@@ -11,3 +11,8 @@ Postgres:
   MaxConnLifetimeSeconds: 1800
   MaxConnIdleSeconds: 300
   HealthCheckPeriodSeconds: 60
+UserRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: user.rpc

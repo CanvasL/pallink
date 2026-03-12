@@ -57,5 +57,12 @@ func (l *CreateActivityLogic) CreateActivity(in *activity.CreateActivityRequest)
 		return nil, err
 	}
 
-	return queryActivityDetail(l.ctx, l.svcCtx.DB, id, in.CreatorId)
+	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, id, in.CreatorId)
+	if err != nil {
+		return nil, err
+	}
+	if err := hydrateActivityUsers(l.ctx, l.svcCtx.UserRpc, []*activity.ActivityInfo{info}); err != nil {
+		return nil, err
+	}
+	return info, nil
 }

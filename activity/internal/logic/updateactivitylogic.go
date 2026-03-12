@@ -83,5 +83,12 @@ func (l *UpdateActivityLogic) UpdateActivity(in *activity.UpdateActivityRequest)
 		return nil, errors.New("activity not found or forbidden")
 	}
 
-	return queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.CreatorId)
+	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.CreatorId)
+	if err != nil {
+		return nil, err
+	}
+	if err := hydrateActivityUsers(l.ctx, l.svcCtx.UserRpc, []*activity.ActivityInfo{info}); err != nil {
+		return nil, err
+	}
+	return info, nil
 }

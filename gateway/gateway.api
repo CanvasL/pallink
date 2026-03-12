@@ -10,12 +10,9 @@ info (
 	version: "v1"
 )
 
-// Gateway service
-// 网关服务
-@server (
-	jwt: Auth
-)
-service gatewayApi {
+// Public service (no auth)
+// 公共服务（无需鉴权）
+service gatewayPublic {
 	// User
 	// 用户
 	@handler Register
@@ -24,6 +21,21 @@ service gatewayApi {
 	@handler Login
 	post /auth/login (LoginRequest) returns (LoginResponse)
 
+	// Public
+	// 公共
+	@handler GetPublicActivityList
+	get /public/activities (GetActivityListReq) returns (GetActivityListResp)
+
+	@handler GetPublicActivityDetail
+	get /public/activities/:id (GetActivityDetailReq) returns (GetActivityDetailResp)
+}
+
+// Gateway service (jwt required)
+// 网关服务（需要鉴权）
+@server (
+	jwt: Auth
+)
+service gatewayApi {
 	@handler GetUserInfo
 	get /users/me (GetUserInfoRequest) returns (UserInfo)
 
@@ -58,13 +70,4 @@ service gatewayApi {
 
 	@handler GetParticipants
 	get /activities/:id/participants (GetParticipantsReq) returns (GetParticipantsResp)
-
-	// Public
-	// 公共
-	@handler GetPublicActivityList
-	get /public/activities (GetActivityListReq) returns (GetActivityListResp)
-
-	@handler GetPublicActivityDetail
-	get /public/activities/:id (GetActivityDetailReq) returns (GetActivityDetailResp)
 }
-

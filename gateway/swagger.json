@@ -6,9 +6,10 @@
     "application/json"
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "swagger": "2.0",
+  "host": "localhost:8080",
   "info": {
     "title": "PalLink Gateway API",
     "version": "v1"
@@ -21,7 +22,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetActivityList",
         "operationId": "getActivityList",
@@ -139,7 +140,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "CreateActivity",
         "operationId": "createActivity",
@@ -261,7 +262,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetEnrolledActivities",
         "operationId": "getEnrolledActivities",
@@ -366,7 +367,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetMyActivities",
         "operationId": "getMyActivities",
@@ -471,7 +472,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetActivityDetail",
         "operationId": "getActivityDetail",
@@ -565,7 +566,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "UpdateActivity",
         "operationId": "updateActivity",
@@ -692,7 +693,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "CheckIn",
         "operationId": "checkIn",
@@ -744,7 +745,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "EnrollActivity",
         "operationId": "enrollActivity",
@@ -781,7 +782,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "CancelEnroll",
         "operationId": "cancelEnroll",
@@ -817,7 +818,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetParticipants",
         "operationId": "getParticipants",
@@ -907,7 +908,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "Login",
         "operationId": "login",
@@ -980,7 +981,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetPublicActivityList",
         "operationId": "getPublicActivityList",
@@ -1097,7 +1098,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetPublicActivityDetail",
         "operationId": "getPublicActivityDetail",
@@ -1193,7 +1194,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "Register",
         "operationId": "register",
@@ -1251,7 +1252,7 @@
           "application/json"
         ],
         "schemes": [
-          "https"
+          "http"
         ],
         "summary": "GetUserInfo",
         "operationId": "getUserInfo",

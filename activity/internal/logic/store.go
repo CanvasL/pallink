@@ -38,7 +38,7 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 	}
 
 	var sb strings.Builder
-	sb.WriteString(" FROM activity a JOIN \"user\" u ON u.id=a.creator_id ")
+	sb.WriteString(" FROM activity a ")
 
 	if filter.UseEnrolledUser {
 		userArg := addArg(filter.EnrolledUserID)
@@ -78,7 +78,7 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 
 	limitArg := addArg(pageSize)
 	offsetArg := addArg((page - 1) * pageSize)
-	listSQL := "SELECT a.id, a.creator_id, u.nickname, u.avatar, a.title, a.description, a.location, " +
+	listSQL := "SELECT a.id, a.creator_id, a.title, a.description, a.location, " +
 		"a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.created_at, " + isEnrolledExpr + " AS is_enrolled" +
 		sb.String() + " WHERE " + strings.Join(where, " AND ") +
 		" ORDER BY a.start_time DESC LIMIT " + limitArg + " OFFSET " + offsetArg
@@ -92,19 +92,15 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 	list := make([]*activity.ActivityInfo, 0)
 	for rows.Next() {
 		var (
-			item          activity.ActivityInfo
-			startTime     time.Time
-			endTime       time.Time
-			createdAt     time.Time
-			creatorName   string
-			creatorAvatar string
-			isEnrolled    bool
+			item       activity.ActivityInfo
+			startTime  time.Time
+			endTime    time.Time
+			createdAt  time.Time
+			isEnrolled bool
 		)
 		if err := rows.Scan(
 			&item.Id,
 			&item.CreatorId,
-			&creatorName,
-			&creatorAvatar,
 			&item.Title,
 			&item.Description,
 			&item.Location,
@@ -121,8 +117,6 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 		item.StartTime = timestamppb.New(startTime)
 		item.EndTime = timestamppb.New(endTime)
 		item.CreatedAt = timestamppb.New(createdAt)
-		item.CreatorName = creatorName
-		item.CreatorAvatar = creatorAvatar
 		item.IsEnrolled = isEnrolled
 		list = append(list, &item)
 	}
@@ -139,26 +133,21 @@ func queryActivityDetail(ctx context.Context, db *pgxpool.Pool, activityID uint6
 	}
 
 	var (
-		info          activity.ActivityInfo
-		startTime     time.Time
-		endTime       time.Time
-		createdAt     time.Time
-		creatorName   string
-		creatorAvatar string
+		info      activity.ActivityInfo
+		startTime time.Time
+		endTime   time.Time
+		createdAt time.Time
 	)
 	if err := db.QueryRow(
 		ctx,
-		`SELECT a.id, a.creator_id, u.nickname, u.avatar, a.title, a.description, a.location,
-		        a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.created_at
-		   FROM activity a
-		   JOIN "user" u ON u.id=a.creator_id
-		  WHERE a.id=$1`,
+		`SELECT a.id, a.creator_id, a.title, a.description, a.location,
+	        a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.created_at
+	   FROM activity a
+	  WHERE a.id=$1`,
 		activityID,
 	).Scan(
 		&info.Id,
 		&info.CreatorId,
-		&creatorName,
-		&creatorAvatar,
 		&info.Title,
 		&info.Description,
 		&info.Location,
@@ -178,8 +167,6 @@ func queryActivityDetail(ctx context.Context, db *pgxpool.Pool, activityID uint6
 	info.StartTime = timestamppb.New(startTime)
 	info.EndTime = timestamppb.New(endTime)
 	info.CreatedAt = timestamppb.New(createdAt)
-	info.CreatorName = creatorName
-	info.CreatorAvatar = creatorAvatar
 
 	if viewerUserID > 0 {
 		var enrolled bool
@@ -211,9 +198,8 @@ func queryParticipants(ctx context.Context, db *pgxpool.Pool, activityID uint64,
 
 	rows, err := db.Query(
 		ctx,
-		`SELECT u.id, u.nickname, u.avatar, e.enroll_time, e.checkin_time, e.status
+		`SELECT e.user_id, e.enroll_time, e.checkin_time, e.status
 		   FROM enrollment e
-		   JOIN "user" u ON u.id=e.user_id
 		  WHERE e.activity_id=$1 AND e.status IN (1,2)
 		  ORDER BY e.enroll_time DESC
 		  LIMIT $2 OFFSET $3`,
@@ -231,7 +217,7 @@ func queryParticipants(ctx context.Context, db *pgxpool.Pool, activityID uint64,
 			enrollTime  time.Time
 			checkinTime *time.Time
 		)
-		if err := rows.Scan(&item.UserId, &item.Nickname, &item.Avatar, &enrollTime, &checkinTime, &item.Status); err != nil {
+		if err := rows.Scan(&item.UserId, &enrollTime, &checkinTime, &item.Status); err != nil {
 			return nil, 0, err
 		}
 		item.EnrollTime = timestamppb.New(enrollTime)

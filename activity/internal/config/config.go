@@ -9,4 +9,5 @@ import (
 type Config struct {
 	zrpc.RpcServerConf
 	Postgres postgres.Config
+	UserRpc  zrpc.RpcClientConf
 }

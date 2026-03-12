@@ -33,6 +33,9 @@ func (l *GetParticipantsLogic) GetParticipants(in *activity.GetParticipantsReque
 	if err != nil {
 		return nil, err
 	}
+	if err := hydrateParticipants(l.ctx, l.svcCtx.UserRpc, list); err != nil {
+		return nil, err
+	}
 
 	return &activity.GetParticipantsResponse{
 		Participants: list,

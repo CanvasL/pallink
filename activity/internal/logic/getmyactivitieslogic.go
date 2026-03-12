@@ -38,6 +38,9 @@ func (l *GetMyActivitiesLogic) GetMyActivities(in *activity.GetMyActivitiesReque
 	if err != nil {
 		return nil, err
 	}
+	if err := hydrateActivityUsers(l.ctx, l.svcCtx.UserRpc, activities); err != nil {
+		return nil, err
+	}
 
 	return &activity.GetActivityListResponse{
 		Activities: activities,

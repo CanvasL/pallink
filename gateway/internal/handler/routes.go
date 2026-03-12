@@ -16,6 +16,31 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
+				Path:    "/auth/login",
+				Handler: LoginHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/public/activities",
+				Handler: GetPublicActivityListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/public/activities/:id",
+				Handler: GetPublicActivityDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/users",
+				Handler: RegisterHandler(serverCtx),
+			},
+		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
 				Path:    "/activities",
 				Handler: CreateActivityHandler(serverCtx),
 			},
@@ -63,26 +88,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/activities/my",
 				Handler: GetMyActivitiesHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/auth/login",
-				Handler: LoginHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/public/activities",
-				Handler: GetPublicActivityListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/public/activities/:id",
-				Handler: GetPublicActivityDetailHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/users",
-				Handler: RegisterHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,

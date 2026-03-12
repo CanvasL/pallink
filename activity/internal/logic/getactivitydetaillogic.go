@@ -24,5 +24,12 @@ func NewGetActivityDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *GetActivityDetailLogic) GetActivityDetail(in *activity.GetActivityDetailRequest) (*activity.ActivityInfo, error) {
-	return queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.ViewerUserId)
+	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.ViewerUserId)
+	if err != nil {
+		return nil, err
+	}
+	if err := hydrateActivityUsers(l.ctx, l.svcCtx.UserRpc, []*activity.ActivityInfo{info}); err != nil {
+		return nil, err
+	}
+	return info, nil
 }
