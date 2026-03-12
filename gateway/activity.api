@@ -57,7 +57,7 @@ type CreateActivityResp {
 // Update activity
 // 更新活动
 type UpdateActivityReq {
-	Id          uint64  `path:"id"`
+	Id          uint64  `json:"id"`
 	Title       *string `json:"title,optional"`
 	Description *string `json:"description,optional"`
 	Location    *string `json:"location,optional"`
@@ -118,7 +118,7 @@ type GetEnrolledActivitiesResp {
 // Activity detail
 // 活动详情
 type GetActivityDetailReq {
-	Id uint64 `path:"id"`
+	Id uint64 `form:"id"`
 }
 
 type GetActivityDetailResp {
@@ -128,7 +128,7 @@ type GetActivityDetailResp {
 // Enroll activity
 // 报名活动
 type EnrollActivityReq {
-	Id uint64 `path:"id"`
+	Id uint64 `json:"id"`
 }
 
 type EnrollActivityResp {
@@ -139,7 +139,7 @@ type EnrollActivityResp {
 // Cancel enrollment
 // 取消报名
 type CancelEnrollReq {
-	Id uint64 `path:"id"`
+	Id uint64 `json:"id"`
 }
 
 type CancelEnrollResp {
@@ -150,7 +150,7 @@ type CancelEnrollResp {
 // Check in
 // 活动签到
 type CheckInReq {
-	Id   uint64 `path:"id"`
+	Id   uint64 `json:"id"`
 	Code string `json:"code,optional"`
 }
 
@@ -162,7 +162,7 @@ type CheckInResp {
 // Participants
 // 参与者列表
 type GetParticipantsReq {
-	Id       uint64 `path:"id"`
+	Id       uint64 `form:"id"`
 	Page     int32  `form:"page,default=1"`
 	PageSize int32  `form:"page_size,default=20"`
 }

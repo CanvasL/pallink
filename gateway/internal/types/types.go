@@ -36,7 +36,7 @@ type ActivityInfo struct {
 }
 
 type CancelEnrollReq struct {
-	Id uint64 `path:"id"`
+	Id uint64 `json:"id"`
 }
 
 type CancelEnrollResp struct {
@@ -45,7 +45,7 @@ type CancelEnrollResp struct {
 }
 
 type CheckInReq struct {
-	Id   uint64 `path:"id"`
+	Id   uint64 `json:"id"`
 	Code string `json:"code,optional"`
 }
 
@@ -68,7 +68,7 @@ type CreateActivityResp struct {
 }
 
 type EnrollActivityReq struct {
-	Id uint64 `path:"id"`
+	Id uint64 `json:"id"`
 }
 
 type EnrollActivityResp struct {
@@ -77,7 +77,7 @@ type EnrollActivityResp struct {
 }
 
 type GetActivityDetailReq struct {
-	Id uint64 `path:"id"`
+	Id uint64 `form:"id"`
 }
 
 type GetActivityDetailResp struct {
@@ -123,7 +123,7 @@ type GetMyActivitiesResp struct {
 }
 
 type GetParticipantsReq struct {
-	Id       uint64 `path:"id"`
+	Id       uint64 `form:"id"`
 	Page     int32  `form:"page,default=1"`
 	PageSize int32  `form:"page_size,default=20"`
 }
@@ -171,7 +171,7 @@ type RegisterResponse struct {
 }
 
 type UpdateActivityReq struct {
-	Id          uint64  `path:"id"`
+	Id          uint64  `json:"id"`
 	Title       *string `json:"title,optional"`
 	Description *string `json:"description,optional"`
 	Location    *string `json:"location,optional"`

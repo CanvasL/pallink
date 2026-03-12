@@ -16,22 +16,22 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/auth/login",
+				Path:    "/user/login",
 				Handler: LoginHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/public/activities",
+				Path:    "/activity/public/list",
 				Handler: GetPublicActivityListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/public/activities/:id",
+				Path:    "/activity/public/detail",
 				Handler: GetPublicActivityDetailHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/users",
+				Path:    "/user/register",
 				Handler: RegisterHandler(serverCtx),
 			},
 		},
@@ -41,57 +41,57 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/activities",
+				Path:    "/activity/create",
 				Handler: CreateActivityHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/activities",
+				Path:    "/activity/list",
 				Handler: GetActivityListHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPut,
-				Path:    "/activities/:id",
+				Method:  http.MethodPost,
+				Path:    "/activity/update",
 				Handler: UpdateActivityHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/activities/:id",
+				Path:    "/activity/detail",
 				Handler: GetActivityDetailHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/activities/:id/checkins",
+				Path:    "/activity/checkIn",
 				Handler: CheckInHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/activities/:id/enrollments",
+				Path:    "/activity/enroll",
 				Handler: EnrollActivityHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodDelete,
-				Path:    "/activities/:id/enrollments",
+				Method:  http.MethodPost,
+				Path:    "/activity/cancelEnroll",
 				Handler: CancelEnrollHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/activities/:id/participants",
+				Path:    "/activity/participants",
 				Handler: GetParticipantsHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/activities/enrolled",
+				Path:    "/activity/enrolled",
 				Handler: GetEnrolledActivitiesHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/activities/my",
+				Path:    "/activity/my",
 				Handler: GetMyActivitiesHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/users/me",
+				Path:    "/user/me",
 				Handler: GetUserInfoHandler(serverCtx),
 			},
 		},

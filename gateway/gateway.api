@@ -10,64 +10,102 @@ info (
 	version: "v1"
 )
 
-// Public service (no auth)
-// 公共服务（无需鉴权）
-service gatewayPublic {
+// Gateway service
+// 网关服务
+service gatewayApi {
 	// User
 	// 用户
+	@doc (
+		group: "user"
+	)
 	@handler Register
-	post /users (RegisterRequest) returns (RegisterResponse)
+	post /user/register (RegisterRequest) returns (RegisterResponse)
 
+	@doc (
+		group: "user"
+	)
 	@handler Login
-	post /auth/login (LoginRequest) returns (LoginResponse)
+	post /user/login (LoginRequest) returns (LoginResponse)
 
-	// Public
-	// 公共
-	@handler GetPublicActivityList
-	get /public/activities (GetActivityListReq) returns (GetActivityListResp)
-
-	@handler GetPublicActivityDetail
-	get /public/activities/:id (GetActivityDetailReq) returns (GetActivityDetailResp)
-}
-
-// Gateway service (jwt required)
-// 网关服务（需要鉴权）
-@server (
-	jwt: Auth
-)
-service gatewayApi {
+	@doc (
+		group: "user"
+	)
 	@handler GetUserInfo
-	get /users/me (GetUserInfoRequest) returns (UserInfo)
+	get /user/me (GetUserInfoRequest) returns (UserInfo)
 
 	// Activity
 	// 活动
+	@doc (
+		group: "activity"
+	)
 	@handler CreateActivity
-	post /activities (CreateActivityReq) returns (CreateActivityResp)
+	post /activity/create (CreateActivityReq) returns (CreateActivityResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler UpdateActivity
-	put /activities/:id (UpdateActivityReq) returns (UpdateActivityResp)
+	post /activity/update (UpdateActivityReq) returns (UpdateActivityResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler GetActivityList
-	get /activities (GetActivityListReq) returns (GetActivityListResp)
+	get /activity/list (GetActivityListReq) returns (GetActivityListResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler GetMyActivities
-	get /activities/my (GetMyActivitiesReq) returns (GetMyActivitiesResp)
+	get /activity/my (GetMyActivitiesReq) returns (GetMyActivitiesResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler GetEnrolledActivities
-	get /activities/enrolled (GetEnrolledActivitiesReq) returns (GetEnrolledActivitiesResp)
+	get /activity/enrolled (GetEnrolledActivitiesReq) returns (GetEnrolledActivitiesResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler GetActivityDetail
-	get /activities/:id (GetActivityDetailReq) returns (GetActivityDetailResp)
+	get /activity/detail (GetActivityDetailReq) returns (GetActivityDetailResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler EnrollActivity
-	post /activities/:id/enrollments (EnrollActivityReq) returns (EnrollActivityResp)
+	post /activity/enroll (EnrollActivityReq) returns (EnrollActivityResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler CancelEnroll
-	delete /activities/:id/enrollments (CancelEnrollReq) returns (CancelEnrollResp)
+	post /activity/cancelEnroll (CancelEnrollReq) returns (CancelEnrollResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler CheckIn
-	post /activities/:id/checkins (CheckInReq) returns (CheckInResp)
+	post /activity/checkIn (CheckInReq) returns (CheckInResp)
 
+	@doc (
+		group: "activity"
+	)
 	@handler GetParticipants
-	get /activities/:id/participants (GetParticipantsReq) returns (GetParticipantsResp)
+	get /activity/participants (GetParticipantsReq) returns (GetParticipantsResp)
+
+	// Public
+	// 公共
+	@doc (
+		group: "activity"
+	)
+	@handler GetPublicActivityList
+	get /activity/public/list (GetActivityListReq) returns (GetActivityListResp)
+
+	@doc (
+		group: "activity"
+	)
+	@handler GetPublicActivityDetail
+	get /activity/public/detail (GetActivityDetailReq) returns (GetActivityDetailResp)
 }

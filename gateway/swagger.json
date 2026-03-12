@@ -16,122 +16,7 @@
   },
   "basePath": "/",
   "paths": {
-    "/activities": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetActivityList",
-        "operationId": "getActivityList",
-        "parameters": [
-          {
-            "type": "integer",
-            "default": 1,
-            "name": "page",
-            "in": "query",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "default": 20,
-            "name": "page_size",
-            "in": "query",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "name": "status",
-            "in": "query",
-            "allowEmptyValue": true
-          },
-          {
-            "type": "string",
-            "name": "keyword",
-            "in": "query",
-            "allowEmptyValue": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "list": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "id",
-                      "creator_id",
-                      "creator_name",
-                      "creator_avatar",
-                      "title",
-                      "location",
-                      "start_time",
-                      "end_time",
-                      "max_people",
-                      "current_people",
-                      "status",
-                      "is_enrolled"
-                    ],
-                    "properties": {
-                      "creator_avatar": {
-                        "type": "string"
-                      },
-                      "creator_id": {
-                        "type": "integer"
-                      },
-                      "creator_name": {
-                        "type": "string"
-                      },
-                      "current_people": {
-                        "type": "integer"
-                      },
-                      "end_time": {
-                        "type": "integer"
-                      },
-                      "id": {
-                        "type": "integer"
-                      },
-                      "is_enrolled": {
-                        "type": "boolean"
-                      },
-                      "location": {
-                        "type": "string"
-                      },
-                      "max_people": {
-                        "type": "integer"
-                      },
-                      "start_time": {
-                        "type": "integer"
-                      },
-                      "status": {
-                        "type": "integer"
-                      },
-                      "title": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "page": {
-                  "type": "integer"
-                },
-                "page_size": {
-                  "type": "integer"
-                },
-                "total": {
-                  "type": "integer"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/activity/cancelEnroll": {
       "post": {
         "consumes": [
           "application/json"
@@ -140,8 +25,109 @@
           "application/json"
         ],
         "schemes": [
-          "http"
+    "http"
+  ],
+        "summary": "CancelEnroll",
+        "operationId": "cancelEnroll",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity/checkIn": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
+        "summary": "CheckIn",
+        "operationId": "checkIn",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity/create": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
         "summary": "CreateActivity",
         "operationId": "createActivity",
         "parameters": [
@@ -256,14 +242,156 @@
         }
       }
     },
-    "/activities/enrolled": {
+    "/activity/detail": {
       "get": {
         "produces": [
           "application/json"
         ],
         "schemes": [
-          "http"
+    "http"
+  ],
+        "summary": "GetActivityDetail",
+        "operationId": "getActivityDetail",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "query",
+            "required": true
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "activity": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "creator_id",
+                    "title",
+                    "description",
+                    "location",
+                    "start_time",
+                    "end_time",
+                    "max_people",
+                    "current_people",
+                    "status",
+                    "created_at",
+                    "is_enrolled",
+                    "creator_name",
+                    "creator_avatar"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "type": "integer"
+                    },
+                    "creator_avatar": {
+                      "type": "string"
+                    },
+                    "creator_id": {
+                      "type": "integer"
+                    },
+                    "creator_name": {
+                      "type": "string"
+                    },
+                    "current_people": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "end_time": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "is_enrolled": {
+                      "type": "boolean"
+                    },
+                    "location": {
+                      "type": "string"
+                    },
+                    "max_people": {
+                      "type": "integer"
+                    },
+                    "start_time": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity/enroll": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
+        "summary": "EnrollActivity",
+        "operationId": "enrollActivity",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity/enrolled": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
         "summary": "GetEnrolledActivities",
         "operationId": "getEnrolledActivities",
         "parameters": [
@@ -361,14 +489,131 @@
         }
       }
     },
-    "/activities/my": {
+    "/activity/list": {
       "get": {
         "produces": [
           "application/json"
         ],
         "schemes": [
-          "http"
+    "http"
+  ],
+        "summary": "GetActivityList",
+        "operationId": "getActivityList",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 1,
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "default": 20,
+            "name": "page_size",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "name": "status",
+            "in": "query",
+            "allowEmptyValue": true
+          },
+          {
+            "type": "string",
+            "name": "keyword",
+            "in": "query",
+            "allowEmptyValue": true
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "creator_id",
+                      "creator_name",
+                      "creator_avatar",
+                      "title",
+                      "location",
+                      "start_time",
+                      "end_time",
+                      "max_people",
+                      "current_people",
+                      "status",
+                      "is_enrolled"
+                    ],
+                    "properties": {
+                      "creator_avatar": {
+                        "type": "string"
+                      },
+                      "creator_id": {
+                        "type": "integer"
+                      },
+                      "creator_name": {
+                        "type": "string"
+                      },
+                      "current_people": {
+                        "type": "integer"
+                      },
+                      "end_time": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "is_enrolled": {
+                        "type": "boolean"
+                      },
+                      "location": {
+                        "type": "string"
+                      },
+                      "max_people": {
+                        "type": "integer"
+                      },
+                      "start_time": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "page_size": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity/my": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
         "summary": "GetMyActivities",
         "operationId": "getMyActivities",
         "parameters": [
@@ -466,367 +711,21 @@
         }
       }
     },
-    "/activities/{id}": {
+    "/activity/participants": {
       "get": {
         "produces": [
           "application/json"
         ],
         "schemes": [
-          "http"
-        ],
-        "summary": "GetActivityDetail",
-        "operationId": "getActivityDetail",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "activity": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "creator_id",
-                    "title",
-                    "description",
-                    "location",
-                    "start_time",
-                    "end_time",
-                    "max_people",
-                    "current_people",
-                    "status",
-                    "created_at",
-                    "is_enrolled",
-                    "creator_name",
-                    "creator_avatar"
-                  ],
-                  "properties": {
-                    "created_at": {
-                      "type": "integer"
-                    },
-                    "creator_avatar": {
-                      "type": "string"
-                    },
-                    "creator_id": {
-                      "type": "integer"
-                    },
-                    "creator_name": {
-                      "type": "string"
-                    },
-                    "current_people": {
-                      "type": "integer"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "end_time": {
-                      "type": "integer"
-                    },
-                    "id": {
-                      "type": "integer"
-                    },
-                    "is_enrolled": {
-                      "type": "boolean"
-                    },
-                    "location": {
-                      "type": "string"
-                    },
-                    "max_people": {
-                      "type": "integer"
-                    },
-                    "start_time": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "integer"
-                    },
-                    "title": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "UpdateActivity",
-        "operationId": "updateActivity",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "description": {
-                  "type": "string"
-                },
-                "end_time": {
-                  "type": "integer"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "max_people": {
-                  "type": "integer"
-                },
-                "start_time": {
-                  "type": "integer"
-                },
-                "status": {
-                  "type": "integer"
-                },
-                "title": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "activity": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "creator_id",
-                    "title",
-                    "description",
-                    "location",
-                    "start_time",
-                    "end_time",
-                    "max_people",
-                    "current_people",
-                    "status",
-                    "created_at",
-                    "is_enrolled",
-                    "creator_name",
-                    "creator_avatar"
-                  ],
-                  "properties": {
-                    "created_at": {
-                      "type": "integer"
-                    },
-                    "creator_avatar": {
-                      "type": "string"
-                    },
-                    "creator_id": {
-                      "type": "integer"
-                    },
-                    "creator_name": {
-                      "type": "string"
-                    },
-                    "current_people": {
-                      "type": "integer"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "end_time": {
-                      "type": "integer"
-                    },
-                    "id": {
-                      "type": "integer"
-                    },
-                    "is_enrolled": {
-                      "type": "boolean"
-                    },
-                    "location": {
-                      "type": "string"
-                    },
-                    "max_people": {
-                      "type": "integer"
-                    },
-                    "start_time": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "integer"
-                    },
-                    "title": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/activities/{id}/checkins": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "CheckIn",
-        "operationId": "checkIn",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/activities/{id}/enrollments": {
-      "post": {
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "EnrollActivity",
-        "operationId": "enrollActivity",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "CancelEnroll",
-        "operationId": "cancelEnroll",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/activities/{id}/participants": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
+    "http"
+  ],
         "summary": "GetParticipants",
         "operationId": "getParticipants",
         "parameters": [
           {
             "type": "integer",
             "name": "id",
-            "in": "path",
+            "in": "query",
             "required": true
           },
           {
@@ -899,39 +798,22 @@
         }
       }
     },
-    "/auth/login": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
+    "/activity/public/detail": {
+      "get": {
         "produces": [
           "application/json"
         ],
         "schemes": [
-          "http"
-        ],
-        "summary": "Login",
-        "operationId": "login",
+    "http"
+  ],
+        "summary": "GetPublicActivityDetail",
+        "operationId": "getPublicActivityDetail",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "required": [
-                "mobile",
-                "password"
-              ],
-              "properties": {
-                "mobile": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                }
-              }
-            }
+            "type": "integer",
+            "name": "id",
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -940,31 +822,65 @@
             "schema": {
               "type": "object",
               "properties": {
-                "token": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                },
-                "user_info": {
+                "activity": {
                   "type": "object",
                   "required": [
                     "id",
-                    "mobile",
-                    "nickname",
-                    "avatar"
+                    "creator_id",
+                    "title",
+                    "description",
+                    "location",
+                    "start_time",
+                    "end_time",
+                    "max_people",
+                    "current_people",
+                    "status",
+                    "created_at",
+                    "is_enrolled",
+                    "creator_name",
+                    "creator_avatar"
                   ],
                   "properties": {
-                    "avatar": {
+                    "created_at": {
+                      "type": "integer"
+                    },
+                    "creator_avatar": {
                       "type": "string"
+                    },
+                    "creator_id": {
+                      "type": "integer"
+                    },
+                    "creator_name": {
+                      "type": "string"
+                    },
+                    "current_people": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "end_time": {
+                      "type": "integer"
                     },
                     "id": {
                       "type": "integer"
                     },
-                    "mobile": {
+                    "is_enrolled": {
+                      "type": "boolean"
+                    },
+                    "location": {
                       "type": "string"
                     },
-                    "nickname": {
+                    "max_people": {
+                      "type": "integer"
+                    },
+                    "start_time": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "title": {
                       "type": "string"
                     }
                   }
@@ -975,14 +891,14 @@
         }
       }
     },
-    "/public/activities": {
+    "/activity/public/list": {
       "get": {
         "produces": [
           "application/json"
         ],
         "schemes": [
-          "http"
-        ],
+    "http"
+  ],
         "summary": "GetPublicActivityList",
         "operationId": "getPublicActivityList",
         "parameters": [
@@ -1092,22 +1008,56 @@
         }
       }
     },
-    "/public/activities/{id}": {
-      "get": {
+    "/activity/update": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
         "schemes": [
-          "http"
-        ],
-        "summary": "GetPublicActivityDetail",
-        "operationId": "getPublicActivityDetail",
+    "http"
+  ],
+        "summary": "UpdateActivity",
+        "operationId": "updateActivity",
         "parameters": [
           {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "end_time": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "max_people": {
+                  "type": "integer"
+                },
+                "start_time": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -1185,7 +1135,7 @@
         }
       }
     },
-    "/users": {
+    "/user/login": {
       "post": {
         "consumes": [
           "application/json"
@@ -1194,8 +1144,118 @@
           "application/json"
         ],
         "schemes": [
-          "http"
+    "http"
+  ],
+        "summary": "Login",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "mobile",
+                "password"
+              ],
+              "properties": {
+                "mobile": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
+                },
+                "user_info": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "mobile",
+                    "nickname",
+                    "avatar"
+                  ],
+                  "properties": {
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "mobile": {
+                      "type": "string"
+                    },
+                    "nickname": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/me": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
+        "summary": "GetUserInfo",
+        "operationId": "getUserInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "avatar": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "mobile": {
+                  "type": "string"
+                },
+                "nickname": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+    "http"
+  ],
         "summary": "Register",
         "operationId": "register",
         "parameters": [
@@ -1245,43 +1305,9 @@
           }
         }
       }
-    },
-    "/users/me": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetUserInfo",
-        "operationId": "getUserInfo",
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "avatar": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "mobile": {
-                  "type": "string"
-                },
-                "nickname": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
-  "x-date": "2026-03-12 20:37:57",
+  "x-date": "2026-03-13 00:57:12",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",
