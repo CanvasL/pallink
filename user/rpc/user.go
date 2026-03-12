@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"pallink/user"
+	"pallink/user/rpc/user"
 	"pallink/user/rpc/internal/config"
 	"pallink/user/rpc/internal/server"
 	"pallink/user/rpc/internal/svc"

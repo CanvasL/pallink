@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 
-	"pallink/user"
+	"pallink/user/rpc/user"
 	"pallink/user/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"

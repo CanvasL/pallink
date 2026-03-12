@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"pallink/activity"
+	"pallink/activity/rpc/activity"
 	"pallink/activity/rpc/internal/config"
 	"pallink/activity/rpc/internal/server"
 	"pallink/activity/rpc/internal/svc"
