@@ -42,3 +42,33 @@ func (s *ActivityServer) EnrollActivity(ctx context.Context, in *activity.Enroll
 	l := logic.NewEnrollActivityLogic(ctx, s.svcCtx)
 	return l.EnrollActivity(in)
 }
+
+func (s *ActivityServer) CancelEnroll(ctx context.Context, in *activity.CancelEnrollRequest) (*activity.EnrollActivityResponse, error) {
+	l := logic.NewCancelEnrollLogic(ctx, s.svcCtx)
+	return l.CancelEnroll(in)
+}
+
+func (s *ActivityServer) CheckIn(ctx context.Context, in *activity.CheckInRequest) (*activity.EnrollActivityResponse, error) {
+	l := logic.NewCheckInLogic(ctx, s.svcCtx)
+	return l.CheckIn(in)
+}
+
+func (s *ActivityServer) UpdateActivity(ctx context.Context, in *activity.UpdateActivityRequest) (*activity.ActivityInfo, error) {
+	l := logic.NewUpdateActivityLogic(ctx, s.svcCtx)
+	return l.UpdateActivity(in)
+}
+
+func (s *ActivityServer) GetMyActivities(ctx context.Context, in *activity.GetMyActivitiesRequest) (*activity.GetActivityListResponse, error) {
+	l := logic.NewGetMyActivitiesLogic(ctx, s.svcCtx)
+	return l.GetMyActivities(in)
+}
+
+func (s *ActivityServer) GetEnrolledActivities(ctx context.Context, in *activity.GetEnrolledActivitiesRequest) (*activity.GetActivityListResponse, error) {
+	l := logic.NewGetEnrolledActivitiesLogic(ctx, s.svcCtx)
+	return l.GetEnrolledActivities(in)
+}
+
+func (s *ActivityServer) GetParticipants(ctx context.Context, in *activity.GetParticipantsRequest) (*activity.GetParticipantsResponse, error) {
+	l := logic.NewGetParticipantsLogic(ctx, s.svcCtx)
+	return l.GetParticipants(in)
+}

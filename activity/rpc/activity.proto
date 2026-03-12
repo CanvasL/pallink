@@ -10,6 +10,12 @@ service Activity {
     rpc GetActivityList(GetActivityListRequest) returns (GetActivityListResponse);
     rpc GetActivityDetail(GetActivityDetailRequest) returns (ActivityInfo);
     rpc EnrollActivity(EnrollActivityRequest) returns (EnrollActivityResponse);
+    rpc CancelEnroll(CancelEnrollRequest) returns (EnrollActivityResponse);
+    rpc CheckIn(CheckInRequest) returns (EnrollActivityResponse);
+    rpc UpdateActivity(UpdateActivityRequest) returns (ActivityInfo);
+    rpc GetMyActivities(GetMyActivitiesRequest) returns (GetActivityListResponse);
+    rpc GetEnrolledActivities(GetEnrolledActivitiesRequest) returns (GetActivityListResponse);
+    rpc GetParticipants(GetParticipantsRequest) returns (GetParticipantsResponse);
 }
 
 message ActivityInfo {
@@ -24,6 +30,9 @@ message ActivityInfo {
     int32 current_people = 9;
     int32 status = 10;
     google.protobuf.Timestamp created_at = 11;
+    string creator_name = 12;
+    string creator_avatar = 13;
+    bool is_enrolled = 14;
 }
 
 message CreateActivityRequest {
@@ -39,6 +48,9 @@ message CreateActivityRequest {
 message GetActivityListRequest {
     int32 page = 1;
     int32 page_size = 2;
+    int32 status = 3;
+    string keyword = 4;
+    uint64 viewer_user_id = 5;
 }
 
 message GetActivityListResponse {
@@ -48,6 +60,7 @@ message GetActivityListResponse {
 
 message GetActivityDetailRequest {
     uint64 id = 1;
+    uint64 viewer_user_id = 2;
 }
 
 message EnrollActivityRequest {
@@ -57,4 +70,60 @@ message EnrollActivityRequest {
 
 message EnrollActivityResponse {
     bool success = 1;
+    string message = 2;
+}
+
+message CancelEnrollRequest {
+    uint64 activity_id = 1;
+    uint64 user_id = 2;
+}
+
+message CheckInRequest {
+    uint64 activity_id = 1;
+    uint64 user_id = 2;
+    string code = 3;
+}
+
+message UpdateActivityRequest {
+    uint64 id = 1;
+    uint64 creator_id = 2;
+    string title = 3;
+    string description = 4;
+    string location = 5;
+    google.protobuf.Timestamp start_time = 6;
+    google.protobuf.Timestamp end_time = 7;
+    int32 max_people = 8;
+    int32 status = 9;
+}
+
+message GetMyActivitiesRequest {
+    uint64 user_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+}
+
+message GetEnrolledActivitiesRequest {
+    uint64 user_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+}
+
+message ParticipantInfo {
+    uint64 user_id = 1;
+    string nickname = 2;
+    string avatar = 3;
+    google.protobuf.Timestamp enroll_time = 4;
+    google.protobuf.Timestamp checkin_time = 5;
+    int32 status = 6;
+}
+
+message GetParticipantsRequest {
+    uint64 activity_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+}
+
+message GetParticipantsResponse {
+    repeated ParticipantInfo participants = 1;
+    int32 total = 2;
 }

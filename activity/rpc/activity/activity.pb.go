@@ -35,6 +35,9 @@ type ActivityInfo struct {
 	CurrentPeople int32                  `protobuf:"varint,9,opt,name=current_people,json=currentPeople,proto3" json:"current_people,omitempty"`
 	Status        int32                  `protobuf:"varint,10,opt,name=status,proto3" json:"status,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatorName   string                 `protobuf:"bytes,12,opt,name=creator_name,json=creatorName,proto3" json:"creator_name,omitempty"`
+	CreatorAvatar string                 `protobuf:"bytes,13,opt,name=creator_avatar,json=creatorAvatar,proto3" json:"creator_avatar,omitempty"`
+	IsEnrolled    bool                   `protobuf:"varint,14,opt,name=is_enrolled,json=isEnrolled,proto3" json:"is_enrolled,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -146,6 +149,27 @@ func (x *ActivityInfo) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *ActivityInfo) GetCreatorName() string {
+	if x != nil {
+		return x.CreatorName
+	}
+	return ""
+}
+
+func (x *ActivityInfo) GetCreatorAvatar() string {
+	if x != nil {
+		return x.CreatorAvatar
+	}
+	return ""
+}
+
+func (x *ActivityInfo) GetIsEnrolled() bool {
+	if x != nil {
+		return x.IsEnrolled
+	}
+	return false
+}
+
 type CreateActivityRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CreatorId     uint64                 `protobuf:"varint,1,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
@@ -242,6 +266,9 @@ type GetActivityListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
+	Keyword       string                 `protobuf:"bytes,4,opt,name=keyword,proto3" json:"keyword,omitempty"`
+	ViewerUserId  uint64                 `protobuf:"varint,5,opt,name=viewer_user_id,json=viewerUserId,proto3" json:"viewer_user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -286,6 +313,27 @@ func (x *GetActivityListRequest) GetPage() int32 {
 func (x *GetActivityListRequest) GetPageSize() int32 {
 	if x != nil {
 		return x.PageSize
+	}
+	return 0
+}
+
+func (x *GetActivityListRequest) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *GetActivityListRequest) GetKeyword() string {
+	if x != nil {
+		return x.Keyword
+	}
+	return ""
+}
+
+func (x *GetActivityListRequest) GetViewerUserId() uint64 {
+	if x != nil {
+		return x.ViewerUserId
 	}
 	return 0
 }
@@ -345,6 +393,7 @@ func (x *GetActivityListResponse) GetTotal() int32 {
 type GetActivityDetailRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	ViewerUserId  uint64                 `protobuf:"varint,2,opt,name=viewer_user_id,json=viewerUserId,proto3" json:"viewer_user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -382,6 +431,13 @@ func (*GetActivityDetailRequest) Descriptor() ([]byte, []int) {
 func (x *GetActivityDetailRequest) GetId() uint64 {
 	if x != nil {
 		return x.Id
+	}
+	return 0
+}
+
+func (x *GetActivityDetailRequest) GetViewerUserId() uint64 {
+	if x != nil {
+		return x.ViewerUserId
 	}
 	return 0
 }
@@ -441,6 +497,7 @@ func (x *EnrollActivityRequest) GetUserId() uint64 {
 type EnrollActivityResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -482,11 +539,554 @@ func (x *EnrollActivityResponse) GetSuccess() bool {
 	return false
 }
 
+func (x *EnrollActivityResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type CancelEnrollRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ActivityId    uint64                 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CancelEnrollRequest) Reset() {
+	*x = CancelEnrollRequest{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CancelEnrollRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CancelEnrollRequest) ProtoMessage() {}
+
+func (x *CancelEnrollRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CancelEnrollRequest.ProtoReflect.Descriptor instead.
+func (*CancelEnrollRequest) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CancelEnrollRequest) GetActivityId() uint64 {
+	if x != nil {
+		return x.ActivityId
+	}
+	return 0
+}
+
+func (x *CancelEnrollRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type CheckInRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ActivityId    uint64                 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Code          string                 `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CheckInRequest) Reset() {
+	*x = CheckInRequest{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CheckInRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckInRequest) ProtoMessage() {}
+
+func (x *CheckInRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckInRequest.ProtoReflect.Descriptor instead.
+func (*CheckInRequest) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CheckInRequest) GetActivityId() uint64 {
+	if x != nil {
+		return x.ActivityId
+	}
+	return 0
+}
+
+func (x *CheckInRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *CheckInRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type UpdateActivityRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	CreatorId     uint64                 `protobuf:"varint,2,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	Location      string                 `protobuf:"bytes,5,opt,name=location,proto3" json:"location,omitempty"`
+	StartTime     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	EndTime       *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	MaxPeople     int32                  `protobuf:"varint,8,opt,name=max_people,json=maxPeople,proto3" json:"max_people,omitempty"`
+	Status        int32                  `protobuf:"varint,9,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateActivityRequest) Reset() {
+	*x = UpdateActivityRequest{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateActivityRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateActivityRequest) ProtoMessage() {}
+
+func (x *UpdateActivityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateActivityRequest.ProtoReflect.Descriptor instead.
+func (*UpdateActivityRequest) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UpdateActivityRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateActivityRequest) GetCreatorId() uint64 {
+	if x != nil {
+		return x.CreatorId
+	}
+	return 0
+}
+
+func (x *UpdateActivityRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *UpdateActivityRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *UpdateActivityRequest) GetLocation() string {
+	if x != nil {
+		return x.Location
+	}
+	return ""
+}
+
+func (x *UpdateActivityRequest) GetStartTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartTime
+	}
+	return nil
+}
+
+func (x *UpdateActivityRequest) GetEndTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EndTime
+	}
+	return nil
+}
+
+func (x *UpdateActivityRequest) GetMaxPeople() int32 {
+	if x != nil {
+		return x.MaxPeople
+	}
+	return 0
+}
+
+func (x *UpdateActivityRequest) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+type GetMyActivitiesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetMyActivitiesRequest) Reset() {
+	*x = GetMyActivitiesRequest{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetMyActivitiesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetMyActivitiesRequest) ProtoMessage() {}
+
+func (x *GetMyActivitiesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetMyActivitiesRequest.ProtoReflect.Descriptor instead.
+func (*GetMyActivitiesRequest) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetMyActivitiesRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GetMyActivitiesRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetMyActivitiesRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type GetEnrolledActivitiesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEnrolledActivitiesRequest) Reset() {
+	*x = GetEnrolledActivitiesRequest{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEnrolledActivitiesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEnrolledActivitiesRequest) ProtoMessage() {}
+
+func (x *GetEnrolledActivitiesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEnrolledActivitiesRequest.ProtoReflect.Descriptor instead.
+func (*GetEnrolledActivitiesRequest) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetEnrolledActivitiesRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GetEnrolledActivitiesRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetEnrolledActivitiesRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type ParticipantInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Nickname      string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Avatar        string                 `protobuf:"bytes,3,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	EnrollTime    *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=enroll_time,json=enrollTime,proto3" json:"enroll_time,omitempty"`
+	CheckinTime   *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=checkin_time,json=checkinTime,proto3" json:"checkin_time,omitempty"`
+	Status        int32                  `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ParticipantInfo) Reset() {
+	*x = ParticipantInfo{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ParticipantInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ParticipantInfo) ProtoMessage() {}
+
+func (x *ParticipantInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ParticipantInfo.ProtoReflect.Descriptor instead.
+func (*ParticipantInfo) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ParticipantInfo) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ParticipantInfo) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *ParticipantInfo) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *ParticipantInfo) GetEnrollTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EnrollTime
+	}
+	return nil
+}
+
+func (x *ParticipantInfo) GetCheckinTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CheckinTime
+	}
+	return nil
+}
+
+func (x *ParticipantInfo) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+type GetParticipantsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ActivityId    uint64                 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetParticipantsRequest) Reset() {
+	*x = GetParticipantsRequest{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetParticipantsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetParticipantsRequest) ProtoMessage() {}
+
+func (x *GetParticipantsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetParticipantsRequest.ProtoReflect.Descriptor instead.
+func (*GetParticipantsRequest) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetParticipantsRequest) GetActivityId() uint64 {
+	if x != nil {
+		return x.ActivityId
+	}
+	return 0
+}
+
+func (x *GetParticipantsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetParticipantsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type GetParticipantsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Participants  []*ParticipantInfo     `protobuf:"bytes,1,rep,name=participants,proto3" json:"participants,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetParticipantsResponse) Reset() {
+	*x = GetParticipantsResponse{}
+	mi := &file_activity_rpc_activity_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetParticipantsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetParticipantsResponse) ProtoMessage() {}
+
+func (x *GetParticipantsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_rpc_activity_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetParticipantsResponse.ProtoReflect.Descriptor instead.
+func (*GetParticipantsResponse) Descriptor() ([]byte, []int) {
+	return file_activity_rpc_activity_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GetParticipantsResponse) GetParticipants() []*ParticipantInfo {
+	if x != nil {
+		return x.Participants
+	}
+	return nil
+}
+
+func (x *GetParticipantsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 var File_activity_rpc_activity_proto protoreflect.FileDescriptor
 
 const file_activity_rpc_activity_proto_rawDesc = "" +
 	"\n" +
-	"\x1bactivity/rpc/activity.proto\x12\bactivity\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9c\x03\n" +
+	"\x1bactivity/rpc/activity.proto\x12\bactivity\x1a\x1fgoogle/protobuf/timestamp.proto\"\x87\x04\n" +
 	"\fActivityInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1d\n" +
 	"\n" +
@@ -503,7 +1103,11 @@ const file_activity_rpc_activity_proto_rawDesc = "" +
 	"\x06status\x18\n" +
 	" \x01(\x05R\x06status\x129\n" +
 	"\n" +
-	"created_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\x9b\x02\n" +
+	"created_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12!\n" +
+	"\fcreator_name\x18\f \x01(\tR\vcreatorName\x12%\n" +
+	"\x0ecreator_avatar\x18\r \x01(\tR\rcreatorAvatar\x12\x1f\n" +
+	"\vis_enrolled\x18\x0e \x01(\bR\n" +
+	"isEnrolled\"\x9b\x02\n" +
 	"\x15CreateActivityRequest\x12\x1d\n" +
 	"\n" +
 	"creator_id\x18\x01 \x01(\x04R\tcreatorId\x12\x14\n" +
@@ -514,28 +1118,85 @@ const file_activity_rpc_activity_proto_rawDesc = "" +
 	"start_time\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tstartTime\x125\n" +
 	"\bend_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\aendTime\x12\x1d\n" +
 	"\n" +
-	"max_people\x18\a \x01(\x05R\tmaxPeople\"I\n" +
+	"max_people\x18\a \x01(\x05R\tmaxPeople\"\xa1\x01\n" +
 	"\x16GetActivityListRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"g\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\x05R\x06status\x12\x18\n" +
+	"\akeyword\x18\x04 \x01(\tR\akeyword\x12$\n" +
+	"\x0eviewer_user_id\x18\x05 \x01(\x04R\fviewerUserId\"g\n" +
 	"\x17GetActivityListResponse\x126\n" +
 	"\n" +
 	"activities\x18\x01 \x03(\v2\x16.activity.ActivityInfoR\n" +
 	"activities\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"*\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"P\n" +
 	"\x18GetActivityDetailRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"Q\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12$\n" +
+	"\x0eviewer_user_id\x18\x02 \x01(\x04R\fviewerUserId\"Q\n" +
 	"\x15EnrollActivityRequest\x12\x1f\n" +
 	"\vactivity_id\x18\x01 \x01(\x04R\n" +
 	"activityId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x04R\x06userId\"2\n" +
+	"\auser_id\x18\x02 \x01(\x04R\x06userId\"L\n" +
 	"\x16EnrollActivityResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xd3\x02\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"O\n" +
+	"\x13CancelEnrollRequest\x12\x1f\n" +
+	"\vactivity_id\x18\x01 \x01(\x04R\n" +
+	"activityId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x04R\x06userId\"^\n" +
+	"\x0eCheckInRequest\x12\x1f\n" +
+	"\vactivity_id\x18\x01 \x01(\x04R\n" +
+	"activityId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x04R\x06userId\x12\x12\n" +
+	"\x04code\x18\x03 \x01(\tR\x04code\"\xc3\x02\n" +
+	"\x15UpdateActivityRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1d\n" +
+	"\n" +
+	"creator_id\x18\x02 \x01(\x04R\tcreatorId\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x1a\n" +
+	"\blocation\x18\x05 \x01(\tR\blocation\x129\n" +
+	"\n" +
+	"start_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tstartTime\x125\n" +
+	"\bend_time\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\aendTime\x12\x1d\n" +
+	"\n" +
+	"max_people\x18\b \x01(\x05R\tmaxPeople\x12\x16\n" +
+	"\x06status\x18\t \x01(\x05R\x06status\"b\n" +
+	"\x16GetMyActivitiesRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\"h\n" +
+	"\x1cGetEnrolledActivitiesRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\"\xf2\x01\n" +
+	"\x0fParticipantInfo\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x1a\n" +
+	"\bnickname\x18\x02 \x01(\tR\bnickname\x12\x16\n" +
+	"\x06avatar\x18\x03 \x01(\tR\x06avatar\x12;\n" +
+	"\venroll_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"enrollTime\x12=\n" +
+	"\fcheckin_time\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\vcheckinTime\x12\x16\n" +
+	"\x06status\x18\x06 \x01(\x05R\x06status\"j\n" +
+	"\x16GetParticipantsRequest\x12\x1f\n" +
+	"\vactivity_id\x18\x01 \x01(\x04R\n" +
+	"activityId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\"n\n" +
+	"\x17GetParticipantsResponse\x12=\n" +
+	"\fparticipants\x18\x01 \x03(\v2\x19.activity.ParticipantInfoR\fparticipants\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total2\xca\x06\n" +
 	"\bActivity\x12I\n" +
 	"\x0eCreateActivity\x12\x1f.activity.CreateActivityRequest\x1a\x16.activity.ActivityInfo\x12V\n" +
 	"\x0fGetActivityList\x12 .activity.GetActivityListRequest\x1a!.activity.GetActivityListResponse\x12O\n" +
 	"\x11GetActivityDetail\x12\".activity.GetActivityDetailRequest\x1a\x16.activity.ActivityInfo\x12S\n" +
-	"\x0eEnrollActivity\x12\x1f.activity.EnrollActivityRequest\x1a .activity.EnrollActivityResponseB\fZ\n" +
+	"\x0eEnrollActivity\x12\x1f.activity.EnrollActivityRequest\x1a .activity.EnrollActivityResponse\x12O\n" +
+	"\fCancelEnroll\x12\x1d.activity.CancelEnrollRequest\x1a .activity.EnrollActivityResponse\x12E\n" +
+	"\aCheckIn\x12\x18.activity.CheckInRequest\x1a .activity.EnrollActivityResponse\x12I\n" +
+	"\x0eUpdateActivity\x12\x1f.activity.UpdateActivityRequest\x1a\x16.activity.ActivityInfo\x12V\n" +
+	"\x0fGetMyActivities\x12 .activity.GetMyActivitiesRequest\x1a!.activity.GetActivityListResponse\x12b\n" +
+	"\x15GetEnrolledActivities\x12&.activity.GetEnrolledActivitiesRequest\x1a!.activity.GetActivityListResponse\x12V\n" +
+	"\x0fGetParticipants\x12 .activity.GetParticipantsRequest\x1a!.activity.GetParticipantsResponseB\fZ\n" +
 	"./activityb\x06proto3"
 
 var (
@@ -550,37 +1211,62 @@ func file_activity_rpc_activity_proto_rawDescGZIP() []byte {
 	return file_activity_rpc_activity_proto_rawDescData
 }
 
-var file_activity_rpc_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_activity_rpc_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_activity_rpc_activity_proto_goTypes = []any{
-	(*ActivityInfo)(nil),             // 0: activity.ActivityInfo
-	(*CreateActivityRequest)(nil),    // 1: activity.CreateActivityRequest
-	(*GetActivityListRequest)(nil),   // 2: activity.GetActivityListRequest
-	(*GetActivityListResponse)(nil),  // 3: activity.GetActivityListResponse
-	(*GetActivityDetailRequest)(nil), // 4: activity.GetActivityDetailRequest
-	(*EnrollActivityRequest)(nil),    // 5: activity.EnrollActivityRequest
-	(*EnrollActivityResponse)(nil),   // 6: activity.EnrollActivityResponse
-	(*timestamppb.Timestamp)(nil),    // 7: google.protobuf.Timestamp
+	(*ActivityInfo)(nil),                 // 0: activity.ActivityInfo
+	(*CreateActivityRequest)(nil),        // 1: activity.CreateActivityRequest
+	(*GetActivityListRequest)(nil),       // 2: activity.GetActivityListRequest
+	(*GetActivityListResponse)(nil),      // 3: activity.GetActivityListResponse
+	(*GetActivityDetailRequest)(nil),     // 4: activity.GetActivityDetailRequest
+	(*EnrollActivityRequest)(nil),        // 5: activity.EnrollActivityRequest
+	(*EnrollActivityResponse)(nil),       // 6: activity.EnrollActivityResponse
+	(*CancelEnrollRequest)(nil),          // 7: activity.CancelEnrollRequest
+	(*CheckInRequest)(nil),               // 8: activity.CheckInRequest
+	(*UpdateActivityRequest)(nil),        // 9: activity.UpdateActivityRequest
+	(*GetMyActivitiesRequest)(nil),       // 10: activity.GetMyActivitiesRequest
+	(*GetEnrolledActivitiesRequest)(nil), // 11: activity.GetEnrolledActivitiesRequest
+	(*ParticipantInfo)(nil),              // 12: activity.ParticipantInfo
+	(*GetParticipantsRequest)(nil),       // 13: activity.GetParticipantsRequest
+	(*GetParticipantsResponse)(nil),      // 14: activity.GetParticipantsResponse
+	(*timestamppb.Timestamp)(nil),        // 15: google.protobuf.Timestamp
 }
 var file_activity_rpc_activity_proto_depIdxs = []int32{
-	7,  // 0: activity.ActivityInfo.start_time:type_name -> google.protobuf.Timestamp
-	7,  // 1: activity.ActivityInfo.end_time:type_name -> google.protobuf.Timestamp
-	7,  // 2: activity.ActivityInfo.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 3: activity.CreateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
-	7,  // 4: activity.CreateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
+	15, // 0: activity.ActivityInfo.start_time:type_name -> google.protobuf.Timestamp
+	15, // 1: activity.ActivityInfo.end_time:type_name -> google.protobuf.Timestamp
+	15, // 2: activity.ActivityInfo.created_at:type_name -> google.protobuf.Timestamp
+	15, // 3: activity.CreateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
+	15, // 4: activity.CreateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
 	0,  // 5: activity.GetActivityListResponse.activities:type_name -> activity.ActivityInfo
-	1,  // 6: activity.Activity.CreateActivity:input_type -> activity.CreateActivityRequest
-	2,  // 7: activity.Activity.GetActivityList:input_type -> activity.GetActivityListRequest
-	4,  // 8: activity.Activity.GetActivityDetail:input_type -> activity.GetActivityDetailRequest
-	5,  // 9: activity.Activity.EnrollActivity:input_type -> activity.EnrollActivityRequest
-	0,  // 10: activity.Activity.CreateActivity:output_type -> activity.ActivityInfo
-	3,  // 11: activity.Activity.GetActivityList:output_type -> activity.GetActivityListResponse
-	0,  // 12: activity.Activity.GetActivityDetail:output_type -> activity.ActivityInfo
-	6,  // 13: activity.Activity.EnrollActivity:output_type -> activity.EnrollActivityResponse
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	15, // 6: activity.UpdateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
+	15, // 7: activity.UpdateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
+	15, // 8: activity.ParticipantInfo.enroll_time:type_name -> google.protobuf.Timestamp
+	15, // 9: activity.ParticipantInfo.checkin_time:type_name -> google.protobuf.Timestamp
+	12, // 10: activity.GetParticipantsResponse.participants:type_name -> activity.ParticipantInfo
+	1,  // 11: activity.Activity.CreateActivity:input_type -> activity.CreateActivityRequest
+	2,  // 12: activity.Activity.GetActivityList:input_type -> activity.GetActivityListRequest
+	4,  // 13: activity.Activity.GetActivityDetail:input_type -> activity.GetActivityDetailRequest
+	5,  // 14: activity.Activity.EnrollActivity:input_type -> activity.EnrollActivityRequest
+	7,  // 15: activity.Activity.CancelEnroll:input_type -> activity.CancelEnrollRequest
+	8,  // 16: activity.Activity.CheckIn:input_type -> activity.CheckInRequest
+	9,  // 17: activity.Activity.UpdateActivity:input_type -> activity.UpdateActivityRequest
+	10, // 18: activity.Activity.GetMyActivities:input_type -> activity.GetMyActivitiesRequest
+	11, // 19: activity.Activity.GetEnrolledActivities:input_type -> activity.GetEnrolledActivitiesRequest
+	13, // 20: activity.Activity.GetParticipants:input_type -> activity.GetParticipantsRequest
+	0,  // 21: activity.Activity.CreateActivity:output_type -> activity.ActivityInfo
+	3,  // 22: activity.Activity.GetActivityList:output_type -> activity.GetActivityListResponse
+	0,  // 23: activity.Activity.GetActivityDetail:output_type -> activity.ActivityInfo
+	6,  // 24: activity.Activity.EnrollActivity:output_type -> activity.EnrollActivityResponse
+	6,  // 25: activity.Activity.CancelEnroll:output_type -> activity.EnrollActivityResponse
+	6,  // 26: activity.Activity.CheckIn:output_type -> activity.EnrollActivityResponse
+	0,  // 27: activity.Activity.UpdateActivity:output_type -> activity.ActivityInfo
+	3,  // 28: activity.Activity.GetMyActivities:output_type -> activity.GetActivityListResponse
+	3,  // 29: activity.Activity.GetEnrolledActivities:output_type -> activity.GetActivityListResponse
+	14, // 30: activity.Activity.GetParticipants:output_type -> activity.GetParticipantsResponse
+	21, // [21:31] is the sub-list for method output_type
+	11, // [11:21] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_activity_rpc_activity_proto_init() }
@@ -594,7 +1280,7 @@ func file_activity_rpc_activity_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_activity_rpc_activity_proto_rawDesc), len(file_activity_rpc_activity_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

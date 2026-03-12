@@ -8,6 +8,7 @@ import (
 
 	"pallink/activity/api/internal/svc"
 	"pallink/activity/api/internal/types"
+	"pallink/activity/rpc/activityclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +28,35 @@ func NewGetPublicActivityListLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *GetPublicActivityListLogic) GetPublicActivityList(req *types.GetActivityListReq) (resp *types.GetActivityListResp, err error) {
-	// todo: add your logic here and delete this line
+	page := req.Page
+	pageSize := req.PageSize
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 20
+	}
 
-	return
+	rpcResp, err := l.svcCtx.ActivityRpc.GetActivityList(l.ctx, &activityclient.GetActivityListRequest{
+		Page:         page,
+		PageSize:     pageSize,
+		Status:       req.Status,
+		Keyword:      req.Keyword,
+		ViewerUserId: 0,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	list := make([]types.ActivityBrief, 0, len(rpcResp.Activities))
+	for _, item := range rpcResp.Activities {
+		list = append(list, toActivityBrief(item))
+	}
+
+	return &types.GetActivityListResp{
+		List:     list,
+		Total:    rpcResp.Total,
+		Page:     page,
+		PageSize: pageSize,
+	}, nil
 }

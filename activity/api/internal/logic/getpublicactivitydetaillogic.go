@@ -8,6 +8,7 @@ import (
 
 	"pallink/activity/api/internal/svc"
 	"pallink/activity/api/internal/types"
+	"pallink/activity/rpc/activityclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +28,13 @@ func NewGetPublicActivityDetailLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *GetPublicActivityDetailLogic) GetPublicActivityDetail(req *types.GetActivityDetailReq) (resp *types.GetActivityDetailResp, err error) {
-	// todo: add your logic here and delete this line
+	rpcResp, err := l.svcCtx.ActivityRpc.GetActivityDetail(l.ctx, &activityclient.GetActivityDetailRequest{
+		Id:           req.Id,
+		ViewerUserId: 0,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return &types.GetActivityDetailResp{Activity: toActivityInfo(rpcResp)}, nil
 }

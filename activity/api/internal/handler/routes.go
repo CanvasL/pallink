@@ -12,6 +12,19 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes([]rest.Route{
+		{
+			Method:  http.MethodGet,
+			Path:    "/public/activities",
+			Handler: GetPublicActivityListHandler(serverCtx),
+		},
+		{
+			Method:  http.MethodGet,
+			Path:    "/public/activities/:id",
+			Handler: GetPublicActivityDetailHandler(serverCtx),
+		},
+	})
+
 	server.AddRoutes(
 		[]rest.Route{
 			{
@@ -63,16 +76,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/activities/my",
 				Handler: GetMyActivitiesHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/public/activities",
-				Handler: GetPublicActivityListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/public/activities/:id",
-				Handler: GetPublicActivityDetailHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

@@ -5,11 +5,16 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"time"
 
 	"pallink/activity/api/internal/svc"
 	"pallink/activity/api/internal/types"
+	"pallink/activity/rpc/activityclient"
+	"pallink/common/auth"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type UpdateActivityLogic struct {
@@ -27,7 +32,46 @@ func NewUpdateActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 }
 
 func (l *UpdateActivityLogic) UpdateActivity(req *types.UpdateActivityReq) (resp *types.UpdateActivityResp, err error) {
-	// todo: add your logic here and delete this line
+	userID, ok := auth.GetUserIDFromCtx(l.ctx)
+	if !ok || userID == 0 {
+		return nil, errors.New("unauthorized")
+	}
 
-	return
+	maxPeople := int32(-1)
+	if req.MaxPeople != nil {
+		maxPeople = *req.MaxPeople
+	}
+	status := int32(-1)
+	if req.Status != nil {
+		status = *req.Status
+	}
+
+	updateReq := &activityclient.UpdateActivityRequest{
+		Id:        req.Id,
+		CreatorId: userID,
+		MaxPeople: maxPeople,
+		Status:    status,
+	}
+	if req.Title != nil {
+		updateReq.Title = *req.Title
+	}
+	if req.Description != nil {
+		updateReq.Description = *req.Description
+	}
+	if req.Location != nil {
+		updateReq.Location = *req.Location
+	}
+	if req.StartTime != nil {
+		updateReq.StartTime = timestamppb.New(time.Unix(*req.StartTime, 0))
+	}
+	if req.EndTime != nil {
+		updateReq.EndTime = timestamppb.New(time.Unix(*req.EndTime, 0))
+	}
+
+	rpcResp, err := l.svcCtx.ActivityRpc.UpdateActivity(l.ctx, updateReq)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.UpdateActivityResp{Activity: toActivityInfo(rpcResp)}, nil
 }

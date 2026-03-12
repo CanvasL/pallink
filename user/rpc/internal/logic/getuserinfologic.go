@@ -2,10 +2,12 @@ package logic
 
 import (
 	"context"
+	"errors"
 
-	"pallink/user/rpc/user"
 	"pallink/user/rpc/internal/svc"
+	"pallink/user/rpc/user"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -24,7 +26,31 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(in *user.GetUserInfoRequest) (*user.UserInfo, error) {
-	// todo: add your logic here and delete this line
+	if in.UserId == 0 {
+		return nil, errors.New("user_id required")
+	}
 
-	return &user.UserInfo{}, nil
+	var (
+		mobile   string
+		nickname string
+		avatar   string
+	)
+	err := l.svcCtx.DB.QueryRow(
+		l.ctx,
+		`SELECT mobile, nickname, avatar FROM "user" WHERE id=$1`,
+		in.UserId,
+	).Scan(&mobile, &nickname, &avatar)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+
+	return &user.UserInfo{
+		Id:       in.UserId,
+		Mobile:   mobile,
+		Nickname: nickname,
+		Avatar:   avatar,
+	}, nil
 }

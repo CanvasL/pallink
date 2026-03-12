@@ -19,10 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Activity_CreateActivity_FullMethodName    = "/activity.Activity/CreateActivity"
-	Activity_GetActivityList_FullMethodName   = "/activity.Activity/GetActivityList"
-	Activity_GetActivityDetail_FullMethodName = "/activity.Activity/GetActivityDetail"
-	Activity_EnrollActivity_FullMethodName    = "/activity.Activity/EnrollActivity"
+	Activity_CreateActivity_FullMethodName        = "/activity.Activity/CreateActivity"
+	Activity_GetActivityList_FullMethodName       = "/activity.Activity/GetActivityList"
+	Activity_GetActivityDetail_FullMethodName     = "/activity.Activity/GetActivityDetail"
+	Activity_EnrollActivity_FullMethodName        = "/activity.Activity/EnrollActivity"
+	Activity_CancelEnroll_FullMethodName          = "/activity.Activity/CancelEnroll"
+	Activity_CheckIn_FullMethodName               = "/activity.Activity/CheckIn"
+	Activity_UpdateActivity_FullMethodName        = "/activity.Activity/UpdateActivity"
+	Activity_GetMyActivities_FullMethodName       = "/activity.Activity/GetMyActivities"
+	Activity_GetEnrolledActivities_FullMethodName = "/activity.Activity/GetEnrolledActivities"
+	Activity_GetParticipants_FullMethodName       = "/activity.Activity/GetParticipants"
 )
 
 // ActivityClient is the client API for Activity service.
@@ -33,6 +39,12 @@ type ActivityClient interface {
 	GetActivityList(ctx context.Context, in *GetActivityListRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 	GetActivityDetail(ctx context.Context, in *GetActivityDetailRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
 	EnrollActivity(ctx context.Context, in *EnrollActivityRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
+	CancelEnroll(ctx context.Context, in *CancelEnrollRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
+	CheckIn(ctx context.Context, in *CheckInRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
+	UpdateActivity(ctx context.Context, in *UpdateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
+	GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
+	GetEnrolledActivities(ctx context.Context, in *GetEnrolledActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
+	GetParticipants(ctx context.Context, in *GetParticipantsRequest, opts ...grpc.CallOption) (*GetParticipantsResponse, error)
 }
 
 type activityClient struct {
@@ -83,6 +95,66 @@ func (c *activityClient) EnrollActivity(ctx context.Context, in *EnrollActivityR
 	return out, nil
 }
 
+func (c *activityClient) CancelEnroll(ctx context.Context, in *CancelEnrollRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EnrollActivityResponse)
+	err := c.cc.Invoke(ctx, Activity_CancelEnroll_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) CheckIn(ctx context.Context, in *CheckInRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EnrollActivityResponse)
+	err := c.cc.Invoke(ctx, Activity_CheckIn_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) UpdateActivity(ctx context.Context, in *UpdateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ActivityInfo)
+	err := c.cc.Invoke(ctx, Activity_UpdateActivity_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetActivityListResponse)
+	err := c.cc.Invoke(ctx, Activity_GetMyActivities_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) GetEnrolledActivities(ctx context.Context, in *GetEnrolledActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetActivityListResponse)
+	err := c.cc.Invoke(ctx, Activity_GetEnrolledActivities_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) GetParticipants(ctx context.Context, in *GetParticipantsRequest, opts ...grpc.CallOption) (*GetParticipantsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetParticipantsResponse)
+	err := c.cc.Invoke(ctx, Activity_GetParticipants_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ActivityServer is the server API for Activity service.
 // All implementations must embed UnimplementedActivityServer
 // for forward compatibility.
@@ -91,6 +163,12 @@ type ActivityServer interface {
 	GetActivityList(context.Context, *GetActivityListRequest) (*GetActivityListResponse, error)
 	GetActivityDetail(context.Context, *GetActivityDetailRequest) (*ActivityInfo, error)
 	EnrollActivity(context.Context, *EnrollActivityRequest) (*EnrollActivityResponse, error)
+	CancelEnroll(context.Context, *CancelEnrollRequest) (*EnrollActivityResponse, error)
+	CheckIn(context.Context, *CheckInRequest) (*EnrollActivityResponse, error)
+	UpdateActivity(context.Context, *UpdateActivityRequest) (*ActivityInfo, error)
+	GetMyActivities(context.Context, *GetMyActivitiesRequest) (*GetActivityListResponse, error)
+	GetEnrolledActivities(context.Context, *GetEnrolledActivitiesRequest) (*GetActivityListResponse, error)
+	GetParticipants(context.Context, *GetParticipantsRequest) (*GetParticipantsResponse, error)
 	mustEmbedUnimplementedActivityServer()
 }
 
@@ -112,6 +190,24 @@ func (UnimplementedActivityServer) GetActivityDetail(context.Context, *GetActivi
 }
 func (UnimplementedActivityServer) EnrollActivity(context.Context, *EnrollActivityRequest) (*EnrollActivityResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method EnrollActivity not implemented")
+}
+func (UnimplementedActivityServer) CancelEnroll(context.Context, *CancelEnrollRequest) (*EnrollActivityResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelEnroll not implemented")
+}
+func (UnimplementedActivityServer) CheckIn(context.Context, *CheckInRequest) (*EnrollActivityResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CheckIn not implemented")
+}
+func (UnimplementedActivityServer) UpdateActivity(context.Context, *UpdateActivityRequest) (*ActivityInfo, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateActivity not implemented")
+}
+func (UnimplementedActivityServer) GetMyActivities(context.Context, *GetMyActivitiesRequest) (*GetActivityListResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMyActivities not implemented")
+}
+func (UnimplementedActivityServer) GetEnrolledActivities(context.Context, *GetEnrolledActivitiesRequest) (*GetActivityListResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetEnrolledActivities not implemented")
+}
+func (UnimplementedActivityServer) GetParticipants(context.Context, *GetParticipantsRequest) (*GetParticipantsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetParticipants not implemented")
 }
 func (UnimplementedActivityServer) mustEmbedUnimplementedActivityServer() {}
 func (UnimplementedActivityServer) testEmbeddedByValue()                  {}
@@ -206,6 +302,114 @@ func _Activity_EnrollActivity_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Activity_CancelEnroll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelEnrollRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).CancelEnroll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_CancelEnroll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).CancelEnroll(ctx, req.(*CancelEnrollRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_CheckIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).CheckIn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_CheckIn_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).CheckIn(ctx, req.(*CheckInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_UpdateActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateActivityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).UpdateActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_UpdateActivity_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).UpdateActivity(ctx, req.(*UpdateActivityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_GetMyActivities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyActivitiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).GetMyActivities(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_GetMyActivities_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).GetMyActivities(ctx, req.(*GetMyActivitiesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_GetEnrolledActivities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEnrolledActivitiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).GetEnrolledActivities(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_GetEnrolledActivities_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).GetEnrolledActivities(ctx, req.(*GetEnrolledActivitiesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_GetParticipants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetParticipantsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).GetParticipants(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_GetParticipants_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).GetParticipants(ctx, req.(*GetParticipantsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Activity_ServiceDesc is the grpc.ServiceDesc for Activity service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +432,30 @@ var Activity_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EnrollActivity",
 			Handler:    _Activity_EnrollActivity_Handler,
+		},
+		{
+			MethodName: "CancelEnroll",
+			Handler:    _Activity_CancelEnroll_Handler,
+		},
+		{
+			MethodName: "CheckIn",
+			Handler:    _Activity_CheckIn_Handler,
+		},
+		{
+			MethodName: "UpdateActivity",
+			Handler:    _Activity_UpdateActivity_Handler,
+		},
+		{
+			MethodName: "GetMyActivities",
+			Handler:    _Activity_GetMyActivities_Handler,
+		},
+		{
+			MethodName: "GetEnrolledActivities",
+			Handler:    _Activity_GetEnrolledActivities_Handler,
+		},
+		{
+			MethodName: "GetParticipants",
+			Handler:    _Activity_GetParticipants_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

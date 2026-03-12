@@ -1,6 +1,13 @@
 Name: activity.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:8004
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+  - etcd:2379
   Key: activity.rpc
+Postgres:
+  DSN: postgres://pallink:pallink@postgres:5432/pallink?sslmode=disable
+  MaxConns: 10
+  MinConns: 2
+  MaxConnLifetimeSeconds: 1800
+  MaxConnIdleSeconds: 300
+  HealthCheckPeriodSeconds: 60

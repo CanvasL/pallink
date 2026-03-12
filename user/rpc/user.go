@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"pallink/user/rpc/user"
 	"pallink/user/rpc/internal/config"
 	"pallink/user/rpc/internal/server"
 	"pallink/user/rpc/internal/svc"
+	"pallink/user/rpc/user"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -24,6 +24,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
+	defer ctx.Close()
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		user.RegisterUserServer(grpcServer, server.NewUserServer(ctx))

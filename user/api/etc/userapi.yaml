@@ -1,3 +1,11 @@
 Name: userApi
 Host: 0.0.0.0
-Port: 8888
+Port: 8001
+UserRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: user.rpc
+Auth:
+  AccessSecret: "pallink-mvp-secret"
+  AccessExpire: 86400

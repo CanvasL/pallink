@@ -8,6 +8,7 @@ import (
 
 	"pallink/user/api/internal/svc"
 	"pallink/user/api/internal/types"
+	"pallink/user/rpc/userclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +28,22 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, err error) {
-	// todo: add your logic here and delete this line
+	rpcResp, err := l.svcCtx.UserRpc.Login(l.ctx, &userclient.LoginRequest{
+		Mobile:   req.Mobile,
+		Password: req.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return &types.LoginResponse{
+		UserId: rpcResp.UserId,
+		Token:  rpcResp.Token,
+		UserInfo: types.UserInfo{
+			Id:       rpcResp.UserInfo.Id,
+			Mobile:   rpcResp.UserInfo.Mobile,
+			Nickname: rpcResp.UserInfo.Nickname,
+			Avatar:   rpcResp.UserInfo.Avatar,
+		},
+	}, nil
 }

@@ -5,9 +5,12 @@ package logic
 
 import (
 	"context"
+	"errors"
 
+	"pallink/common/auth"
 	"pallink/user/api/internal/svc"
 	"pallink/user/api/internal/types"
+	"pallink/user/rpc/userclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +30,22 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoRequest) (resp *types.UserInfo, err error) {
-	// todo: add your logic here and delete this line
+	userID, ok := auth.GetUserIDFromCtx(l.ctx)
+	if !ok || userID == 0 {
+		return nil, errors.New("unauthorized")
+	}
 
-	return
+	rpcResp, err := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &userclient.GetUserInfoRequest{
+		UserId: userID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.UserInfo{
+		Id:       rpcResp.Id,
+		Mobile:   rpcResp.Mobile,
+		Nickname: rpcResp.Nickname,
+		Avatar:   rpcResp.Avatar,
+	}, nil
 }

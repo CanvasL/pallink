@@ -5,9 +5,12 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"pallink/activity/api/internal/svc"
 	"pallink/activity/api/internal/types"
+	"pallink/activity/rpc/activityclient"
+	"pallink/common/auth"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +30,22 @@ func NewCheckInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CheckInLo
 }
 
 func (l *CheckInLogic) CheckIn(req *types.CheckInReq) (resp *types.CheckInResp, err error) {
-	// todo: add your logic here and delete this line
+	userID, ok := auth.GetUserIDFromCtx(l.ctx)
+	if !ok || userID == 0 {
+		return nil, errors.New("unauthorized")
+	}
+	if req.Id == 0 {
+		return nil, errors.New("id required")
+	}
 
-	return
+	rpcResp, err := l.svcCtx.ActivityRpc.CheckIn(l.ctx, &activityclient.CheckInRequest{
+		ActivityId: req.Id,
+		UserId:     userID,
+		Code:       req.Code,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.CheckInResp{Success: rpcResp.Success, Message: rpcResp.Message}, nil
 }

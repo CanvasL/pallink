@@ -24,7 +24,21 @@ func NewGetActivityListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetActivityListLogic) GetActivityList(in *activity.GetActivityListRequest) (*activity.GetActivityListResponse, error) {
-	// todo: add your logic here and delete this line
+	filter := listFilter{
+		Status:  nil,
+		Keyword: in.Keyword,
+	}
+	if in.Status != 0 {
+		filter.Status = &in.Status
+	}
 
-	return &activity.GetActivityListResponse{}, nil
+	activities, total, err := queryActivityList(l.ctx, l.svcCtx.DB, filter, in.ViewerUserId, in.Page, in.PageSize)
+	if err != nil {
+		return nil, err
+	}
+
+	return &activity.GetActivityListResponse{
+		Activities: activities,
+		Total:      total,
+	}, nil
 }

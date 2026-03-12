@@ -1,7 +1,12 @@
 package config
 
-import "github.com/zeromicro/go-zero/zrpc"
+import (
+	"pallink/common/postgres"
+
+	"github.com/zeromicro/go-zero/zrpc"
+)
 
 type Config struct {
 	zrpc.RpcServerConf
+	Postgres postgres.Config
 }

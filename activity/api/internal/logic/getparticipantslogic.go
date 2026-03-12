@@ -8,6 +8,7 @@ import (
 
 	"pallink/activity/api/internal/svc"
 	"pallink/activity/api/internal/types"
+	"pallink/activity/rpc/activityclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +28,41 @@ func NewGetParticipantsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetParticipantsLogic) GetParticipants(req *types.GetParticipantsReq) (resp *types.GetParticipantsResp, err error) {
-	// todo: add your logic here and delete this line
+	page := req.Page
+	pageSize := req.PageSize
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 20
+	}
 
-	return
+	rpcResp, err := l.svcCtx.ActivityRpc.GetParticipants(l.ctx, &activityclient.GetParticipantsRequest{
+		ActivityId: req.Id,
+		Page:       page,
+		PageSize:   pageSize,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	list := make([]types.ParticipantInfo, 0, len(rpcResp.Participants))
+	for _, p := range rpcResp.Participants {
+		item := types.ParticipantInfo{
+			UserId:      p.UserId,
+			Nickname:    p.Nickname,
+			Avatar:      p.Avatar,
+			EnrollTime:  tsToUnix(p.EnrollTime),
+			CheckinTime: tsToUnix(p.CheckinTime),
+			Status:      p.Status,
+		}
+		list = append(list, item)
+	}
+
+	return &types.GetParticipantsResp{
+		List:     list,
+		Total:    rpcResp.Total,
+		Page:     page,
+		PageSize: pageSize,
+	}, nil
 }

@@ -24,7 +24,5 @@ func NewGetActivityDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *GetActivityDetailLogic) GetActivityDetail(in *activity.GetActivityDetailRequest) (*activity.ActivityInfo, error) {
-	// todo: add your logic here and delete this line
-
-	return &activity.ActivityInfo{}, nil
+	return queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.ViewerUserId)
 }

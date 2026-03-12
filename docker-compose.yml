@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: pallink
+      POSTGRES_PASSWORD: pallink
+      POSTGRES_DB: pallink
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  etcd:
+    image: registry.k8s.io/etcd:v3.5.21
+    environment:
+      ETCDCTL_API: "3"
+    command:
+      - /usr/local/bin/etcd
+      - --advertise-client-urls=http://0.0.0.0:2379
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://0.0.0.0:2380
+      - --initial-cluster=default=http://0.0.0.0:2380
+      - --initial-cluster-token=etcd-cluster-1
+      - --initial-cluster-state=new
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+
+  user-rpc:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/user-rpc.Dockerfile
+    depends_on:
+      - postgres
+      - etcd
+    ports:
+      - "8002:8002"
+
+  user-api:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/user-api.Dockerfile
+    depends_on:
+      - user-rpc
+      - etcd
+    ports:
+      - "8001:8001"
+
+  activity-rpc:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/activity-rpc.Dockerfile
+    depends_on:
+      - postgres
+      - etcd
+    ports:
+      - "8004:8004"
+
+  activity-api:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/activity-api.Dockerfile
+    depends_on:
+      - activity-rpc
+      - etcd
+    ports:
+      - "8003:8003"
+
+volumes:
+  postgres_data:
