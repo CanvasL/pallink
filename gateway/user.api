@@ -1,0 +1,45 @@
+syntax = "v1"
+
+// User related types
+// 用户相关数据结构
+
+// User profile
+// 用户资料
+
+type UserInfo {
+	Id       uint64 `json:"id"`
+	Mobile   string `json:"mobile"`
+	Nickname string `json:"nickname"`
+	Avatar   string `json:"avatar"`
+}
+
+// Register
+// 注册
+type RegisterRequest {
+	Mobile     string `json:"mobile"`
+	Password   string `json:"password"`
+	Nickname   string `json:"nickname"`
+	VerifyCode string `json:"verify_code"`
+}
+
+type RegisterResponse {
+	UserId uint64 `json:"user_id"`
+	Token  string `json:"token"`
+}
+
+// Login
+// 登录
+type LoginRequest {
+	Mobile   string `json:"mobile"`
+	Password string `json:"password"`
+}
+
+type LoginResponse {
+	UserId   uint64   `json:"user_id"`
+	Token    string   `json:"token"`
+	UserInfo UserInfo `json:"user_info"`
+}
+
+// Get current user info
+// 获取当前用户信息
+type GetUserInfoRequest {}

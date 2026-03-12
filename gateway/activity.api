@@ -1,0 +1,184 @@
+syntax = "v1"
+
+// Activity related types
+// 活动相关数据结构
+
+// Activity detail
+// 活动详情
+type ActivityInfo {
+	Id            uint64 `json:"id"`
+	CreatorId     uint64 `json:"creator_id"`
+	Title         string `json:"title"`
+	Description   string `json:"description"`
+	Location      string `json:"location"`
+	StartTime     int64  `json:"start_time"`
+	EndTime       int64  `json:"end_time"`
+	MaxPeople     int32  `json:"max_people"`
+	CurrentPeople int32  `json:"current_people"`
+	Status        int32  `json:"status"`
+	CreatedAt     int64  `json:"created_at"`
+	IsEnrolled    bool   `json:"is_enrolled"`
+	CreatorName   string `json:"creator_name"`
+	CreatorAvatar string `json:"creator_avatar"`
+}
+
+// Activity brief for list
+// 活动列表简要信息
+type ActivityBrief {
+	Id            uint64 `json:"id"`
+	CreatorId     uint64 `json:"creator_id"`
+	CreatorName   string `json:"creator_name"`
+	CreatorAvatar string `json:"creator_avatar"`
+	Title         string `json:"title"`
+	Location      string `json:"location"`
+	StartTime     int64  `json:"start_time"`
+	EndTime       int64  `json:"end_time"`
+	MaxPeople     int32  `json:"max_people"`
+	CurrentPeople int32  `json:"current_people"`
+	Status        int32  `json:"status"`
+	IsEnrolled    bool   `json:"is_enrolled"`
+}
+
+// Create activity
+// 创建活动
+type CreateActivityReq {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Location    string `json:"location"`
+	StartTime   int64  `json:"start_time"`
+	EndTime     int64  `json:"end_time"`
+	MaxPeople   int32  `json:"max_people,optional"`
+}
+
+type CreateActivityResp {
+	Activity ActivityInfo `json:"activity"`
+}
+
+// Update activity
+// 更新活动
+type UpdateActivityReq {
+	Id          uint64  `path:"id"`
+	Title       *string `json:"title,optional"`
+	Description *string `json:"description,optional"`
+	Location    *string `json:"location,optional"`
+	StartTime   *int64  `json:"start_time,optional"`
+	EndTime     *int64  `json:"end_time,optional"`
+	MaxPeople   *int32  `json:"max_people,optional"`
+	Status      *int32  `json:"status,optional"`
+}
+
+type UpdateActivityResp {
+	Activity ActivityInfo `json:"activity"`
+}
+
+// List activities
+// 活动列表
+type GetActivityListReq {
+	Page     int32  `form:"page,default=1"`
+	PageSize int32  `form:"page_size,default=20"`
+	Status   int32  `form:"status,optional"`
+	Keyword  string `form:"keyword,optional"`
+}
+
+type GetActivityListResp {
+	List     []ActivityBrief `json:"list"`
+	Total    int32           `json:"total"`
+	Page     int32           `json:"page"`
+	PageSize int32           `json:"page_size"`
+}
+
+// My activities
+// 我创建的活动
+type GetMyActivitiesReq {
+	Page     int32 `form:"page,default=1"`
+	PageSize int32 `form:"page_size,default=20"`
+}
+
+type GetMyActivitiesResp {
+	List     []ActivityBrief `json:"list"`
+	Total    int32           `json:"total"`
+	Page     int32           `json:"page"`
+	PageSize int32           `json:"page_size"`
+}
+
+// Enrolled activities
+// 我报名的活动
+type GetEnrolledActivitiesReq {
+	Page     int32 `form:"page,default=1"`
+	PageSize int32 `form:"page_size,default=20"`
+}
+
+type GetEnrolledActivitiesResp {
+	List     []ActivityBrief `json:"list"`
+	Total    int32           `json:"total"`
+	Page     int32           `json:"page"`
+	PageSize int32           `json:"page_size"`
+}
+
+// Activity detail
+// 活动详情
+type GetActivityDetailReq {
+	Id uint64 `path:"id"`
+}
+
+type GetActivityDetailResp {
+	Activity ActivityInfo `json:"activity"`
+}
+
+// Enroll activity
+// 报名活动
+type EnrollActivityReq {
+	Id uint64 `path:"id"`
+}
+
+type EnrollActivityResp {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// Cancel enrollment
+// 取消报名
+type CancelEnrollReq {
+	Id uint64 `path:"id"`
+}
+
+type CancelEnrollResp {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// Check in
+// 活动签到
+type CheckInReq {
+	Id   uint64 `path:"id"`
+	Code string `json:"code,optional"`
+}
+
+type CheckInResp {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// Participants
+// 参与者列表
+type GetParticipantsReq {
+	Id       uint64 `path:"id"`
+	Page     int32  `form:"page,default=1"`
+	PageSize int32  `form:"page_size,default=20"`
+}
+
+type ParticipantInfo {
+	UserId      uint64 `json:"user_id"`
+	Nickname    string `json:"nickname"`
+	Avatar      string `json:"avatar"`
+	EnrollTime  int64  `json:"enroll_time"`
+	CheckinTime int64  `json:"checkin_time"`
+	Status      int32  `json:"status"`
+}
+
+type GetParticipantsResp {
+	List     []ParticipantInfo `json:"list"`
+	Total    int32             `json:"total"`
+	Page     int32             `json:"page"`
+	PageSize int32             `json:"page_size"`
+}

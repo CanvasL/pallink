@@ -30,6 +30,15 @@ services:
       - "2379:2379"
       - "2380:2380"
 
+  swagger-ui:
+    image: swaggerapi/swagger-ui:v5.32.0
+    environment:
+      SWAGGER_JSON: /swagger/swagger.json
+    volumes:
+      - ./gateway/api/swagger.json:/swagger/swagger.json:ro
+    ports:
+      - "8090:8080"
+
   user-rpc:
     build:
       context: .
@@ -39,16 +48,6 @@ services:
       - etcd
     ports:
       - "8002:8002"
-
-  user-api:
-    build:
-      context: .
-      dockerfile: ./deploy/docker/user-api.Dockerfile
-    depends_on:
-      - user-rpc
-      - etcd
-    ports:
-      - "8001:8001"
 
   activity-rpc:
     build:
@@ -60,15 +59,16 @@ services:
     ports:
       - "8004:8004"
 
-  activity-api:
+  gateway-api:
     build:
       context: .
-      dockerfile: ./deploy/docker/activity-api.Dockerfile
+      dockerfile: ./deploy/docker/gateway-api.Dockerfile
     depends_on:
+      - user-rpc
       - activity-rpc
       - etcd
     ports:
-      - "8003:8003"
+      - "8080:8080"
 
 volumes:
   postgres_data:

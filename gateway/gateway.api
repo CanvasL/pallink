@@ -1,0 +1,70 @@
+syntax = "v1"
+
+import "user.api"
+import "activity.api"
+
+info (
+	title:   "PalLink Gateway API"
+	desc:    "Gateway for user/activity"
+	author:  "PalLink Team"
+	version: "v1"
+)
+
+// Gateway service
+// 网关服务
+@server (
+	jwt: Auth
+)
+service gatewayApi {
+	// User
+	// 用户
+	@handler Register
+	post /users (RegisterRequest) returns (RegisterResponse)
+
+	@handler Login
+	post /auth/login (LoginRequest) returns (LoginResponse)
+
+	@handler GetUserInfo
+	get /users/me (GetUserInfoRequest) returns (UserInfo)
+
+	// Activity
+	// 活动
+	@handler CreateActivity
+	post /activities (CreateActivityReq) returns (CreateActivityResp)
+
+	@handler UpdateActivity
+	put /activities/:id (UpdateActivityReq) returns (UpdateActivityResp)
+
+	@handler GetActivityList
+	get /activities (GetActivityListReq) returns (GetActivityListResp)
+
+	@handler GetMyActivities
+	get /activities/my (GetMyActivitiesReq) returns (GetMyActivitiesResp)
+
+	@handler GetEnrolledActivities
+	get /activities/enrolled (GetEnrolledActivitiesReq) returns (GetEnrolledActivitiesResp)
+
+	@handler GetActivityDetail
+	get /activities/:id (GetActivityDetailReq) returns (GetActivityDetailResp)
+
+	@handler EnrollActivity
+	post /activities/:id/enrollments (EnrollActivityReq) returns (EnrollActivityResp)
+
+	@handler CancelEnroll
+	delete /activities/:id/enrollments (CancelEnrollReq) returns (CancelEnrollResp)
+
+	@handler CheckIn
+	post /activities/:id/checkins (CheckInReq) returns (CheckInResp)
+
+	@handler GetParticipants
+	get /activities/:id/participants (GetParticipantsReq) returns (GetParticipantsResp)
+
+	// Public
+	// 公共
+	@handler GetPublicActivityList
+	get /public/activities (GetActivityListReq) returns (GetActivityListResp)
+
+	@handler GetPublicActivityDetail
+	get /public/activities/:id (GetActivityDetailReq) returns (GetActivityDetailResp)
+}
+

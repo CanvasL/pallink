@@ -1,0 +1,16 @@
+Name: gatewayApi
+Host: 0.0.0.0
+Port: 8080
+Auth:
+  AccessSecret: "pallink-mvp-secret"
+  AccessExpire: 86400
+UserRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: user.rpc
+ActivityRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: activity.rpc
