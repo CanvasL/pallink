@@ -1,0 +1,49 @@
+syntax = "v1"
+
+info (
+	title:   "用户服务API"
+	desc:    "PalLink 用户服务接口"
+	author:  "PalLink Team"
+	version: "v1"
+)
+
+type (
+	UserInfo {
+		Id       uint64 `json:"id"`
+		Mobile   string `json:"mobile"`
+		Nickname string `json:"nickname"`
+		Avatar   string `json:"avatar"`
+	}
+	RegisterRequest {
+		Mobile     string `json:"mobile"`
+		Password   string `json:"password"`
+		Nickname   string `json:"nickname"`
+		VerifyCode string `json:"verify_code"`
+	}
+	RegisterResponse {
+		UserId uint64 `json:"user_id"`
+		Token  string `json:"token"`
+	}
+	LoginRequest {
+		Mobile   string `json:"mobile"`
+		Password string `json:"password"`
+	}
+	LoginResponse {
+		UserId   uint64   `json:"user_id"`
+		Token    string   `json:"token"`
+		UserInfo UserInfo `json:"user_info"`
+	}
+	GetUserInfoRequest  {}
+)
+
+service userApi {
+	@handler Register
+	post /users (RegisterRequest) returns (RegisterResponse)
+
+	@handler Login
+	post /auth/login (LoginRequest) returns (LoginResponse)
+
+	@handler GetUserInfo
+	get /users/me (GetUserInfoRequest) returns (UserInfo)
+}
+

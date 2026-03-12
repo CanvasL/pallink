@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package activity;
+option go_package = "./activity";
+
+import "google/protobuf/timestamp.proto";
+
+service Activity {
+    rpc CreateActivity(CreateActivityRequest) returns (ActivityInfo);
+    rpc GetActivityList(GetActivityListRequest) returns (GetActivityListResponse);
+    rpc GetActivityDetail(GetActivityDetailRequest) returns (ActivityInfo);
+    rpc EnrollActivity(EnrollActivityRequest) returns (EnrollActivityResponse);
+}
+
+message ActivityInfo {
+    uint64 id = 1;
+    uint64 creator_id = 2;
+    string title = 3;
+    string description = 4;
+    string location = 5;
+    google.protobuf.Timestamp start_time = 6;
+    google.protobuf.Timestamp end_time = 7;
+    int32 max_people = 8;
+    int32 current_people = 9;
+    int32 status = 10;
+    google.protobuf.Timestamp created_at = 11;
+}
+
+message CreateActivityRequest {
+    uint64 creator_id = 1;
+    string title = 2;
+    string description = 3;
+    string location = 4;
+    google.protobuf.Timestamp start_time = 5;
+    google.protobuf.Timestamp end_time = 6;
+    int32 max_people = 7;
+}
+
+message GetActivityListRequest {
+    int32 page = 1;
+    int32 page_size = 2;
+}
+
+message GetActivityListResponse {
+    repeated ActivityInfo activities = 1;
+    int32 total = 2;
+}
+
+message GetActivityDetailRequest {
+    uint64 id = 1;
+}
+
+message EnrollActivityRequest {
+    uint64 activity_id = 1;
+    uint64 user_id = 2;
+}
+
+message EnrollActivityResponse {
+    bool success = 1;
+}
