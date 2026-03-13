@@ -8,6 +8,8 @@ service User {
     rpc Register(RegisterRequest) returns (RegisterResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc GetUserInfo(GetUserInfoRequest) returns (UserInfo);
+    rpc UpdateUserInfo(UpdateUserInfoRequest) returns (UserInfo);
+    rpc UpdateUserAuditStatus(UpdateUserAuditStatusRequest) returns (UpdateUserAuditStatusResponse);
 }
 
 // 用户信息
@@ -16,6 +18,7 @@ message UserInfo {
     string mobile = 2;
     string nickname = 3;
     string avatar = 4;
+    int32 audit_status = 5;
 }
 
 // 注册
@@ -46,4 +49,21 @@ message LoginResponse {
 // 获取用户信息
 message GetUserInfoRequest {
     uint64 user_id = 1;
+}
+
+// 更新用户信息
+message UpdateUserInfoRequest {
+    uint64 user_id = 1;
+    string nickname = 2;
+    string avatar = 3;
+}
+
+message UpdateUserAuditStatusRequest {
+    uint64 user_id = 1;
+    int32 audit_status = 2;
+}
+
+message UpdateUserAuditStatusResponse {
+    bool success = 1;
+    string message = 2;
 }

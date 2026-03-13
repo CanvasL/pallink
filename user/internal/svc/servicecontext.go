@@ -3,6 +3,7 @@ package svc
 import (
 	"context"
 
+	"pallink/common/mq"
 	"pallink/common/postgres"
 	"pallink/user/internal/config"
 
@@ -13,6 +14,7 @@ import (
 type ServiceContext struct {
 	Config config.Config
 	DB     *pgxpool.Pool
+	MQ     *mq.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -20,15 +22,23 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		logx.Must(err)
 	}
+	mqClient, err := mq.NewClient(c.RabbitMQ)
+	if err != nil {
+		logx.Must(err)
+	}
 
 	return &ServiceContext{
 		Config: c,
 		DB:     pool,
+		MQ:     mqClient,
 	}
 }
 
 func (s *ServiceContext) Close() {
 	if s.DB != nil {
 		s.DB.Close()
+	}
+	if s.MQ != nil {
+		_ = s.MQ.Close()
 	}
 }

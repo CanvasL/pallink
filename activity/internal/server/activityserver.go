@@ -63,6 +63,21 @@ func (s *ActivityServer) UpdateAuditStatus(ctx context.Context, in *activity.Upd
 	return l.UpdateAuditStatus(in)
 }
 
+func (s *ActivityServer) CreateComment(ctx context.Context, in *activity.CreateCommentRequest) (*activity.CreateCommentResponse, error) {
+	l := logic.NewCreateCommentLogic(ctx, s.svcCtx)
+	return l.CreateComment(in)
+}
+
+func (s *ActivityServer) GetComments(ctx context.Context, in *activity.GetCommentsRequest) (*activity.GetCommentsResponse, error) {
+	l := logic.NewGetCommentsLogic(ctx, s.svcCtx)
+	return l.GetComments(in)
+}
+
+func (s *ActivityServer) UpdateCommentAuditStatus(ctx context.Context, in *activity.UpdateCommentAuditStatusRequest) (*activity.UpdateCommentAuditStatusResponse, error) {
+	l := logic.NewUpdateCommentAuditStatusLogic(ctx, s.svcCtx)
+	return l.UpdateCommentAuditStatus(in)
+}
+
 func (s *ActivityServer) GetMyActivities(ctx context.Context, in *activity.GetMyActivitiesRequest) (*activity.GetActivityListResponse, error) {
 	l := logic.NewGetMyActivitiesLogic(ctx, s.svcCtx)
 	return l.GetMyActivities(in)

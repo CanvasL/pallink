@@ -14,3 +14,6 @@ Postgres:
 Jwt:
   AccessSecret: "pallink-mvp-secret"
   AccessExpire: 86400
+RabbitMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Queue: "activity_audit"

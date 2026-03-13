@@ -17,12 +17,17 @@ type (
 	ActivityInfo                 = activity.ActivityInfo
 	CancelEnrollRequest          = activity.CancelEnrollRequest
 	CheckInRequest               = activity.CheckInRequest
+	CommentInfo                  = activity.CommentInfo
 	CreateActivityRequest        = activity.CreateActivityRequest
+	CreateCommentRequest         = activity.CreateCommentRequest
+	CreateCommentResponse        = activity.CreateCommentResponse
 	EnrollActivityRequest        = activity.EnrollActivityRequest
 	EnrollActivityResponse       = activity.EnrollActivityResponse
 	GetActivityDetailRequest     = activity.GetActivityDetailRequest
 	GetActivityListRequest       = activity.GetActivityListRequest
 	GetActivityListResponse      = activity.GetActivityListResponse
+	GetCommentsRequest           = activity.GetCommentsRequest
+	GetCommentsResponse          = activity.GetCommentsResponse
 	GetEnrolledActivitiesRequest = activity.GetEnrolledActivitiesRequest
 	GetMyActivitiesRequest       = activity.GetMyActivitiesRequest
 	GetParticipantsRequest       = activity.GetParticipantsRequest
@@ -31,6 +36,8 @@ type (
 	UpdateActivityRequest        = activity.UpdateActivityRequest
 	UpdateAuditStatusRequest     = activity.UpdateAuditStatusRequest
 	UpdateAuditStatusResponse    = activity.UpdateAuditStatusResponse
+	UpdateCommentAuditStatusRequest  = activity.UpdateCommentAuditStatusRequest
+	UpdateCommentAuditStatusResponse = activity.UpdateCommentAuditStatusResponse
 
 	Activity interface {
 		CreateActivity(ctx context.Context, in *CreateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
@@ -41,6 +48,9 @@ type (
 		CheckIn(ctx context.Context, in *CheckInRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
 		UpdateActivity(ctx context.Context, in *UpdateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
 		UpdateAuditStatus(ctx context.Context, in *UpdateAuditStatusRequest, opts ...grpc.CallOption) (*UpdateAuditStatusResponse, error)
+		CreateComment(ctx context.Context, in *CreateCommentRequest, opts ...grpc.CallOption) (*CreateCommentResponse, error)
+		GetComments(ctx context.Context, in *GetCommentsRequest, opts ...grpc.CallOption) (*GetCommentsResponse, error)
+		UpdateCommentAuditStatus(ctx context.Context, in *UpdateCommentAuditStatusRequest, opts ...grpc.CallOption) (*UpdateCommentAuditStatusResponse, error)
 		GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 		GetEnrolledActivities(ctx context.Context, in *GetEnrolledActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 		GetParticipants(ctx context.Context, in *GetParticipantsRequest, opts ...grpc.CallOption) (*GetParticipantsResponse, error)
@@ -95,6 +105,21 @@ func (m *defaultActivity) UpdateActivity(ctx context.Context, in *UpdateActivity
 func (m *defaultActivity) UpdateAuditStatus(ctx context.Context, in *UpdateAuditStatusRequest, opts ...grpc.CallOption) (*UpdateAuditStatusResponse, error) {
 	client := activity.NewActivityClient(m.cli.Conn())
 	return client.UpdateAuditStatus(ctx, in, opts...)
+}
+
+func (m *defaultActivity) CreateComment(ctx context.Context, in *CreateCommentRequest, opts ...grpc.CallOption) (*CreateCommentResponse, error) {
+	client := activity.NewActivityClient(m.cli.Conn())
+	return client.CreateComment(ctx, in, opts...)
+}
+
+func (m *defaultActivity) GetComments(ctx context.Context, in *GetCommentsRequest, opts ...grpc.CallOption) (*GetCommentsResponse, error) {
+	client := activity.NewActivityClient(m.cli.Conn())
+	return client.GetComments(ctx, in, opts...)
+}
+
+func (m *defaultActivity) UpdateCommentAuditStatus(ctx context.Context, in *UpdateCommentAuditStatusRequest, opts ...grpc.CallOption) (*UpdateCommentAuditStatusResponse, error) {
+	client := activity.NewActivityClient(m.cli.Conn())
+	return client.UpdateCommentAuditStatus(ctx, in, opts...)
 }
 
 func (m *defaultActivity) GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error) {

@@ -37,3 +37,13 @@ func (s *UserServer) GetUserInfo(ctx context.Context, in *user.GetUserInfoReques
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)
 }
+
+func (s *UserServer) UpdateUserInfo(ctx context.Context, in *user.UpdateUserInfoRequest) (*user.UserInfo, error) {
+	l := logic.NewUpdateUserInfoLogic(ctx, s.svcCtx)
+	return l.UpdateUserInfo(in)
+}
+
+func (s *UserServer) UpdateUserAuditStatus(ctx context.Context, in *user.UpdateUserAuditStatusRequest) (*user.UpdateUserAuditStatusResponse, error) {
+	l := logic.NewUpdateAuditStatusLogic(ctx, s.svcCtx)
+	return l.UpdateAuditStatus(in)
+}

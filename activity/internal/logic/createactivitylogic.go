@@ -6,6 +6,7 @@ import (
 
 	"pallink/activity/activity"
 	"pallink/activity/internal/svc"
+	"pallink/common/mq"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -56,7 +57,7 @@ func (l *CreateActivityLogic) CreateActivity(in *activity.CreateActivityRequest)
 	if err != nil {
 		return nil, err
 	}
-	if err := l.svcCtx.MQ.PublishJSON(l.ctx, auditMessage{ActivityID: id}); err != nil {
+	if err := l.svcCtx.MQ.PublishJSON(l.ctx, mq.AuditMessage{Type: "activity", ID: id}); err != nil {
 		return nil, err
 	}
 

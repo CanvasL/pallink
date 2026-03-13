@@ -14,6 +14,9 @@ service Activity {
     rpc CheckIn(CheckInRequest) returns (EnrollActivityResponse);
     rpc UpdateActivity(UpdateActivityRequest) returns (ActivityInfo);
     rpc UpdateAuditStatus(UpdateAuditStatusRequest) returns (UpdateAuditStatusResponse);
+    rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse);
+    rpc GetComments(GetCommentsRequest) returns (GetCommentsResponse);
+    rpc UpdateCommentAuditStatus(UpdateCommentAuditStatusRequest) returns (UpdateCommentAuditStatusResponse);
     rpc GetMyActivities(GetMyActivitiesRequest) returns (GetActivityListResponse);
     rpc GetEnrolledActivities(GetEnrolledActivitiesRequest) returns (GetActivityListResponse);
     rpc GetParticipants(GetParticipantsRequest) returns (GetParticipantsResponse);
@@ -104,6 +107,49 @@ message UpdateAuditStatusRequest {
 }
 
 message UpdateAuditStatusResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message CommentInfo {
+    uint64 id = 1;
+    uint64 activity_id = 2;
+    uint64 user_id = 3;
+    string content = 4;
+    google.protobuf.Timestamp created_at = 5;
+    int32 audit_status = 6;
+    string nickname = 7;
+    string avatar = 8;
+}
+
+message CreateCommentRequest {
+    uint64 activity_id = 1;
+    uint64 user_id = 2;
+    string content = 3;
+}
+
+message CreateCommentResponse {
+    uint64 comment_id = 1;
+}
+
+message GetCommentsRequest {
+    uint64 activity_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+    uint64 viewer_user_id = 4;
+}
+
+message GetCommentsResponse {
+    repeated CommentInfo comments = 1;
+    int32 total = 2;
+}
+
+message UpdateCommentAuditStatusRequest {
+    uint64 comment_id = 1;
+    int32 audit_status = 2;
+}
+
+message UpdateCommentAuditStatusResponse {
     bool success = 1;
     string message = 2;
 }

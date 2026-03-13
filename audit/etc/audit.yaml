@@ -7,3 +7,8 @@ ActivityRpc:
     Hosts:
     - etcd:2379
     Key: activity.rpc
+UserRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: user.rpc

@@ -12,6 +12,7 @@ import (
 	"pallink/activity/activityclient"
 	"pallink/audit/internal/config"
 	"pallink/common/mq"
+	"pallink/user/userclient"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -19,10 +20,6 @@ import (
 )
 
 var configFile = flag.String("f", "etc/audit.yaml", "the config file")
-
-type auditMessage struct {
-	ActivityID uint64 `json:"activity_id"`
-}
 
 func main() {
 	flag.Parse()
@@ -38,6 +35,8 @@ func main() {
 
 	activityCli := zrpc.MustNewClient(c.ActivityRpc)
 	activitySvc := activityclient.NewActivity(activityCli)
+	userCli := zrpc.MustNewClient(c.UserRpc)
+	userSvc := userclient.NewUser(userCli)
 
 	msgs, err := mqClient.Consume()
 	if err != nil {
@@ -60,27 +59,51 @@ func main() {
 				return
 			}
 
-			var body auditMessage
+			var body mq.AuditMessage
 			if err := json.Unmarshal(msg.Body, &body); err != nil {
 				_ = msg.Nack(false, false)
 				continue
 			}
-			if body.ActivityID == 0 {
+			if body.ID == 0 || body.Type == "" {
 				_ = msg.Nack(false, false)
 				continue
 			}
 
-			_, err := activitySvc.UpdateAuditStatus(ctx, &activityclient.UpdateAuditStatusRequest{
-				ActivityId:  body.ActivityID,
-				AuditStatus: 1,
-			})
-			if err != nil {
-				_ = msg.Nack(false, true)
+			switch body.Type {
+			case "activity":
+				_, err := activitySvc.UpdateAuditStatus(ctx, &activityclient.UpdateAuditStatusRequest{
+					ActivityId:  body.ID,
+					AuditStatus: 1,
+				})
+				if err != nil {
+					_ = msg.Nack(false, true)
+					continue
+				}
+			case "comment":
+				_, err := activitySvc.UpdateCommentAuditStatus(ctx, &activityclient.UpdateCommentAuditStatusRequest{
+					CommentId:   body.ID,
+					AuditStatus: 1,
+				})
+				if err != nil {
+					_ = msg.Nack(false, true)
+					continue
+				}
+			case "user":
+				_, err := userSvc.UpdateUserAuditStatus(ctx, &userclient.UpdateUserAuditStatusRequest{
+					UserId:      body.ID,
+					AuditStatus: 1,
+				})
+				if err != nil {
+					_ = msg.Nack(false, true)
+					continue
+				}
+			default:
+				_ = msg.Nack(false, false)
 				continue
 			}
 
 			_ = msg.Ack(false)
-			fmt.Printf("audited activity=%d -> approved\n", body.ActivityID)
+			fmt.Printf("audited %s=%d -> approved\n", body.Type, body.ID)
 		}
 	}
 }

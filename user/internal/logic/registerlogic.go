@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"pallink/common/auth"
+	"pallink/common/mq"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
@@ -58,6 +59,9 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 		mobile, string(hashed), nickname, "",
 	).Scan(&userID)
 	if err != nil {
+		return nil, err
+	}
+	if err := l.svcCtx.MQ.PublishJSON(l.ctx, mq.AuditMessage{Type: "user", ID: userID}); err != nil {
 		return nil, err
 	}
 

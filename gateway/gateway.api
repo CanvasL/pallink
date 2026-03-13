@@ -33,6 +33,12 @@ service gatewayApi {
 	@handler GetUserInfo
 	get /user/me (GetUserInfoRequest) returns (UserInfo)
 
+	@doc (
+		group: "user"
+	)
+	@handler UpdateUserInfo
+	post /user/update (UpdateUserRequest) returns (UpdateUserResponse)
+
 	// Activity
 	// 活动
 	@doc (
@@ -95,6 +101,12 @@ service gatewayApi {
 	@handler GetParticipants
 	get /activity/participants (GetParticipantsReq) returns (GetParticipantsResp)
 
+	@doc (
+		group: "activity"
+	)
+	@handler CreateComment
+	post /activity/comment/create (CreateCommentReq) returns (CreateCommentResp)
+
 	// Public
 	// 公共
 	@doc (
@@ -108,4 +120,10 @@ service gatewayApi {
 	)
 	@handler GetPublicActivityDetail
 	get /activity/public/detail (GetActivityDetailReq) returns (GetActivityDetailResp)
+
+	@doc (
+		group: "activity"
+	)
+	@handler GetPublicComments
+	get /activity/public/comment/list (GetCommentsReq) returns (GetCommentsResp)
 }

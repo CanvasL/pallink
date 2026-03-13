@@ -64,6 +64,22 @@ func toActivityBrief(in *activityclient.ActivityInfo) types.ActivityBrief {
 	}
 }
 
+func toCommentInfo(in *activityclient.CommentInfo) types.CommentInfo {
+	if in == nil {
+		return types.CommentInfo{}
+	}
+	return types.CommentInfo{
+		Id:          in.Id,
+		ActivityId:  in.ActivityId,
+		UserId:      in.UserId,
+		Content:     in.Content,
+		CreatedAt:   tsToUnix(in.CreatedAt),
+		AuditStatus: in.AuditStatus,
+		Nickname:    in.Nickname,
+		Avatar:      in.Avatar,
+	}
+}
+
 func tsToUnix(ts *timestamppb.Timestamp) int64 {
 	if ts == nil {
 		return 0

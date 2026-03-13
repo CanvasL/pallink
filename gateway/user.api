@@ -43,3 +43,14 @@ type LoginResponse {
 // Get current user info
 // 获取当前用户信息
 type GetUserInfoRequest {}
+
+// Update user info
+// 更新用户资料
+type UpdateUserRequest {
+	Nickname string `json:"nickname,optional"`
+	Avatar   string `json:"avatar,optional"`
+}
+
+type UpdateUserResponse {
+	UserInfo UserInfo `json:"user_info"`
+}

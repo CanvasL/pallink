@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v3.19.4
-// source: user/rpc/user.proto
+// source: user/user.proto
 
 package user
 
@@ -19,9 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	User_Register_FullMethodName    = "/user.User/Register"
-	User_Login_FullMethodName       = "/user.User/Login"
-	User_GetUserInfo_FullMethodName = "/user.User/GetUserInfo"
+	User_Register_FullMethodName              = "/user.User/Register"
+	User_Login_FullMethodName                 = "/user.User/Login"
+	User_GetUserInfo_FullMethodName           = "/user.User/GetUserInfo"
+	User_UpdateUserInfo_FullMethodName        = "/user.User/UpdateUserInfo"
+	User_UpdateUserAuditStatus_FullMethodName = "/user.User/UpdateUserAuditStatus"
 )
 
 // UserClient is the client API for User service.
@@ -33,6 +35,8 @@ type UserClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+	UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+	UpdateUserAuditStatus(ctx context.Context, in *UpdateUserAuditStatusRequest, opts ...grpc.CallOption) (*UpdateUserAuditStatusResponse, error)
 }
 
 type userClient struct {
@@ -73,6 +77,26 @@ func (c *userClient) GetUserInfo(ctx context.Context, in *GetUserInfoRequest, op
 	return out, nil
 }
 
+func (c *userClient) UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserInfo)
+	err := c.cc.Invoke(ctx, User_UpdateUserInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) UpdateUserAuditStatus(ctx context.Context, in *UpdateUserAuditStatusRequest, opts ...grpc.CallOption) (*UpdateUserAuditStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateUserAuditStatusResponse)
+	err := c.cc.Invoke(ctx, User_UpdateUserAuditStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
@@ -82,6 +106,8 @@ type UserServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	GetUserInfo(context.Context, *GetUserInfoRequest) (*UserInfo, error)
+	UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*UserInfo, error)
+	UpdateUserAuditStatus(context.Context, *UpdateUserAuditStatusRequest) (*UpdateUserAuditStatusResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -100,6 +126,12 @@ func (UnimplementedUserServer) Login(context.Context, *LoginRequest) (*LoginResp
 }
 func (UnimplementedUserServer) GetUserInfo(context.Context, *GetUserInfoRequest) (*UserInfo, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserInfo not implemented")
+}
+func (UnimplementedUserServer) UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*UserInfo, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserInfo not implemented")
+}
+func (UnimplementedUserServer) UpdateUserAuditStatus(context.Context, *UpdateUserAuditStatusRequest) (*UpdateUserAuditStatusResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserAuditStatus not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 func (UnimplementedUserServer) testEmbeddedByValue()              {}
@@ -176,6 +208,42 @@ func _User_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_UpdateUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UpdateUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UpdateUserInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UpdateUserInfo(ctx, req.(*UpdateUserInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_UpdateUserAuditStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserAuditStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UpdateUserAuditStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UpdateUserAuditStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UpdateUserAuditStatus(ctx, req.(*UpdateUserAuditStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -195,7 +263,15 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetUserInfo",
 			Handler:    _User_GetUserInfo_Handler,
 		},
+		{
+			MethodName: "UpdateUserInfo",
+			Handler:    _User_UpdateUserInfo_Handler,
+		},
+		{
+			MethodName: "UpdateUserAuditStatus",
+			Handler:    _User_UpdateUserAuditStatus_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "user/rpc/user.proto",
+	Metadata: "user/user.proto",
 }

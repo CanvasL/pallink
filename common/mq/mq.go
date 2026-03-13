@@ -38,9 +38,7 @@ func NewClient(cfg Config) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err != nil {
-		return nil, err
-	}
+
 	ch, err := conn.Channel()
 	if err != nil {
 		_ = conn.Close()

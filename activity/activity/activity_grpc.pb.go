@@ -19,17 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Activity_CreateActivity_FullMethodName        = "/activity.Activity/CreateActivity"
-	Activity_GetActivityList_FullMethodName       = "/activity.Activity/GetActivityList"
-	Activity_GetActivityDetail_FullMethodName     = "/activity.Activity/GetActivityDetail"
-	Activity_EnrollActivity_FullMethodName        = "/activity.Activity/EnrollActivity"
-	Activity_CancelEnroll_FullMethodName          = "/activity.Activity/CancelEnroll"
-	Activity_CheckIn_FullMethodName               = "/activity.Activity/CheckIn"
-	Activity_UpdateActivity_FullMethodName        = "/activity.Activity/UpdateActivity"
-	Activity_UpdateAuditStatus_FullMethodName     = "/activity.Activity/UpdateAuditStatus"
-	Activity_GetMyActivities_FullMethodName       = "/activity.Activity/GetMyActivities"
-	Activity_GetEnrolledActivities_FullMethodName = "/activity.Activity/GetEnrolledActivities"
-	Activity_GetParticipants_FullMethodName       = "/activity.Activity/GetParticipants"
+	Activity_CreateActivity_FullMethodName           = "/activity.Activity/CreateActivity"
+	Activity_GetActivityList_FullMethodName          = "/activity.Activity/GetActivityList"
+	Activity_GetActivityDetail_FullMethodName        = "/activity.Activity/GetActivityDetail"
+	Activity_EnrollActivity_FullMethodName           = "/activity.Activity/EnrollActivity"
+	Activity_CancelEnroll_FullMethodName             = "/activity.Activity/CancelEnroll"
+	Activity_CheckIn_FullMethodName                  = "/activity.Activity/CheckIn"
+	Activity_UpdateActivity_FullMethodName           = "/activity.Activity/UpdateActivity"
+	Activity_UpdateAuditStatus_FullMethodName        = "/activity.Activity/UpdateAuditStatus"
+	Activity_CreateComment_FullMethodName            = "/activity.Activity/CreateComment"
+	Activity_GetComments_FullMethodName              = "/activity.Activity/GetComments"
+	Activity_UpdateCommentAuditStatus_FullMethodName = "/activity.Activity/UpdateCommentAuditStatus"
+	Activity_GetMyActivities_FullMethodName          = "/activity.Activity/GetMyActivities"
+	Activity_GetEnrolledActivities_FullMethodName    = "/activity.Activity/GetEnrolledActivities"
+	Activity_GetParticipants_FullMethodName          = "/activity.Activity/GetParticipants"
 )
 
 // ActivityClient is the client API for Activity service.
@@ -44,6 +47,9 @@ type ActivityClient interface {
 	CheckIn(ctx context.Context, in *CheckInRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
 	UpdateActivity(ctx context.Context, in *UpdateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
 	UpdateAuditStatus(ctx context.Context, in *UpdateAuditStatusRequest, opts ...grpc.CallOption) (*UpdateAuditStatusResponse, error)
+	CreateComment(ctx context.Context, in *CreateCommentRequest, opts ...grpc.CallOption) (*CreateCommentResponse, error)
+	GetComments(ctx context.Context, in *GetCommentsRequest, opts ...grpc.CallOption) (*GetCommentsResponse, error)
+	UpdateCommentAuditStatus(ctx context.Context, in *UpdateCommentAuditStatusRequest, opts ...grpc.CallOption) (*UpdateCommentAuditStatusResponse, error)
 	GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 	GetEnrolledActivities(ctx context.Context, in *GetEnrolledActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 	GetParticipants(ctx context.Context, in *GetParticipantsRequest, opts ...grpc.CallOption) (*GetParticipantsResponse, error)
@@ -137,6 +143,36 @@ func (c *activityClient) UpdateAuditStatus(ctx context.Context, in *UpdateAuditS
 	return out, nil
 }
 
+func (c *activityClient) CreateComment(ctx context.Context, in *CreateCommentRequest, opts ...grpc.CallOption) (*CreateCommentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateCommentResponse)
+	err := c.cc.Invoke(ctx, Activity_CreateComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) GetComments(ctx context.Context, in *GetCommentsRequest, opts ...grpc.CallOption) (*GetCommentsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCommentsResponse)
+	err := c.cc.Invoke(ctx, Activity_GetComments_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *activityClient) UpdateCommentAuditStatus(ctx context.Context, in *UpdateCommentAuditStatusRequest, opts ...grpc.CallOption) (*UpdateCommentAuditStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateCommentAuditStatusResponse)
+	err := c.cc.Invoke(ctx, Activity_UpdateCommentAuditStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *activityClient) GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetActivityListResponse)
@@ -179,6 +215,9 @@ type ActivityServer interface {
 	CheckIn(context.Context, *CheckInRequest) (*EnrollActivityResponse, error)
 	UpdateActivity(context.Context, *UpdateActivityRequest) (*ActivityInfo, error)
 	UpdateAuditStatus(context.Context, *UpdateAuditStatusRequest) (*UpdateAuditStatusResponse, error)
+	CreateComment(context.Context, *CreateCommentRequest) (*CreateCommentResponse, error)
+	GetComments(context.Context, *GetCommentsRequest) (*GetCommentsResponse, error)
+	UpdateCommentAuditStatus(context.Context, *UpdateCommentAuditStatusRequest) (*UpdateCommentAuditStatusResponse, error)
 	GetMyActivities(context.Context, *GetMyActivitiesRequest) (*GetActivityListResponse, error)
 	GetEnrolledActivities(context.Context, *GetEnrolledActivitiesRequest) (*GetActivityListResponse, error)
 	GetParticipants(context.Context, *GetParticipantsRequest) (*GetParticipantsResponse, error)
@@ -215,6 +254,15 @@ func (UnimplementedActivityServer) UpdateActivity(context.Context, *UpdateActivi
 }
 func (UnimplementedActivityServer) UpdateAuditStatus(context.Context, *UpdateAuditStatusRequest) (*UpdateAuditStatusResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateAuditStatus not implemented")
+}
+func (UnimplementedActivityServer) CreateComment(context.Context, *CreateCommentRequest) (*CreateCommentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateComment not implemented")
+}
+func (UnimplementedActivityServer) GetComments(context.Context, *GetCommentsRequest) (*GetCommentsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetComments not implemented")
+}
+func (UnimplementedActivityServer) UpdateCommentAuditStatus(context.Context, *UpdateCommentAuditStatusRequest) (*UpdateCommentAuditStatusResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateCommentAuditStatus not implemented")
 }
 func (UnimplementedActivityServer) GetMyActivities(context.Context, *GetMyActivitiesRequest) (*GetActivityListResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMyActivities not implemented")
@@ -390,6 +438,60 @@ func _Activity_UpdateAuditStatus_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Activity_CreateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).CreateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_CreateComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).CreateComment(ctx, req.(*CreateCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_GetComments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCommentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).GetComments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_GetComments_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).GetComments(ctx, req.(*GetCommentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Activity_UpdateCommentAuditStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCommentAuditStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActivityServer).UpdateCommentAuditStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Activity_UpdateCommentAuditStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActivityServer).UpdateCommentAuditStatus(ctx, req.(*UpdateCommentAuditStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Activity_GetMyActivities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMyActivitiesRequest)
 	if err := dec(in); err != nil {
@@ -482,6 +584,18 @@ var Activity_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAuditStatus",
 			Handler:    _Activity_UpdateAuditStatus_Handler,
+		},
+		{
+			MethodName: "CreateComment",
+			Handler:    _Activity_CreateComment_Handler,
+		},
+		{
+			MethodName: "GetComments",
+			Handler:    _Activity_GetComments_Handler,
+		},
+		{
+			MethodName: "UpdateCommentAuditStatus",
+			Handler:    _Activity_UpdateCommentAuditStatus_Handler,
 		},
 		{
 			MethodName: "GetMyActivities",

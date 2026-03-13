@@ -30,6 +30,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: GetPublicActivityDetailHandler(serverCtx),
 			},
 			{
+				Method:  http.MethodGet,
+				Path:    "/activity/public/comment/list",
+				Handler: GetPublicCommentsHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodPost,
 				Path:    "/user/register",
 				Handler: RegisterHandler(serverCtx),
@@ -75,6 +80,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: CancelEnrollHandler(serverCtx),
 			},
 			{
+				Method:  http.MethodPost,
+				Path:    "/activity/comment/create",
+				Handler: CreateCommentHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodGet,
 				Path:    "/activity/participants",
 				Handler: GetParticipantsHandler(serverCtx),
@@ -93,6 +103,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/user/me",
 				Handler: GetUserInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/update",
+				Handler: UpdateUserInfoHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

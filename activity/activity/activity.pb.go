@@ -878,6 +878,434 @@ func (x *UpdateAuditStatusResponse) GetMessage() string {
 	return ""
 }
 
+type CommentInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	ActivityId    uint64                 `protobuf:"varint,2,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	UserId        uint64                 `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	AuditStatus   int32                  `protobuf:"varint,6,opt,name=audit_status,json=auditStatus,proto3" json:"audit_status,omitempty"`
+	Nickname      string                 `protobuf:"bytes,7,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Avatar        string                 `protobuf:"bytes,8,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CommentInfo) Reset() {
+	*x = CommentInfo{}
+	mi := &file_activity_activity_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CommentInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CommentInfo) ProtoMessage() {}
+
+func (x *CommentInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CommentInfo.ProtoReflect.Descriptor instead.
+func (*CommentInfo) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CommentInfo) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *CommentInfo) GetActivityId() uint64 {
+	if x != nil {
+		return x.ActivityId
+	}
+	return 0
+}
+
+func (x *CommentInfo) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *CommentInfo) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *CommentInfo) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *CommentInfo) GetAuditStatus() int32 {
+	if x != nil {
+		return x.AuditStatus
+	}
+	return 0
+}
+
+func (x *CommentInfo) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *CommentInfo) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+type CreateCommentRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ActivityId    uint64                 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateCommentRequest) Reset() {
+	*x = CreateCommentRequest{}
+	mi := &file_activity_activity_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateCommentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCommentRequest) ProtoMessage() {}
+
+func (x *CreateCommentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCommentRequest.ProtoReflect.Descriptor instead.
+func (*CreateCommentRequest) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *CreateCommentRequest) GetActivityId() uint64 {
+	if x != nil {
+		return x.ActivityId
+	}
+	return 0
+}
+
+func (x *CreateCommentRequest) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *CreateCommentRequest) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+type CreateCommentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CommentId     uint64                 `protobuf:"varint,1,opt,name=comment_id,json=commentId,proto3" json:"comment_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateCommentResponse) Reset() {
+	*x = CreateCommentResponse{}
+	mi := &file_activity_activity_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateCommentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCommentResponse) ProtoMessage() {}
+
+func (x *CreateCommentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCommentResponse.ProtoReflect.Descriptor instead.
+func (*CreateCommentResponse) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *CreateCommentResponse) GetCommentId() uint64 {
+	if x != nil {
+		return x.CommentId
+	}
+	return 0
+}
+
+type GetCommentsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ActivityId    uint64                 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	ViewerUserId  uint64                 `protobuf:"varint,4,opt,name=viewer_user_id,json=viewerUserId,proto3" json:"viewer_user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCommentsRequest) Reset() {
+	*x = GetCommentsRequest{}
+	mi := &file_activity_activity_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCommentsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCommentsRequest) ProtoMessage() {}
+
+func (x *GetCommentsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCommentsRequest.ProtoReflect.Descriptor instead.
+func (*GetCommentsRequest) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *GetCommentsRequest) GetActivityId() uint64 {
+	if x != nil {
+		return x.ActivityId
+	}
+	return 0
+}
+
+func (x *GetCommentsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetCommentsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *GetCommentsRequest) GetViewerUserId() uint64 {
+	if x != nil {
+		return x.ViewerUserId
+	}
+	return 0
+}
+
+type GetCommentsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Comments      []*CommentInfo         `protobuf:"bytes,1,rep,name=comments,proto3" json:"comments,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCommentsResponse) Reset() {
+	*x = GetCommentsResponse{}
+	mi := &file_activity_activity_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCommentsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCommentsResponse) ProtoMessage() {}
+
+func (x *GetCommentsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCommentsResponse.ProtoReflect.Descriptor instead.
+func (*GetCommentsResponse) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GetCommentsResponse) GetComments() []*CommentInfo {
+	if x != nil {
+		return x.Comments
+	}
+	return nil
+}
+
+func (x *GetCommentsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+type UpdateCommentAuditStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CommentId     uint64                 `protobuf:"varint,1,opt,name=comment_id,json=commentId,proto3" json:"comment_id,omitempty"`
+	AuditStatus   int32                  `protobuf:"varint,2,opt,name=audit_status,json=auditStatus,proto3" json:"audit_status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateCommentAuditStatusRequest) Reset() {
+	*x = UpdateCommentAuditStatusRequest{}
+	mi := &file_activity_activity_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateCommentAuditStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateCommentAuditStatusRequest) ProtoMessage() {}
+
+func (x *UpdateCommentAuditStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateCommentAuditStatusRequest.ProtoReflect.Descriptor instead.
+func (*UpdateCommentAuditStatusRequest) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *UpdateCommentAuditStatusRequest) GetCommentId() uint64 {
+	if x != nil {
+		return x.CommentId
+	}
+	return 0
+}
+
+func (x *UpdateCommentAuditStatusRequest) GetAuditStatus() int32 {
+	if x != nil {
+		return x.AuditStatus
+	}
+	return 0
+}
+
+type UpdateCommentAuditStatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateCommentAuditStatusResponse) Reset() {
+	*x = UpdateCommentAuditStatusResponse{}
+	mi := &file_activity_activity_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateCommentAuditStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateCommentAuditStatusResponse) ProtoMessage() {}
+
+func (x *UpdateCommentAuditStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_activity_activity_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateCommentAuditStatusResponse.ProtoReflect.Descriptor instead.
+func (*UpdateCommentAuditStatusResponse) Descriptor() ([]byte, []int) {
+	return file_activity_activity_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *UpdateCommentAuditStatusResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateCommentAuditStatusResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 type GetMyActivitiesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -889,7 +1317,7 @@ type GetMyActivitiesRequest struct {
 
 func (x *GetMyActivitiesRequest) Reset() {
 	*x = GetMyActivitiesRequest{}
-	mi := &file_activity_activity_proto_msgTypes[12]
+	mi := &file_activity_activity_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -901,7 +1329,7 @@ func (x *GetMyActivitiesRequest) String() string {
 func (*GetMyActivitiesRequest) ProtoMessage() {}
 
 func (x *GetMyActivitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_activity_activity_proto_msgTypes[12]
+	mi := &file_activity_activity_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -914,7 +1342,7 @@ func (x *GetMyActivitiesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMyActivitiesRequest.ProtoReflect.Descriptor instead.
 func (*GetMyActivitiesRequest) Descriptor() ([]byte, []int) {
-	return file_activity_activity_proto_rawDescGZIP(), []int{12}
+	return file_activity_activity_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetMyActivitiesRequest) GetUserId() uint64 {
@@ -949,7 +1377,7 @@ type GetEnrolledActivitiesRequest struct {
 
 func (x *GetEnrolledActivitiesRequest) Reset() {
 	*x = GetEnrolledActivitiesRequest{}
-	mi := &file_activity_activity_proto_msgTypes[13]
+	mi := &file_activity_activity_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -961,7 +1389,7 @@ func (x *GetEnrolledActivitiesRequest) String() string {
 func (*GetEnrolledActivitiesRequest) ProtoMessage() {}
 
 func (x *GetEnrolledActivitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_activity_activity_proto_msgTypes[13]
+	mi := &file_activity_activity_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -974,7 +1402,7 @@ func (x *GetEnrolledActivitiesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEnrolledActivitiesRequest.ProtoReflect.Descriptor instead.
 func (*GetEnrolledActivitiesRequest) Descriptor() ([]byte, []int) {
-	return file_activity_activity_proto_rawDescGZIP(), []int{13}
+	return file_activity_activity_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetEnrolledActivitiesRequest) GetUserId() uint64 {
@@ -1012,7 +1440,7 @@ type ParticipantInfo struct {
 
 func (x *ParticipantInfo) Reset() {
 	*x = ParticipantInfo{}
-	mi := &file_activity_activity_proto_msgTypes[14]
+	mi := &file_activity_activity_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1024,7 +1452,7 @@ func (x *ParticipantInfo) String() string {
 func (*ParticipantInfo) ProtoMessage() {}
 
 func (x *ParticipantInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_activity_activity_proto_msgTypes[14]
+	mi := &file_activity_activity_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1037,7 +1465,7 @@ func (x *ParticipantInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ParticipantInfo.ProtoReflect.Descriptor instead.
 func (*ParticipantInfo) Descriptor() ([]byte, []int) {
-	return file_activity_activity_proto_rawDescGZIP(), []int{14}
+	return file_activity_activity_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ParticipantInfo) GetUserId() uint64 {
@@ -1093,7 +1521,7 @@ type GetParticipantsRequest struct {
 
 func (x *GetParticipantsRequest) Reset() {
 	*x = GetParticipantsRequest{}
-	mi := &file_activity_activity_proto_msgTypes[15]
+	mi := &file_activity_activity_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1105,7 +1533,7 @@ func (x *GetParticipantsRequest) String() string {
 func (*GetParticipantsRequest) ProtoMessage() {}
 
 func (x *GetParticipantsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_activity_activity_proto_msgTypes[15]
+	mi := &file_activity_activity_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1118,7 +1546,7 @@ func (x *GetParticipantsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetParticipantsRequest.ProtoReflect.Descriptor instead.
 func (*GetParticipantsRequest) Descriptor() ([]byte, []int) {
-	return file_activity_activity_proto_rawDescGZIP(), []int{15}
+	return file_activity_activity_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GetParticipantsRequest) GetActivityId() uint64 {
@@ -1152,7 +1580,7 @@ type GetParticipantsResponse struct {
 
 func (x *GetParticipantsResponse) Reset() {
 	*x = GetParticipantsResponse{}
-	mi := &file_activity_activity_proto_msgTypes[16]
+	mi := &file_activity_activity_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1164,7 +1592,7 @@ func (x *GetParticipantsResponse) String() string {
 func (*GetParticipantsResponse) ProtoMessage() {}
 
 func (x *GetParticipantsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_activity_activity_proto_msgTypes[16]
+	mi := &file_activity_activity_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1177,7 +1605,7 @@ func (x *GetParticipantsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetParticipantsResponse.ProtoReflect.Descriptor instead.
 func (*GetParticipantsResponse) Descriptor() ([]byte, []int) {
-	return file_activity_activity_proto_rawDescGZIP(), []int{16}
+	return file_activity_activity_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetParticipantsResponse) GetParticipants() []*ParticipantInfo {
@@ -1281,6 +1709,41 @@ const file_activity_activity_proto_rawDesc = "" +
 	"\faudit_status\x18\x02 \x01(\x05R\vauditStatus\"O\n" +
 	"\x19UpdateAuditStatusResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\x83\x02\n" +
+	"\vCommentInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1f\n" +
+	"\vactivity_id\x18\x02 \x01(\x04R\n" +
+	"activityId\x12\x17\n" +
+	"\auser_id\x18\x03 \x01(\x04R\x06userId\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x129\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12!\n" +
+	"\faudit_status\x18\x06 \x01(\x05R\vauditStatus\x12\x1a\n" +
+	"\bnickname\x18\a \x01(\tR\bnickname\x12\x16\n" +
+	"\x06avatar\x18\b \x01(\tR\x06avatar\"j\n" +
+	"\x14CreateCommentRequest\x12\x1f\n" +
+	"\vactivity_id\x18\x01 \x01(\x04R\n" +
+	"activityId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x04R\x06userId\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\"6\n" +
+	"\x15CreateCommentResponse\x12\x1d\n" +
+	"\n" +
+	"comment_id\x18\x01 \x01(\x04R\tcommentId\"\x8c\x01\n" +
+	"\x12GetCommentsRequest\x12\x1f\n" +
+	"\vactivity_id\x18\x01 \x01(\x04R\n" +
+	"activityId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x12$\n" +
+	"\x0eviewer_user_id\x18\x04 \x01(\x04R\fviewerUserId\"^\n" +
+	"\x13GetCommentsResponse\x121\n" +
+	"\bcomments\x18\x01 \x03(\v2\x15.activity.CommentInfoR\bcomments\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"c\n" +
+	"\x1fUpdateCommentAuditStatusRequest\x12\x1d\n" +
+	"\n" +
+	"comment_id\x18\x01 \x01(\x04R\tcommentId\x12!\n" +
+	"\faudit_status\x18\x02 \x01(\x05R\vauditStatus\"V\n" +
+	" UpdateCommentAuditStatusResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"b\n" +
 	"\x16GetMyActivitiesRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x12\n" +
@@ -1305,7 +1768,7 @@ const file_activity_activity_proto_rawDesc = "" +
 	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\"n\n" +
 	"\x17GetParticipantsResponse\x12=\n" +
 	"\fparticipants\x18\x01 \x03(\v2\x19.activity.ParticipantInfoR\fparticipants\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total2\xa8\a\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total2\xb9\t\n" +
 	"\bActivity\x12I\n" +
 	"\x0eCreateActivity\x12\x1f.activity.CreateActivityRequest\x1a\x16.activity.ActivityInfo\x12V\n" +
 	"\x0fGetActivityList\x12 .activity.GetActivityListRequest\x1a!.activity.GetActivityListResponse\x12O\n" +
@@ -1314,7 +1777,10 @@ const file_activity_activity_proto_rawDesc = "" +
 	"\fCancelEnroll\x12\x1d.activity.CancelEnrollRequest\x1a .activity.EnrollActivityResponse\x12E\n" +
 	"\aCheckIn\x12\x18.activity.CheckInRequest\x1a .activity.EnrollActivityResponse\x12I\n" +
 	"\x0eUpdateActivity\x12\x1f.activity.UpdateActivityRequest\x1a\x16.activity.ActivityInfo\x12\\\n" +
-	"\x11UpdateAuditStatus\x12\".activity.UpdateAuditStatusRequest\x1a#.activity.UpdateAuditStatusResponse\x12V\n" +
+	"\x11UpdateAuditStatus\x12\".activity.UpdateAuditStatusRequest\x1a#.activity.UpdateAuditStatusResponse\x12P\n" +
+	"\rCreateComment\x12\x1e.activity.CreateCommentRequest\x1a\x1f.activity.CreateCommentResponse\x12J\n" +
+	"\vGetComments\x12\x1c.activity.GetCommentsRequest\x1a\x1d.activity.GetCommentsResponse\x12q\n" +
+	"\x18UpdateCommentAuditStatus\x12).activity.UpdateCommentAuditStatusRequest\x1a*.activity.UpdateCommentAuditStatusResponse\x12V\n" +
 	"\x0fGetMyActivities\x12 .activity.GetMyActivitiesRequest\x1a!.activity.GetActivityListResponse\x12b\n" +
 	"\x15GetEnrolledActivities\x12&.activity.GetEnrolledActivitiesRequest\x1a!.activity.GetActivityListResponse\x12V\n" +
 	"\x0fGetParticipants\x12 .activity.GetParticipantsRequest\x1a!.activity.GetParticipantsResponseB\fZ\n" +
@@ -1332,66 +1798,81 @@ func file_activity_activity_proto_rawDescGZIP() []byte {
 	return file_activity_activity_proto_rawDescData
 }
 
-var file_activity_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_activity_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_activity_activity_proto_goTypes = []any{
-	(*ActivityInfo)(nil),                 // 0: activity.ActivityInfo
-	(*CreateActivityRequest)(nil),        // 1: activity.CreateActivityRequest
-	(*GetActivityListRequest)(nil),       // 2: activity.GetActivityListRequest
-	(*GetActivityListResponse)(nil),      // 3: activity.GetActivityListResponse
-	(*GetActivityDetailRequest)(nil),     // 4: activity.GetActivityDetailRequest
-	(*EnrollActivityRequest)(nil),        // 5: activity.EnrollActivityRequest
-	(*EnrollActivityResponse)(nil),       // 6: activity.EnrollActivityResponse
-	(*CancelEnrollRequest)(nil),          // 7: activity.CancelEnrollRequest
-	(*CheckInRequest)(nil),               // 8: activity.CheckInRequest
-	(*UpdateActivityRequest)(nil),        // 9: activity.UpdateActivityRequest
-	(*UpdateAuditStatusRequest)(nil),     // 10: activity.UpdateAuditStatusRequest
-	(*UpdateAuditStatusResponse)(nil),    // 11: activity.UpdateAuditStatusResponse
-	(*GetMyActivitiesRequest)(nil),       // 12: activity.GetMyActivitiesRequest
-	(*GetEnrolledActivitiesRequest)(nil), // 13: activity.GetEnrolledActivitiesRequest
-	(*ParticipantInfo)(nil),              // 14: activity.ParticipantInfo
-	(*GetParticipantsRequest)(nil),       // 15: activity.GetParticipantsRequest
-	(*GetParticipantsResponse)(nil),      // 16: activity.GetParticipantsResponse
-	(*timestamppb.Timestamp)(nil),        // 17: google.protobuf.Timestamp
+	(*ActivityInfo)(nil),                     // 0: activity.ActivityInfo
+	(*CreateActivityRequest)(nil),            // 1: activity.CreateActivityRequest
+	(*GetActivityListRequest)(nil),           // 2: activity.GetActivityListRequest
+	(*GetActivityListResponse)(nil),          // 3: activity.GetActivityListResponse
+	(*GetActivityDetailRequest)(nil),         // 4: activity.GetActivityDetailRequest
+	(*EnrollActivityRequest)(nil),            // 5: activity.EnrollActivityRequest
+	(*EnrollActivityResponse)(nil),           // 6: activity.EnrollActivityResponse
+	(*CancelEnrollRequest)(nil),              // 7: activity.CancelEnrollRequest
+	(*CheckInRequest)(nil),                   // 8: activity.CheckInRequest
+	(*UpdateActivityRequest)(nil),            // 9: activity.UpdateActivityRequest
+	(*UpdateAuditStatusRequest)(nil),         // 10: activity.UpdateAuditStatusRequest
+	(*UpdateAuditStatusResponse)(nil),        // 11: activity.UpdateAuditStatusResponse
+	(*CommentInfo)(nil),                      // 12: activity.CommentInfo
+	(*CreateCommentRequest)(nil),             // 13: activity.CreateCommentRequest
+	(*CreateCommentResponse)(nil),            // 14: activity.CreateCommentResponse
+	(*GetCommentsRequest)(nil),               // 15: activity.GetCommentsRequest
+	(*GetCommentsResponse)(nil),              // 16: activity.GetCommentsResponse
+	(*UpdateCommentAuditStatusRequest)(nil),  // 17: activity.UpdateCommentAuditStatusRequest
+	(*UpdateCommentAuditStatusResponse)(nil), // 18: activity.UpdateCommentAuditStatusResponse
+	(*GetMyActivitiesRequest)(nil),           // 19: activity.GetMyActivitiesRequest
+	(*GetEnrolledActivitiesRequest)(nil),     // 20: activity.GetEnrolledActivitiesRequest
+	(*ParticipantInfo)(nil),                  // 21: activity.ParticipantInfo
+	(*GetParticipantsRequest)(nil),           // 22: activity.GetParticipantsRequest
+	(*GetParticipantsResponse)(nil),          // 23: activity.GetParticipantsResponse
+	(*timestamppb.Timestamp)(nil),            // 24: google.protobuf.Timestamp
 }
 var file_activity_activity_proto_depIdxs = []int32{
-	17, // 0: activity.ActivityInfo.start_time:type_name -> google.protobuf.Timestamp
-	17, // 1: activity.ActivityInfo.end_time:type_name -> google.protobuf.Timestamp
-	17, // 2: activity.ActivityInfo.created_at:type_name -> google.protobuf.Timestamp
-	17, // 3: activity.CreateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
-	17, // 4: activity.CreateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
+	24, // 0: activity.ActivityInfo.start_time:type_name -> google.protobuf.Timestamp
+	24, // 1: activity.ActivityInfo.end_time:type_name -> google.protobuf.Timestamp
+	24, // 2: activity.ActivityInfo.created_at:type_name -> google.protobuf.Timestamp
+	24, // 3: activity.CreateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
+	24, // 4: activity.CreateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
 	0,  // 5: activity.GetActivityListResponse.activities:type_name -> activity.ActivityInfo
-	17, // 6: activity.UpdateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
-	17, // 7: activity.UpdateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
-	17, // 8: activity.ParticipantInfo.enroll_time:type_name -> google.protobuf.Timestamp
-	17, // 9: activity.ParticipantInfo.checkin_time:type_name -> google.protobuf.Timestamp
-	14, // 10: activity.GetParticipantsResponse.participants:type_name -> activity.ParticipantInfo
-	1,  // 11: activity.Activity.CreateActivity:input_type -> activity.CreateActivityRequest
-	2,  // 12: activity.Activity.GetActivityList:input_type -> activity.GetActivityListRequest
-	4,  // 13: activity.Activity.GetActivityDetail:input_type -> activity.GetActivityDetailRequest
-	5,  // 14: activity.Activity.EnrollActivity:input_type -> activity.EnrollActivityRequest
-	7,  // 15: activity.Activity.CancelEnroll:input_type -> activity.CancelEnrollRequest
-	8,  // 16: activity.Activity.CheckIn:input_type -> activity.CheckInRequest
-	9,  // 17: activity.Activity.UpdateActivity:input_type -> activity.UpdateActivityRequest
-	10, // 18: activity.Activity.UpdateAuditStatus:input_type -> activity.UpdateAuditStatusRequest
-	12, // 19: activity.Activity.GetMyActivities:input_type -> activity.GetMyActivitiesRequest
-	13, // 20: activity.Activity.GetEnrolledActivities:input_type -> activity.GetEnrolledActivitiesRequest
-	15, // 21: activity.Activity.GetParticipants:input_type -> activity.GetParticipantsRequest
-	0,  // 22: activity.Activity.CreateActivity:output_type -> activity.ActivityInfo
-	3,  // 23: activity.Activity.GetActivityList:output_type -> activity.GetActivityListResponse
-	0,  // 24: activity.Activity.GetActivityDetail:output_type -> activity.ActivityInfo
-	6,  // 25: activity.Activity.EnrollActivity:output_type -> activity.EnrollActivityResponse
-	6,  // 26: activity.Activity.CancelEnroll:output_type -> activity.EnrollActivityResponse
-	6,  // 27: activity.Activity.CheckIn:output_type -> activity.EnrollActivityResponse
-	0,  // 28: activity.Activity.UpdateActivity:output_type -> activity.ActivityInfo
-	11, // 29: activity.Activity.UpdateAuditStatus:output_type -> activity.UpdateAuditStatusResponse
-	3,  // 30: activity.Activity.GetMyActivities:output_type -> activity.GetActivityListResponse
-	3,  // 31: activity.Activity.GetEnrolledActivities:output_type -> activity.GetActivityListResponse
-	16, // 32: activity.Activity.GetParticipants:output_type -> activity.GetParticipantsResponse
-	22, // [22:33] is the sub-list for method output_type
-	11, // [11:22] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	24, // 6: activity.UpdateActivityRequest.start_time:type_name -> google.protobuf.Timestamp
+	24, // 7: activity.UpdateActivityRequest.end_time:type_name -> google.protobuf.Timestamp
+	24, // 8: activity.CommentInfo.created_at:type_name -> google.protobuf.Timestamp
+	12, // 9: activity.GetCommentsResponse.comments:type_name -> activity.CommentInfo
+	24, // 10: activity.ParticipantInfo.enroll_time:type_name -> google.protobuf.Timestamp
+	24, // 11: activity.ParticipantInfo.checkin_time:type_name -> google.protobuf.Timestamp
+	21, // 12: activity.GetParticipantsResponse.participants:type_name -> activity.ParticipantInfo
+	1,  // 13: activity.Activity.CreateActivity:input_type -> activity.CreateActivityRequest
+	2,  // 14: activity.Activity.GetActivityList:input_type -> activity.GetActivityListRequest
+	4,  // 15: activity.Activity.GetActivityDetail:input_type -> activity.GetActivityDetailRequest
+	5,  // 16: activity.Activity.EnrollActivity:input_type -> activity.EnrollActivityRequest
+	7,  // 17: activity.Activity.CancelEnroll:input_type -> activity.CancelEnrollRequest
+	8,  // 18: activity.Activity.CheckIn:input_type -> activity.CheckInRequest
+	9,  // 19: activity.Activity.UpdateActivity:input_type -> activity.UpdateActivityRequest
+	10, // 20: activity.Activity.UpdateAuditStatus:input_type -> activity.UpdateAuditStatusRequest
+	13, // 21: activity.Activity.CreateComment:input_type -> activity.CreateCommentRequest
+	15, // 22: activity.Activity.GetComments:input_type -> activity.GetCommentsRequest
+	17, // 23: activity.Activity.UpdateCommentAuditStatus:input_type -> activity.UpdateCommentAuditStatusRequest
+	19, // 24: activity.Activity.GetMyActivities:input_type -> activity.GetMyActivitiesRequest
+	20, // 25: activity.Activity.GetEnrolledActivities:input_type -> activity.GetEnrolledActivitiesRequest
+	22, // 26: activity.Activity.GetParticipants:input_type -> activity.GetParticipantsRequest
+	0,  // 27: activity.Activity.CreateActivity:output_type -> activity.ActivityInfo
+	3,  // 28: activity.Activity.GetActivityList:output_type -> activity.GetActivityListResponse
+	0,  // 29: activity.Activity.GetActivityDetail:output_type -> activity.ActivityInfo
+	6,  // 30: activity.Activity.EnrollActivity:output_type -> activity.EnrollActivityResponse
+	6,  // 31: activity.Activity.CancelEnroll:output_type -> activity.EnrollActivityResponse
+	6,  // 32: activity.Activity.CheckIn:output_type -> activity.EnrollActivityResponse
+	0,  // 33: activity.Activity.UpdateActivity:output_type -> activity.ActivityInfo
+	11, // 34: activity.Activity.UpdateAuditStatus:output_type -> activity.UpdateAuditStatusResponse
+	14, // 35: activity.Activity.CreateComment:output_type -> activity.CreateCommentResponse
+	16, // 36: activity.Activity.GetComments:output_type -> activity.GetCommentsResponse
+	18, // 37: activity.Activity.UpdateCommentAuditStatus:output_type -> activity.UpdateCommentAuditStatusResponse
+	3,  // 38: activity.Activity.GetMyActivities:output_type -> activity.GetActivityListResponse
+	3,  // 39: activity.Activity.GetEnrolledActivities:output_type -> activity.GetActivityListResponse
+	23, // 40: activity.Activity.GetParticipants:output_type -> activity.GetParticipantsResponse
+	27, // [27:41] is the sub-list for method output_type
+	13, // [13:27] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_activity_activity_proto_init() }
@@ -1405,7 +1886,7 @@ func file_activity_activity_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_activity_activity_proto_rawDesc), len(file_activity_activity_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

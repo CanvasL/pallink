@@ -8,6 +8,7 @@ import (
 
 	"pallink/activity/activity"
 	"pallink/activity/internal/svc"
+	"pallink/common/mq"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -71,6 +72,7 @@ func (l *UpdateActivityLogic) UpdateActivity(in *activity.UpdateActivityRequest)
 	}
 
 	sets = append(sets, "updated_at=now()")
+	sets = append(sets, "audit_status=0")
 	idArg := addArg(in.Id)
 	creatorArg := addArg(in.CreatorId)
 	query := "UPDATE activity SET " + strings.Join(sets, ", ") + " WHERE id=" + idArg + " AND creator_id=" + creatorArg
@@ -81,6 +83,10 @@ func (l *UpdateActivityLogic) UpdateActivity(in *activity.UpdateActivityRequest)
 	}
 	if cmd.RowsAffected() == 0 {
 		return nil, errors.New("activity not found or forbidden")
+	}
+
+	if err := l.svcCtx.MQ.PublishJSON(l.ctx, mq.AuditMessage{Type: "activity", ID: in.Id}); err != nil {
+		return nil, err
 	}
 
 	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.CreatorId)

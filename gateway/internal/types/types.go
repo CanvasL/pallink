@@ -140,6 +140,15 @@ type GetParticipantsResp struct {
 type GetUserInfoRequest struct {
 }
 
+type UpdateUserRequest struct {
+	Nickname string `json:"nickname,optional"`
+	Avatar   string `json:"avatar,optional"`
+}
+
+type UpdateUserResponse struct {
+	UserInfo UserInfo `json:"user_info"`
+}
+
 type LoginRequest struct {
 	Mobile   string `json:"mobile"`
 	Password string `json:"password"`
@@ -170,6 +179,39 @@ type RegisterRequest struct {
 type RegisterResponse struct {
 	UserId uint64 `json:"user_id"`
 	Token  string `json:"token"`
+}
+
+type CommentInfo struct {
+	Id          uint64 `json:"id"`
+	ActivityId  uint64 `json:"activity_id"`
+	UserId      uint64 `json:"user_id"`
+	Content     string `json:"content"`
+	CreatedAt   int64  `json:"created_at"`
+	AuditStatus int32  `json:"audit_status"`
+	Nickname    string `json:"nickname"`
+	Avatar      string `json:"avatar"`
+}
+
+type CreateCommentReq struct {
+	ActivityId uint64 `json:"activity_id"`
+	Content    string `json:"content"`
+}
+
+type CreateCommentResp struct {
+	CommentId uint64 `json:"comment_id"`
+}
+
+type GetCommentsReq struct {
+	ActivityId uint64 `form:"activity_id"`
+	Page       int32  `form:"page,default=1"`
+	PageSize   int32  `form:"page_size,default=20"`
+}
+
+type GetCommentsResp struct {
+	List     []CommentInfo `json:"list"`
+	Total    int32         `json:"total"`
+	Page     int32         `json:"page"`
+	PageSize int32         `json:"page_size"`
 }
 
 type UpdateActivityReq struct {

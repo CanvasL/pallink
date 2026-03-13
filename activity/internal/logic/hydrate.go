@@ -63,3 +63,30 @@ func hydrateParticipants(ctx context.Context, userRpc userclient.User, participa
 	return nil
 }
 
+func hydrateComments(ctx context.Context, userRpc userclient.User, comments []*activity.CommentInfo) error {
+	if len(comments) == 0 {
+		return nil
+	}
+
+	cache := make(map[uint64]*userclient.UserInfo)
+	for _, item := range comments {
+		if item == nil || item.UserId == 0 {
+			continue
+		}
+		info, ok := cache[item.UserId]
+		if !ok {
+			resp, err := userRpc.GetUserInfo(ctx, &userclient.GetUserInfoRequest{UserId: item.UserId})
+			if err != nil {
+				return err
+			}
+			cache[item.UserId] = resp
+			info = resp
+		}
+		if info != nil {
+			item.Nickname = info.Nickname
+			item.Avatar = info.Avatar
+		}
+	}
+
+	return nil
+}

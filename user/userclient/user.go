@@ -19,12 +19,17 @@ type (
 	LoginResponse      = user.LoginResponse
 	RegisterRequest    = user.RegisterRequest
 	RegisterResponse   = user.RegisterResponse
+	UpdateUserInfoRequest = user.UpdateUserInfoRequest
+	UpdateUserAuditStatusRequest = user.UpdateUserAuditStatusRequest
+	UpdateUserAuditStatusResponse = user.UpdateUserAuditStatusResponse
 	UserInfo           = user.UserInfo
 
 	User interface {
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+		UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+		UpdateUserAuditStatus(ctx context.Context, in *UpdateUserAuditStatusRequest, opts ...grpc.CallOption) (*UpdateUserAuditStatusResponse, error)
 	}
 
 	defaultUser struct {
@@ -51,4 +56,14 @@ func (m *defaultUser) Login(ctx context.Context, in *LoginRequest, opts ...grpc.
 func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.GetUserInfo(ctx, in, opts...)
+}
+
+func (m *defaultUser) UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*UserInfo, error) {
+	client := user.NewUserClient(m.cli.Conn())
+	return client.UpdateUserInfo(ctx, in, opts...)
+}
+
+func (m *defaultUser) UpdateUserAuditStatus(ctx context.Context, in *UpdateUserAuditStatusRequest, opts ...grpc.CallOption) (*UpdateUserAuditStatusResponse, error) {
+	client := user.NewUserClient(m.cli.Conn())
+	return client.UpdateUserAuditStatus(ctx, in, opts...)
 }
