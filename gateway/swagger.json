@@ -9,7 +9,6 @@
     "http"
   ],
   "swagger": "2.0",
-  "host": "localhost:8080",
   "info": {
     "title": "PalLink Gateway API",
     "version": "v1"
@@ -202,12 +201,16 @@
                     "max_people",
                     "current_people",
                     "status",
+                    "audit_status",
                     "created_at",
                     "is_enrolled",
                     "creator_name",
                     "creator_avatar"
                   ],
                   "properties": {
+                    "audit_status": {
+                      "type": "integer"
+                    },
                     "created_at": {
                       "type": "integer"
                     },
@@ -303,12 +306,16 @@
                     "max_people",
                     "current_people",
                     "status",
+                    "audit_status",
                     "created_at",
                     "is_enrolled",
                     "creator_name",
                     "creator_avatar"
                   ],
                   "properties": {
+                    "audit_status": {
+                      "type": "integer"
+                    },
                     "created_at": {
                       "type": "integer"
                     },
@@ -472,9 +479,13 @@
                       "max_people",
                       "current_people",
                       "status",
+                      "audit_status",
                       "is_enrolled"
                     ],
                     "properties": {
+                      "audit_status": {
+                        "type": "integer"
+                      },
                       "creator_avatar": {
                         "type": "string"
                       },
@@ -597,9 +608,13 @@
                       "max_people",
                       "current_people",
                       "status",
+                      "audit_status",
                       "is_enrolled"
                     ],
                     "properties": {
+                      "audit_status": {
+                        "type": "integer"
+                      },
                       "creator_avatar": {
                         "type": "string"
                       },
@@ -710,9 +725,13 @@
                       "max_people",
                       "current_people",
                       "status",
+                      "audit_status",
                       "is_enrolled"
                     ],
                     "properties": {
+                      "audit_status": {
+                        "type": "integer"
+                      },
                       "creator_avatar": {
                         "type": "string"
                       },
@@ -907,12 +926,16 @@
                     "max_people",
                     "current_people",
                     "status",
+                    "audit_status",
                     "created_at",
                     "is_enrolled",
                     "creator_name",
                     "creator_avatar"
                   ],
                   "properties": {
+                    "audit_status": {
+                      "type": "integer"
+                    },
                     "created_at": {
                       "type": "integer"
                     },
@@ -1026,9 +1049,13 @@
                       "max_people",
                       "current_people",
                       "status",
+                      "audit_status",
                       "is_enrolled"
                     ],
                     "properties": {
+                      "audit_status": {
+                        "type": "integer"
+                      },
                       "creator_avatar": {
                         "type": "string"
                       },
@@ -1157,12 +1184,16 @@
                     "max_people",
                     "current_people",
                     "status",
+                    "audit_status",
                     "created_at",
                     "is_enrolled",
                     "creator_name",
                     "creator_avatar"
                   ],
                   "properties": {
+                    "audit_status": {
+                      "type": "integer"
+                    },
                     "created_at": {
                       "type": "integer"
                     },
@@ -1407,11 +1438,12 @@
       }
     }
   },
-  "x-date": "2026-03-13 00:57:12",
+  "x-date": "2026-03-13 11:47:14",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",
   "x-goctl-version": "1.9.2",
+  "host": "localhost:8080",
   "tags": [
     {
       "name": "user",

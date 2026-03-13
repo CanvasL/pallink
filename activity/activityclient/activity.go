@@ -29,6 +29,8 @@ type (
 	GetParticipantsResponse      = activity.GetParticipantsResponse
 	ParticipantInfo              = activity.ParticipantInfo
 	UpdateActivityRequest        = activity.UpdateActivityRequest
+	UpdateAuditStatusRequest     = activity.UpdateAuditStatusRequest
+	UpdateAuditStatusResponse    = activity.UpdateAuditStatusResponse
 
 	Activity interface {
 		CreateActivity(ctx context.Context, in *CreateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
@@ -38,6 +40,7 @@ type (
 		CancelEnroll(ctx context.Context, in *CancelEnrollRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
 		CheckIn(ctx context.Context, in *CheckInRequest, opts ...grpc.CallOption) (*EnrollActivityResponse, error)
 		UpdateActivity(ctx context.Context, in *UpdateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error)
+		UpdateAuditStatus(ctx context.Context, in *UpdateAuditStatusRequest, opts ...grpc.CallOption) (*UpdateAuditStatusResponse, error)
 		GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 		GetEnrolledActivities(ctx context.Context, in *GetEnrolledActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error)
 		GetParticipants(ctx context.Context, in *GetParticipantsRequest, opts ...grpc.CallOption) (*GetParticipantsResponse, error)
@@ -87,6 +90,11 @@ func (m *defaultActivity) CheckIn(ctx context.Context, in *CheckInRequest, opts 
 func (m *defaultActivity) UpdateActivity(ctx context.Context, in *UpdateActivityRequest, opts ...grpc.CallOption) (*ActivityInfo, error) {
 	client := activity.NewActivityClient(m.cli.Conn())
 	return client.UpdateActivity(ctx, in, opts...)
+}
+
+func (m *defaultActivity) UpdateAuditStatus(ctx context.Context, in *UpdateAuditStatusRequest, opts ...grpc.CallOption) (*UpdateAuditStatusResponse, error) {
+	client := activity.NewActivityClient(m.cli.Conn())
+	return client.UpdateAuditStatus(ctx, in, opts...)
 }
 
 func (m *defaultActivity) GetMyActivities(ctx context.Context, in *GetMyActivitiesRequest, opts ...grpc.CallOption) (*GetActivityListResponse, error) {

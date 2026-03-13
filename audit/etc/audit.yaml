@@ -1,0 +1,9 @@
+Name: audit.worker
+RabbitMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Queue: "activity_audit"
+ActivityRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: activity.rpc

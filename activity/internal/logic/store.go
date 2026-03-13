@@ -20,6 +20,7 @@ type listFilter struct {
 	EnrolledUserID  uint64
 	UseEnrolledUser bool
 	Status          *int32
+	AuditStatus     *int32
 	Keyword         string
 }
 
@@ -65,6 +66,9 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 	if filter.Status != nil {
 		where = append(where, "a.status="+addArg(*filter.Status))
 	}
+	if filter.AuditStatus != nil {
+		where = append(where, "a.audit_status="+addArg(*filter.AuditStatus))
+	}
 	if filter.Keyword != "" {
 		kw := "%" + filter.Keyword + "%"
 		where = append(where, "(a.title ILIKE "+addArg(kw)+" OR a.description ILIKE "+addArg(kw)+")")
@@ -79,7 +83,7 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 	limitArg := addArg(pageSize)
 	offsetArg := addArg((page - 1) * pageSize)
 	listSQL := "SELECT a.id, a.creator_id, a.title, a.description, a.location, " +
-		"a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.created_at, " + isEnrolledExpr + " AS is_enrolled" +
+		"a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.audit_status, a.created_at, " + isEnrolledExpr + " AS is_enrolled" +
 		sb.String() + " WHERE " + strings.Join(where, " AND ") +
 		" ORDER BY a.start_time DESC LIMIT " + limitArg + " OFFSET " + offsetArg
 
@@ -109,6 +113,7 @@ func queryActivityList(ctx context.Context, db *pgxpool.Pool, filter listFilter,
 			&item.MaxPeople,
 			&item.CurrentPeople,
 			&item.Status,
+			&item.AuditStatus,
 			&createdAt,
 			&isEnrolled,
 		); err != nil {
@@ -141,7 +146,7 @@ func queryActivityDetail(ctx context.Context, db *pgxpool.Pool, activityID uint6
 	if err := db.QueryRow(
 		ctx,
 		`SELECT a.id, a.creator_id, a.title, a.description, a.location,
-	        a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.created_at
+	        a.start_time, a.end_time, a.max_people, a.current_people, a.status, a.audit_status, a.created_at
 	   FROM activity a
 	  WHERE a.id=$1`,
 		activityID,
@@ -156,6 +161,7 @@ func queryActivityDetail(ctx context.Context, db *pgxpool.Pool, activityID uint6
 		&info.MaxPeople,
 		&info.CurrentPeople,
 		&info.Status,
+		&info.AuditStatus,
 		&createdAt,
 	); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {

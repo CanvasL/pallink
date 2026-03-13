@@ -31,6 +31,10 @@ func (l *GetActivityListLogic) GetActivityList(in *activity.GetActivityListReque
 	if in.Status != 0 {
 		filter.Status = &in.Status
 	}
+	if in.ViewerUserId == 0 {
+		approved := int32(1)
+		filter.AuditStatus = &approved
+	}
 
 	activities, total, err := queryActivityList(l.ctx, l.svcCtx.DB, filter, in.ViewerUserId, in.Page, in.PageSize)
 	if err != nil {

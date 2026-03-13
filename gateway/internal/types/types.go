@@ -15,6 +15,7 @@ type ActivityBrief struct {
 	MaxPeople     int32  `json:"max_people"`
 	CurrentPeople int32  `json:"current_people"`
 	Status        int32  `json:"status"`
+	AuditStatus   int32  `json:"audit_status"`
 	IsEnrolled    bool   `json:"is_enrolled"`
 }
 
@@ -29,6 +30,7 @@ type ActivityInfo struct {
 	MaxPeople     int32  `json:"max_people"`
 	CurrentPeople int32  `json:"current_people"`
 	Status        int32  `json:"status"`
+	AuditStatus   int32  `json:"audit_status"`
 	CreatedAt     int64  `json:"created_at"`
 	IsEnrolled    bool   `json:"is_enrolled"`
 	CreatorName   string `json:"creator_name"`

@@ -48,12 +48,15 @@ func (l *CreateActivityLogic) CreateActivity(in *activity.CreateActivityRequest)
 	)
 	err := l.svcCtx.DB.QueryRow(
 		l.ctx,
-		`INSERT INTO activity (creator_id, title, description, location, start_time, end_time, max_people, current_people, status, created_at)
-		 VALUES ($1,$2,$3,$4,$5,$6,$7,0,1,now())
+		`INSERT INTO activity (creator_id, title, description, location, start_time, end_time, max_people, current_people, status, audit_status, created_at)
+		 VALUES ($1,$2,$3,$4,$5,$6,$7,0,1,0,now())
 		 RETURNING id`,
 		in.CreatorId, in.Title, in.Description, in.Location, startTime, endTime, in.MaxPeople,
 	).Scan(&id)
 	if err != nil {
+		return nil, err
+	}
+	if err := l.svcCtx.MQ.PublishJSON(l.ctx, auditMessage{ActivityID: id}); err != nil {
 		return nil, err
 	}
 

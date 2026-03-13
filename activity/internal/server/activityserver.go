@@ -58,6 +58,11 @@ func (s *ActivityServer) UpdateActivity(ctx context.Context, in *activity.Update
 	return l.UpdateActivity(in)
 }
 
+func (s *ActivityServer) UpdateAuditStatus(ctx context.Context, in *activity.UpdateAuditStatusRequest) (*activity.UpdateAuditStatusResponse, error) {
+	l := logic.NewUpdateAuditStatusLogic(ctx, s.svcCtx)
+	return l.UpdateAuditStatus(in)
+}
+
 func (s *ActivityServer) GetMyActivities(ctx context.Context, in *activity.GetMyActivitiesRequest) (*activity.GetActivityListResponse, error) {
 	l := logic.NewGetMyActivitiesLogic(ctx, s.svcCtx)
 	return l.GetMyActivities(in)

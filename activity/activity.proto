@@ -13,6 +13,7 @@ service Activity {
     rpc CancelEnroll(CancelEnrollRequest) returns (EnrollActivityResponse);
     rpc CheckIn(CheckInRequest) returns (EnrollActivityResponse);
     rpc UpdateActivity(UpdateActivityRequest) returns (ActivityInfo);
+    rpc UpdateAuditStatus(UpdateAuditStatusRequest) returns (UpdateAuditStatusResponse);
     rpc GetMyActivities(GetMyActivitiesRequest) returns (GetActivityListResponse);
     rpc GetEnrolledActivities(GetEnrolledActivitiesRequest) returns (GetActivityListResponse);
     rpc GetParticipants(GetParticipantsRequest) returns (GetParticipantsResponse);
@@ -33,6 +34,7 @@ message ActivityInfo {
     string creator_name = 12;
     string creator_avatar = 13;
     bool is_enrolled = 14;
+    int32 audit_status = 15;
 }
 
 message CreateActivityRequest {
@@ -94,6 +96,16 @@ message UpdateActivityRequest {
     google.protobuf.Timestamp end_time = 7;
     int32 max_people = 8;
     int32 status = 9;
+}
+
+message UpdateAuditStatusRequest {
+    uint64 activity_id = 1;
+    int32 audit_status = 2;
+}
+
+message UpdateAuditStatusResponse {
+    bool success = 1;
+    string message = 2;
 }
 
 message GetMyActivitiesRequest {

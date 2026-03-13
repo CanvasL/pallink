@@ -1,0 +1,13 @@
+package config
+
+import (
+	"pallink/common/mq"
+
+	"github.com/zeromicro/go-zero/zrpc"
+)
+
+type Config struct {
+	Name        string 
+	RabbitMQ    mq.Config
+	ActivityRpc zrpc.RpcClientConf
+}

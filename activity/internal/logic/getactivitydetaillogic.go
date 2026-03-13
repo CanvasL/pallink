@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"pallink/activity/activity"
 	"pallink/activity/internal/svc"
@@ -27,6 +28,9 @@ func (l *GetActivityDetailLogic) GetActivityDetail(in *activity.GetActivityDetai
 	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.ViewerUserId)
 	if err != nil {
 		return nil, err
+	}
+	if in.ViewerUserId == 0 && info.AuditStatus != 1 {
+		return nil, errors.New("activity not approved")
 	}
 	if err := hydrateActivityUsers(l.ctx, l.svcCtx.UserRpc, []*activity.ActivityInfo{info}); err != nil {
 		return nil, err

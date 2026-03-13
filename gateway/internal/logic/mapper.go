@@ -35,6 +35,7 @@ func toActivityInfo(in *activityclient.ActivityInfo) types.ActivityInfo {
 		MaxPeople:     in.MaxPeople,
 		CurrentPeople: in.CurrentPeople,
 		Status:        in.Status,
+		AuditStatus:   in.AuditStatus,
 		CreatedAt:     tsToUnix(in.CreatedAt),
 		IsEnrolled:    in.IsEnrolled,
 		CreatorName:   in.CreatorName,
@@ -58,6 +59,7 @@ func toActivityBrief(in *activityclient.ActivityInfo) types.ActivityBrief {
 		MaxPeople:     in.MaxPeople,
 		CurrentPeople: in.CurrentPeople,
 		Status:        in.Status,
+		AuditStatus:   in.AuditStatus,
 		IsEnrolled:    in.IsEnrolled,
 	}
 }

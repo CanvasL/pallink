@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS activity (
     max_people INTEGER NOT NULL DEFAULT 0,
     current_people INTEGER NOT NULL DEFAULT 0,
     status SMALLINT NOT NULL DEFAULT 1,
+    audit_status SMALLINT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,4 +40,5 @@ CREATE TABLE IF NOT EXISTS enrollment (
 CREATE INDEX IF NOT EXISTS idx_user_mobile ON "user" (mobile);
 CREATE INDEX IF NOT EXISTS idx_activity_creator ON activity (creator_id);
 CREATE INDEX IF NOT EXISTS idx_activity_status ON activity (status);
+CREATE INDEX IF NOT EXISTS idx_activity_audit_status ON activity (audit_status);
 CREATE INDEX IF NOT EXISTS idx_enrollment_user ON enrollment (user_id);
