@@ -14,3 +14,8 @@ ActivityRpc:
     Hosts:
     - etcd:2379
     Key: activity.rpc
+NotifyRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: notify.rpc

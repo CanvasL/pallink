@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +25,7 @@ func NewUpdateCommentAuditStatusLogic(ctx context.Context, svcCtx *svc.ServiceCo
 }
 
 func (l *UpdateCommentAuditStatusLogic) UpdateCommentAuditStatus(in *activity.UpdateCommentAuditStatusRequest) (*activity.UpdateCommentAuditStatusResponse, error) {
-	ok, err := updateCommentAuditStatus(l.ctx, l.svcCtx.DB, in.CommentId, in.AuditStatus)
+	ok, err := dao.UpdateCommentAuditStatus(l.ctx, l.svcCtx.DB, in.CommentId, in.AuditStatus)
 	if err != nil {
 		return nil, err
 	}

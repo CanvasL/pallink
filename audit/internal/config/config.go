@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Name        string
-	RabbitMQ    mq.Config
+	AuditMQ     mq.Config
 	ActivityRpc zrpc.RpcClientConf
 	UserRpc     zrpc.RpcClientConf
 }

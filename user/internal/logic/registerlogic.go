@@ -7,10 +7,10 @@ import (
 
 	"pallink/common/auth"
 	"pallink/common/mq"
+	"pallink/user/internal/dao"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -38,13 +38,10 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 		return nil, errors.New("mobile/password/nickname required")
 	}
 
-	var existingID uint64
-	err := l.svcCtx.DB.QueryRow(l.ctx, `SELECT id FROM "user" WHERE mobile=$1`, mobile).Scan(&existingID)
-	if err == nil {
-		return nil, errors.New("mobile already registered")
-	}
-	if !errors.Is(err, pgx.ErrNoRows) {
+	if _, exists, err := dao.GetUserIDByMobile(l.ctx, l.svcCtx.DB, mobile); err != nil {
 		return nil, err
+	} else if exists {
+		return nil, errors.New("mobile already registered")
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -52,12 +49,7 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 		return nil, err
 	}
 
-	var userID uint64
-	err = l.svcCtx.DB.QueryRow(
-		l.ctx,
-		`INSERT INTO "user" (mobile, password_hash, nickname, avatar) VALUES ($1, $2, $3, $4) RETURNING id`,
-		mobile, string(hashed), nickname, "",
-	).Scan(&userID)
+	userID, err := dao.InsertUser(l.ctx, l.svcCtx.DB, mobile, string(hashed), nickname, "")
 	if err != nil {
 		return nil, err
 	}

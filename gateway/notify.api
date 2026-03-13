@@ -1,0 +1,39 @@
+syntax = "v1"
+
+// Notification related types
+// 通知相关数据结构
+
+type NotificationInfo {
+	Id         uint64 `json:"id"`
+	UserId     uint64 `json:"user_id"`
+	ActorId    uint64 `json:"actor_id"`
+	Type       string `json:"type"`
+	ActivityId uint64 `json:"activity_id"`
+	CommentId  uint64 `json:"comment_id"`
+	ParentId   uint64 `json:"parent_id"`
+	Content    string `json:"content"`
+	CreatedAt  int64  `json:"created_at"`
+	ReadAt     int64  `json:"read_at"`
+}
+
+type GetNotificationsReq {
+	Page       int32 `form:"page,default=1"`
+	PageSize   int32 `form:"page_size,default=20"`
+	UnreadOnly bool  `form:"unread_only,optional"`
+}
+
+type GetNotificationsResp {
+	List     []NotificationInfo `json:"list"`
+	Total    int32              `json:"total"`
+	Page     int32              `json:"page"`
+	PageSize int32              `json:"page_size"`
+}
+
+type MarkReadReq {
+	NotificationId uint64 `json:"notification_id,optional"`
+}
+
+type MarkReadResp {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}

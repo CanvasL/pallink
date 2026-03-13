@@ -2,13 +2,12 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -37,38 +36,24 @@ func (l *CancelEnrollLogic) CancelEnroll(in *activity.CancelEnrollRequest) (*act
 	}
 	defer tx.Rollback(l.ctx)
 
-	var status int32
-	err = tx.QueryRow(
-		l.ctx,
-		`SELECT status FROM enrollment WHERE activity_id=$1 AND user_id=$2`,
-		in.ActivityId, in.UserId,
-	).Scan(&status)
+	status, exists, err := dao.GetEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return &activity.EnrollActivityResponse{Success: false, Message: "not enrolled"}, nil
-		}
 		return nil, err
+	}
+	if !exists {
+		return &activity.EnrollActivityResponse{Success: false, Message: "not enrolled"}, nil
 	}
 
 	if status == 3 {
 		return &activity.EnrollActivityResponse{Success: false, Message: "already canceled"}, nil
 	}
 
-	_, err = tx.Exec(
-		l.ctx,
-		`UPDATE enrollment SET status=3, updated_at=$1 WHERE activity_id=$2 AND user_id=$3`,
-		time.Now(), in.ActivityId, in.UserId,
-	)
-	if err != nil {
+	now := time.Now()
+	if err := dao.UpdateEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId, 3, &now, nil); err != nil {
 		return nil, err
 	}
 
-	_, err = tx.Exec(
-		l.ctx,
-		`UPDATE activity SET current_people = GREATEST(current_people - 1, 0) WHERE id=$1`,
-		in.ActivityId,
-	)
-	if err != nil {
+	if err := dao.UpdateActivityPeople(l.ctx, tx, in.ActivityId, -1); err != nil {
 		return nil, err
 	}
 

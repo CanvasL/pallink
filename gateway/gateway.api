@@ -2,6 +2,7 @@ syntax = "v1"
 
 import "user.api"
 import "activity.api"
+import "notify.api"
 
 info (
 	title:   "PalLink Gateway API"
@@ -38,6 +39,20 @@ service gatewayApi {
 	)
 	@handler UpdateUserInfo
 	post /user/update (UpdateUserRequest) returns (UpdateUserResponse)
+
+	// Notify
+	// 通知
+	@doc (
+		group: "notify"
+	)
+	@handler GetNotifications
+	get /notify/list (GetNotificationsReq) returns (GetNotificationsResp)
+
+	@doc (
+		group: "notify"
+	)
+	@handler MarkRead
+	post /notify/read (MarkReadReq) returns (MarkReadResp)
 
 	// Activity
 	// 活动

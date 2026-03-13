@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 
+	"pallink/user/internal/dao"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
@@ -31,15 +32,11 @@ func (l *UpdateAuditStatusLogic) UpdateAuditStatus(in *user.UpdateUserAuditStatu
 		return &user.UpdateUserAuditStatusResponse{Success: false, Message: "invalid audit_status"}, nil
 	}
 
-	cmd, err := l.svcCtx.DB.Exec(
-		l.ctx,
-		`UPDATE "user" SET audit_status=$1, updated_at=now() WHERE id=$2`,
-		in.AuditStatus, in.UserId,
-	)
+	ok, err := dao.UpdateAuditStatus(l.ctx, l.svcCtx.DB, in.UserId, in.AuditStatus)
 	if err != nil {
 		return nil, err
 	}
-	if cmd.RowsAffected() == 0 {
+	if !ok {
 		return &user.UpdateUserAuditStatusResponse{Success: false, Message: "user not found"}, nil
 	}
 	return &user.UpdateUserAuditStatusResponse{Success: true, Message: "ok"}, nil

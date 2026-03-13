@@ -48,6 +48,19 @@ CREATE TABLE IF NOT EXISTS activity_comment (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS notification (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    actor_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    type VARCHAR(32) NOT NULL,
+    activity_id BIGINT,
+    comment_id BIGINT,
+    parent_id BIGINT,
+    content TEXT NOT NULL DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMPTZ
+);
+
 CREATE INDEX IF NOT EXISTS idx_user_mobile ON "user" (mobile);
 CREATE INDEX IF NOT EXISTS idx_user_audit_status ON "user" (audit_status);
 CREATE INDEX IF NOT EXISTS idx_activity_creator ON activity (creator_id);
@@ -57,3 +70,5 @@ CREATE INDEX IF NOT EXISTS idx_enrollment_user ON enrollment (user_id);
 CREATE INDEX IF NOT EXISTS idx_comment_activity ON activity_comment (activity_id);
 CREATE INDEX IF NOT EXISTS idx_comment_parent ON activity_comment (parent_id);
 CREATE INDEX IF NOT EXISTS idx_comment_audit_status ON activity_comment (audit_status);
+CREATE INDEX IF NOT EXISTS idx_notification_user ON notification (user_id);
+CREATE INDEX IF NOT EXISTS idx_notification_user_read ON notification (user_id, read_at);

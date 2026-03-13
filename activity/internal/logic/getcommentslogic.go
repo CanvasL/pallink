@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -32,7 +33,7 @@ func (l *GetCommentsLogic) GetComments(in *activity.GetCommentsRequest) (*activi
 		return nil, errors.New("activity_id required")
 	}
 
-	list, total, err := queryComments(l.ctx, l.svcCtx.DB, in.ActivityId, in.ParentId, in.ViewerUserId, in.Page, in.PageSize)
+	list, total, err := dao.QueryComments(l.ctx, l.svcCtx.DB, in.ActivityId, in.ParentId, in.ViewerUserId, in.Page, in.PageSize)
 	if err != nil {
 		return nil, err
 	}

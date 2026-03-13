@@ -1421,6 +1421,171 @@
         ]
       }
     },
+    "/notify/list": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http"
+        ],
+        "summary": "GetNotifications",
+        "operationId": "getNotifications",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 1,
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "default": 20,
+            "name": "page_size",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "boolean",
+            "name": "unread_only",
+            "in": "query",
+            "allowEmptyValue": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "user_id",
+                      "actor_id",
+                      "type",
+                      "activity_id",
+                      "comment_id",
+                      "parent_id",
+                      "content",
+                      "created_at",
+                      "read_at"
+                    ],
+                    "properties": {
+                      "activity_id": {
+                        "type": "integer"
+                      },
+                      "actor_id": {
+                        "type": "integer"
+                      },
+                      "comment_id": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "parent_id": {
+                        "type": "integer"
+                      },
+                      "read_at": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "page_size": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "notify"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/notify/read": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http"
+        ],
+        "summary": "MarkRead",
+        "operationId": "markRead",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notification_id": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "notify"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
     "/user/login": {
       "post": {
         "consumes": [
@@ -1681,7 +1846,7 @@
       }
     }
   },
-  "x-date": "2026-03-13 15:47:01",
+  "x-date": "2026-03-13 21:48:33",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",
@@ -1695,6 +1860,10 @@
     {
       "name": "activity",
       "description": "Activity APIs"
+    },
+    {
+      "name": "notify",
+      "description": "Notify APIs"
     }
   ],
   "securityDefinitions": {

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -29,7 +30,7 @@ func (l *GetParticipantsLogic) GetParticipants(in *activity.GetParticipantsReque
 		return nil, errors.New("activity_id required")
 	}
 
-	list, total, err := queryParticipants(l.ctx, l.svcCtx.DB, in.ActivityId, in.Page, in.PageSize)
+	list, total, err := dao.QueryParticipants(l.ctx, l.svcCtx.DB, in.ActivityId, in.Page, in.PageSize)
 	if err != nil {
 		return nil, err
 	}

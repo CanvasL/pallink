@@ -16,6 +16,9 @@ UserRpc:
     Hosts:
     - etcd:2379
     Key: user.rpc
-RabbitMQ:
+AuditMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
-  Queue: "activity_audit"
+  Queue: "audit_events"
+NotifyMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Queue: "notify_events"

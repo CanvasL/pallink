@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 	"pallink/common/mq"
 
@@ -44,16 +45,7 @@ func (l *CreateActivityLogic) CreateActivity(in *activity.CreateActivityRequest)
 		return nil, errors.New("max_people invalid")
 	}
 
-	var (
-		id uint64
-	)
-	err := l.svcCtx.DB.QueryRow(
-		l.ctx,
-		`INSERT INTO activity (creator_id, title, description, location, start_time, end_time, max_people, current_people, status, audit_status, created_at)
-		 VALUES ($1,$2,$3,$4,$5,$6,$7,0,1,0,now())
-		 RETURNING id`,
-		in.CreatorId, in.Title, in.Description, in.Location, startTime, endTime, in.MaxPeople,
-	).Scan(&id)
+	id, err := dao.CreateActivity(l.ctx, l.svcCtx.DB, in.CreatorId, in.Title, in.Description, in.Location, startTime, endTime, in.MaxPeople)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +53,7 @@ func (l *CreateActivityLogic) CreateActivity(in *activity.CreateActivityRequest)
 		return nil, err
 	}
 
-	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, id, in.CreatorId)
+	info, err := dao.QueryActivityDetail(l.ctx, l.svcCtx.DB, id, in.CreatorId)
 	if err != nil {
 		return nil, err
 	}

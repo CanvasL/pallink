@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +25,7 @@ func NewGetActivityListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetActivityListLogic) GetActivityList(in *activity.GetActivityListRequest) (*activity.GetActivityListResponse, error) {
-	filter := listFilter{
+	filter := dao.ListFilter{
 		Status:  nil,
 		Keyword: in.Keyword,
 	}
@@ -36,7 +37,7 @@ func (l *GetActivityListLogic) GetActivityList(in *activity.GetActivityListReque
 		filter.AuditStatus = &approved
 	}
 
-	activities, total, err := queryActivityList(l.ctx, l.svcCtx.DB, filter, in.ViewerUserId, in.Page, in.PageSize)
+	activities, total, err := dao.QueryActivityList(l.ctx, l.svcCtx.DB, filter, in.ViewerUserId, in.Page, in.PageSize)
 	if err != nil {
 		return nil, err
 	}

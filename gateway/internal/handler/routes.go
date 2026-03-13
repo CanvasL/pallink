@@ -109,6 +109,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/update",
 				Handler: UpdateUserInfoHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/notify/list",
+				Handler: GetNotificationsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/notify/read",
+				Handler: MarkReadHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

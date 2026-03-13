@@ -3,13 +3,13 @@ package logic
 import (
 	"context"
 	"errors"
-	"strconv"
 	"strings"
 
 	"pallink/common/mq"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -32,26 +32,27 @@ func (l *UpdateUserInfoLogic) UpdateUserInfo(in *user.UpdateUserInfoRequest) (*u
 		return nil, errors.New("user_id required")
 	}
 
-	sets := make([]string, 0)
-	args := make([]any, 0)
-	addArg := func(v any) string {
-		args = append(args, v)
-		return "$" + strconv.Itoa(len(args))
-	}
-
-	if in.Nickname != "" {
-		sets = append(sets, "nickname="+addArg(strings.TrimSpace(in.Nickname)))
-	}
-	if in.Avatar != "" {
-		sets = append(sets, "avatar="+addArg(strings.TrimSpace(in.Avatar)))
-	}
-	if len(sets) == 0 {
+	if in.Nickname == "" && in.Avatar == "" {
 		return nil, errors.New("no fields to update")
 	}
 
-	sets = append(sets, "audit_status=0", "updated_at=now()")
-	userArg := addArg(in.UserId)
-	query := "UPDATE \"user\" SET " + strings.Join(sets, ", ") + " WHERE id=" + userArg
+	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
+		Update(`"user"`).
+		Set("audit_status", 0).
+		Set("updated_at", sq.Expr("now()")).
+		Where(sq.Eq{"id": in.UserId})
+
+	if in.Nickname != "" {
+		builder = builder.Set("nickname", strings.TrimSpace(in.Nickname))
+	}
+	if in.Avatar != "" {
+		builder = builder.Set("avatar", strings.TrimSpace(in.Avatar))
+	}
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, err
+	}
 	cmd, err := l.svcCtx.DB.Exec(l.ctx, query, args...)
 	if err != nil {
 		return nil, err

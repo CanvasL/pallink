@@ -14,5 +14,5 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
-	RabbitMQ mq.Config
+	AuditMQ mq.Config
 }

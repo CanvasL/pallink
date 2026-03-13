@@ -3,10 +3,9 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
-	"strings"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 	"pallink/common/mq"
 
@@ -32,36 +31,7 @@ func (l *UpdateActivityLogic) UpdateActivity(in *activity.UpdateActivityRequest)
 		return nil, errors.New("id/creator_id required")
 	}
 
-	sets := make([]string, 0)
-	args := make([]any, 0)
-	addArg := func(v any) string {
-		args = append(args, v)
-		return fmt.Sprintf("$%d", len(args))
-	}
-
-	if in.Title != "" {
-		sets = append(sets, "title="+addArg(in.Title))
-	}
-	if in.Description != "" {
-		sets = append(sets, "description="+addArg(in.Description))
-	}
-	if in.Location != "" {
-		sets = append(sets, "location="+addArg(in.Location))
-	}
-	if in.StartTime != nil {
-		sets = append(sets, "start_time="+addArg(in.StartTime.AsTime()))
-	}
-	if in.EndTime != nil {
-		sets = append(sets, "end_time="+addArg(in.EndTime.AsTime()))
-	}
-	if in.MaxPeople != -1 {
-		sets = append(sets, "max_people="+addArg(in.MaxPeople))
-	}
-	if in.Status != -1 {
-		sets = append(sets, "status="+addArg(in.Status))
-	}
-
-	if len(sets) == 0 {
+	if in.Title == "" && in.Description == "" && in.Location == "" && in.StartTime == nil && in.EndTime == nil && in.MaxPeople == -1 && in.Status == -1 {
 		return nil, errors.New("no fields to update")
 	}
 
@@ -71,17 +41,11 @@ func (l *UpdateActivityLogic) UpdateActivity(in *activity.UpdateActivityRequest)
 		}
 	}
 
-	sets = append(sets, "updated_at=now()")
-	sets = append(sets, "audit_status=0")
-	idArg := addArg(in.Id)
-	creatorArg := addArg(in.CreatorId)
-	query := "UPDATE activity SET " + strings.Join(sets, ", ") + " WHERE id=" + idArg + " AND creator_id=" + creatorArg
-
-	cmd, err := l.svcCtx.DB.Exec(l.ctx, query, args...)
+	updated, err := dao.UpdateActivity(l.ctx, l.svcCtx.DB, in)
 	if err != nil {
 		return nil, err
 	}
-	if cmd.RowsAffected() == 0 {
+	if !updated {
 		return nil, errors.New("activity not found or forbidden")
 	}
 
@@ -89,7 +53,7 @@ func (l *UpdateActivityLogic) UpdateActivity(in *activity.UpdateActivityRequest)
 		return nil, err
 	}
 
-	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.CreatorId)
+	info, err := dao.QueryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.CreatorId)
 	if err != nil {
 		return nil, err
 	}

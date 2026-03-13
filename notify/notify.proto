@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package notify;
+option go_package = "./notify";
+
+import "google/protobuf/timestamp.proto";
+
+service Notify {
+    rpc GetNotifications(GetNotificationsRequest) returns (GetNotificationsResponse);
+    rpc MarkRead(MarkReadRequest) returns (MarkReadResponse);
+}
+
+message NotificationInfo {
+    uint64 id = 1;
+    uint64 user_id = 2;
+    uint64 actor_id = 3;
+    string type = 4;
+    uint64 activity_id = 5;
+    uint64 comment_id = 6;
+    uint64 parent_id = 7;
+    string content = 8;
+    google.protobuf.Timestamp created_at = 9;
+    google.protobuf.Timestamp read_at = 10;
+}
+
+message GetNotificationsRequest {
+    uint64 user_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+    bool unread_only = 4;
+}
+
+message GetNotificationsResponse {
+    repeated NotificationInfo list = 1;
+    int32 total = 2;
+}
+
+message MarkReadRequest {
+    uint64 user_id = 1;
+    uint64 notification_id = 2; // 0 means mark all
+}
+
+message MarkReadResponse {
+    bool success = 1;
+    string message = 2;
+}

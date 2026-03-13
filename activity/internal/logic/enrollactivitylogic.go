@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/jackc/pgx/v5"
@@ -37,16 +38,7 @@ func (l *EnrollActivityLogic) EnrollActivity(in *activity.EnrollActivityRequest)
 	}
 	defer tx.Rollback(l.ctx)
 
-	var (
-		maxPeople     int32
-		currentPeople int32
-		status        int32
-	)
-	err = tx.QueryRow(
-		l.ctx,
-		`SELECT max_people, current_people, status FROM activity WHERE id=$1`,
-		in.ActivityId,
-	).Scan(&maxPeople, &currentPeople, &status)
+	maxPeople, currentPeople, status, err := dao.GetActivityEnrollInfo(l.ctx, tx, in.ActivityId)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return &activity.EnrollActivityResponse{Success: false, Message: "activity not found"}, nil
@@ -60,43 +52,25 @@ func (l *EnrollActivityLogic) EnrollActivity(in *activity.EnrollActivityRequest)
 		return &activity.EnrollActivityResponse{Success: false, Message: "activity is full"}, nil
 	}
 
-	var existingStatus int32
-	err = tx.QueryRow(
-		l.ctx,
-		`SELECT status FROM enrollment WHERE activity_id=$1 AND user_id=$2`,
-		in.ActivityId, in.UserId,
-	).Scan(&existingStatus)
-	if err == nil {
+	existingStatus, exists, err := dao.GetEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId)
+	if err != nil {
+		return nil, err
+	}
+	if exists {
 		if existingStatus == 1 || existingStatus == 2 {
 			return &activity.EnrollActivityResponse{Success: false, Message: "already enrolled"}, nil
 		}
-		_, err = tx.Exec(
-			l.ctx,
-			`UPDATE enrollment SET status=1, enroll_time=$1, checkin_time=NULL WHERE activity_id=$2 AND user_id=$3`,
-			time.Now(), in.ActivityId, in.UserId,
-		)
-		if err != nil {
-			return nil, err
-		}
-	} else if errors.Is(err, pgx.ErrNoRows) {
-		_, err = tx.Exec(
-			l.ctx,
-			`INSERT INTO enrollment (activity_id, user_id, status, enroll_time) VALUES ($1, $2, 1, $3)`,
-			in.ActivityId, in.UserId, time.Now(),
-		)
-		if err != nil {
+		now := time.Now()
+		if err := dao.UpdateEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId, 1, &now, nil); err != nil {
 			return nil, err
 		}
 	} else {
-		return nil, err
+		if err := dao.InsertEnrollment(l.ctx, tx, in.ActivityId, in.UserId, 1, time.Now()); err != nil {
+			return nil, err
+		}
 	}
 
-	_, err = tx.Exec(
-		l.ctx,
-		`UPDATE activity SET current_people = current_people + 1 WHERE id=$1`,
-		in.ActivityId,
-	)
-	if err != nil {
+	if err := dao.UpdateActivityPeople(l.ctx, tx, in.ActivityId, 1); err != nil {
 		return nil, err
 	}
 

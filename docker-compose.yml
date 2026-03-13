@@ -87,6 +87,18 @@ services:
       - activity-rpc
     restart: unless-stopped
 
+  notify-rpc:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/notify-rpc.Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+      - etcd
+    restart: unless-stopped
+    ports:
+      - "8006:8006"
+
   gateway-api:
     build:
       context: .
@@ -94,6 +106,7 @@ services:
     depends_on:
       - user-rpc
       - activity-rpc
+      - notify-rpc
       - etcd
     ports:
       - "8080:8080"

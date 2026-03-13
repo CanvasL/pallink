@@ -1,7 +1,7 @@
 Name: audit.worker
-RabbitMQ:
+AuditMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
-  Queue: "activity_audit"
+  Queue: "audit_events"
 ActivityRpc:
   Etcd:
     Hosts:

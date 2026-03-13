@@ -22,7 +22,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		logx.Must(err)
 	}
-	mqClient, err := mq.NewClient(c.RabbitMQ)
+	mqClient, err := mq.NewClient(c.AuditMQ)
 	if err != nil {
 		logx.Must(err)
 	}

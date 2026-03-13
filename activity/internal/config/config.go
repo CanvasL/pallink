@@ -11,5 +11,6 @@ type Config struct {
 	zrpc.RpcServerConf
 	Postgres postgres.Config
 	UserRpc  zrpc.RpcClientConf
-	RabbitMQ mq.Config
+	AuditMQ  mq.Config
+	NotifyMQ mq.Config
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"pallink/user/internal/dao"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
@@ -30,29 +31,12 @@ func (l *GetUserInfoLogic) GetUserInfo(in *user.GetUserInfoRequest) (*user.UserI
 		return nil, errors.New("user_id required")
 	}
 
-	var (
-		mobile   string
-		nickname string
-		avatar   string
-		audit    int32
-	)
-	err := l.svcCtx.DB.QueryRow(
-		l.ctx,
-		`SELECT mobile, nickname, avatar, audit_status FROM "user" WHERE id=$1`,
-		in.UserId,
-	).Scan(&mobile, &nickname, &avatar, &audit)
+	info, err := dao.GetUserInfo(l.ctx, l.svcCtx.DB, in.UserId)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, errors.New("user not found")
 		}
 		return nil, err
 	}
-
-	return &user.UserInfo{
-		Id:          in.UserId,
-		Mobile:      mobile,
-		Nickname:    nickname,
-		Avatar:      avatar,
-		AuditStatus: audit,
-	}, nil
+	return info, nil
 }

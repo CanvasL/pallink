@@ -217,6 +217,41 @@ type GetCommentsResp struct {
 	PageSize int32         `json:"page_size"`
 }
 
+type GetNotificationsReq struct {
+	Page       int32 `form:"page,default=1"`
+	PageSize   int32 `form:"page_size,default=20"`
+	UnreadOnly bool  `form:"unread_only,optional"`
+}
+
+type GetNotificationsResp struct {
+	List     []NotificationInfo `json:"list"`
+	Total    int32              `json:"total"`
+	Page     int32              `json:"page"`
+	PageSize int32              `json:"page_size"`
+}
+
+type MarkReadReq struct {
+	NotificationId uint64 `json:"notification_id,optional"`
+}
+
+type MarkReadResp struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type NotificationInfo struct {
+	Id         uint64 `json:"id"`
+	UserId     uint64 `json:"user_id"`
+	ActorId    uint64 `json:"actor_id"`
+	Type       string `json:"type"`
+	ActivityId uint64 `json:"activity_id"`
+	CommentId  uint64 `json:"comment_id"`
+	ParentId   uint64 `json:"parent_id"`
+	Content    string `json:"content"`
+	CreatedAt  int64  `json:"created_at"`
+	ReadAt     int64  `json:"read_at"`
+}
+
 type UpdateActivityReq struct {
 	Id          uint64  `json:"id"`
 	Title       *string `json:"title,optional"`

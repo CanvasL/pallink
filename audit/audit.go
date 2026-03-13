@@ -27,7 +27,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	mqClient, err := mq.NewClient(c.RabbitMQ)
+	mqClient, err := mq.NewClient(c.AuditMQ)
 	if err != nil {
 		logx.Must(err)
 	}
@@ -46,7 +46,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	logx.Infof("audit worker started, queue=%s", c.RabbitMQ.Queue)
+	logx.Infof("audit worker started, queue=%s", c.AuditMQ.Queue)
 
 	for {
 		select {

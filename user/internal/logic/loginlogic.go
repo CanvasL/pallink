@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"pallink/common/auth"
+	"pallink/user/internal/dao"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
@@ -35,17 +36,7 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 		return nil, errors.New("mobile/password required")
 	}
 
-	var (
-		userID       uint64
-		passwordHash string
-		nickname     string
-		avatar       string
-	)
-	err := l.svcCtx.DB.QueryRow(
-		l.ctx,
-		`SELECT id, password_hash, nickname, avatar FROM "user" WHERE mobile=$1`,
-		mobile,
-	).Scan(&userID, &passwordHash, &nickname, &avatar)
+	userID, passwordHash, nickname, avatar, err := dao.GetLoginInfo(l.ctx, l.svcCtx.DB, mobile)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, errors.New("invalid mobile or password")

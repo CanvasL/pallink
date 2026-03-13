@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -25,7 +26,7 @@ func NewGetActivityDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *GetActivityDetailLogic) GetActivityDetail(in *activity.GetActivityDetailRequest) (*activity.ActivityInfo, error) {
-	info, err := queryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.ViewerUserId)
+	info, err := dao.QueryActivityDetail(l.ctx, l.svcCtx.DB, in.Id, in.ViewerUserId)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -29,12 +30,12 @@ func (l *GetEnrolledActivitiesLogic) GetEnrolledActivities(in *activity.GetEnrol
 		return nil, errors.New("user_id required")
 	}
 
-	filter := listFilter{
+	filter := dao.ListFilter{
 		EnrolledUserID:  in.UserId,
 		UseEnrolledUser: true,
 	}
 
-	activities, total, err := queryActivityList(l.ctx, l.svcCtx.DB, filter, in.UserId, in.Page, in.PageSize)
+	activities, total, err := dao.QueryActivityList(l.ctx, l.svcCtx.DB, filter, in.UserId, in.Page, in.PageSize)
 	if err != nil {
 		return nil, err
 	}

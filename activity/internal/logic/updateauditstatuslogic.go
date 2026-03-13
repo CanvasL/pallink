@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"pallink/activity/activity"
+	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -31,15 +32,11 @@ func (l *UpdateAuditStatusLogic) UpdateAuditStatus(in *activity.UpdateAuditStatu
 		return &activity.UpdateAuditStatusResponse{Success: false, Message: "invalid audit_status"}, nil
 	}
 
-	cmd, err := l.svcCtx.DB.Exec(
-		l.ctx,
-		`UPDATE activity SET audit_status=$1, updated_at=now() WHERE id=$2`,
-		in.AuditStatus, in.ActivityId,
-	)
+	ok, err := dao.UpdateAuditStatus(l.ctx, l.svcCtx.DB, in.ActivityId, in.AuditStatus)
 	if err != nil {
 		return nil, err
 	}
-	if cmd.RowsAffected() == 0 {
+	if !ok {
 		return &activity.UpdateAuditStatusResponse{Success: false, Message: "activity not found"}, nil
 	}
 
