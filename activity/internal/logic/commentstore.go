@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func createComment(ctx context.Context, db *pgxpool.Pool, activityID, userID uint64, content string) (uint64, error) {
+func createComment(ctx context.Context, db *pgxpool.Pool, activityID, userID, parentID uint64, content string) (uint64, error) {
 	if activityID == 0 || userID == 0 {
 		return 0, errors.New("activity_id/user_id required")
 	}
@@ -22,12 +22,32 @@ func createComment(ctx context.Context, db *pgxpool.Pool, activityID, userID uin
 		return 0, errors.New("content required")
 	}
 
+	if parentID > 0 {
+		var parentActivityID uint64
+		err := db.QueryRow(ctx, `SELECT activity_id FROM activity_comment WHERE id=$1`, parentID).Scan(&parentActivityID)
+		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return 0, errors.New("parent comment not found")
+			}
+			return 0, err
+		}
+		if parentActivityID != activityID {
+			return 0, errors.New("parent comment not in activity")
+		}
+	}
+
 	var id uint64
+	var parent any
+	if parentID > 0 {
+		parent = parentID
+	} else {
+		parent = nil
+	}
 	err := db.QueryRow(
 		ctx,
-		`INSERT INTO activity_comment (activity_id, user_id, content, audit_status, created_at)
-		 VALUES ($1,$2,$3,0,now()) RETURNING id`,
-		activityID, userID, content,
+		`INSERT INTO activity_comment (activity_id, user_id, parent_id, content, audit_status, created_at)
+		 VALUES ($1,$2,$3,$4,0,now()) RETURNING id`,
+		activityID, userID, parent, content,
 	).Scan(&id)
 	if err != nil {
 		return 0, err
@@ -35,7 +55,7 @@ func createComment(ctx context.Context, db *pgxpool.Pool, activityID, userID uin
 	return id, nil
 }
 
-func queryComments(ctx context.Context, db *pgxpool.Pool, activityID uint64, viewerUserID uint64, page, pageSize int32) ([]*activity.CommentInfo, int32, error) {
+func queryComments(ctx context.Context, db *pgxpool.Pool, activityID, parentID uint64, viewerUserID uint64, page, pageSize int32) ([]*activity.CommentInfo, int32, error) {
 	if activityID == 0 {
 		return nil, 0, errors.New("activity_id required")
 	}
@@ -48,6 +68,12 @@ func queryComments(ctx context.Context, db *pgxpool.Pool, activityID uint64, vie
 
 	where := []string{"activity_id=$1"}
 	args := []any{activityID}
+	if parentID > 0 {
+		where = append(where, "parent_id=$2")
+		args = append(args, parentID)
+	} else {
+		where = append(where, "parent_id IS NULL")
+	}
 	if viewerUserID == 0 {
 		where = append(where, "audit_status=1")
 	}
@@ -60,7 +86,7 @@ func queryComments(ctx context.Context, db *pgxpool.Pool, activityID uint64, vie
 
 	limitArg := fmt.Sprintf("$%d", len(args)+1)
 	offsetArg := fmt.Sprintf("$%d", len(args)+2)
-	listSQL := "SELECT id, activity_id, user_id, content, audit_status, created_at FROM activity_comment WHERE " +
+	listSQL := "SELECT id, activity_id, user_id, COALESCE(parent_id,0), content, audit_status, created_at FROM activity_comment WHERE " +
 		strings.Join(where, " AND ") + " ORDER BY created_at DESC LIMIT " + limitArg + " OFFSET " + offsetArg
 	args = append(args, pageSize, (page-1)*pageSize)
 
@@ -80,6 +106,7 @@ func queryComments(ctx context.Context, db *pgxpool.Pool, activityID uint64, vie
 			&item.Id,
 			&item.ActivityId,
 			&item.UserId,
+			&item.ParentId,
 			&item.Content,
 			&item.AuditStatus,
 			&createdAt,

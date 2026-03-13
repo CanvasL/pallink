@@ -33,7 +33,7 @@ func (l *CreateCommentLogic) CreateComment(in *activity.CreateCommentRequest) (*
 		return nil, errors.New("content required")
 	}
 
-	id, err := createComment(l.ctx, l.svcCtx.DB, in.ActivityId, in.UserId, in.Content)
+	id, err := createComment(l.ctx, l.svcCtx.DB, in.ActivityId, in.UserId, in.ParentId, in.Content)
 	if err != nil {
 		return nil, err
 	}

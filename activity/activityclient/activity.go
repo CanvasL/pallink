@@ -14,28 +14,28 @@ import (
 )
 
 type (
-	ActivityInfo                 = activity.ActivityInfo
-	CancelEnrollRequest          = activity.CancelEnrollRequest
-	CheckInRequest               = activity.CheckInRequest
-	CommentInfo                  = activity.CommentInfo
-	CreateActivityRequest        = activity.CreateActivityRequest
-	CreateCommentRequest         = activity.CreateCommentRequest
-	CreateCommentResponse        = activity.CreateCommentResponse
-	EnrollActivityRequest        = activity.EnrollActivityRequest
-	EnrollActivityResponse       = activity.EnrollActivityResponse
-	GetActivityDetailRequest     = activity.GetActivityDetailRequest
-	GetActivityListRequest       = activity.GetActivityListRequest
-	GetActivityListResponse      = activity.GetActivityListResponse
-	GetCommentsRequest           = activity.GetCommentsRequest
-	GetCommentsResponse          = activity.GetCommentsResponse
-	GetEnrolledActivitiesRequest = activity.GetEnrolledActivitiesRequest
-	GetMyActivitiesRequest       = activity.GetMyActivitiesRequest
-	GetParticipantsRequest       = activity.GetParticipantsRequest
-	GetParticipantsResponse      = activity.GetParticipantsResponse
-	ParticipantInfo              = activity.ParticipantInfo
-	UpdateActivityRequest        = activity.UpdateActivityRequest
-	UpdateAuditStatusRequest     = activity.UpdateAuditStatusRequest
-	UpdateAuditStatusResponse    = activity.UpdateAuditStatusResponse
+	ActivityInfo                     = activity.ActivityInfo
+	CancelEnrollRequest              = activity.CancelEnrollRequest
+	CheckInRequest                   = activity.CheckInRequest
+	CommentInfo                      = activity.CommentInfo
+	CreateActivityRequest            = activity.CreateActivityRequest
+	CreateCommentRequest             = activity.CreateCommentRequest
+	CreateCommentResponse            = activity.CreateCommentResponse
+	EnrollActivityRequest            = activity.EnrollActivityRequest
+	EnrollActivityResponse           = activity.EnrollActivityResponse
+	GetActivityDetailRequest         = activity.GetActivityDetailRequest
+	GetActivityListRequest           = activity.GetActivityListRequest
+	GetActivityListResponse          = activity.GetActivityListResponse
+	GetCommentsRequest               = activity.GetCommentsRequest
+	GetCommentsResponse              = activity.GetCommentsResponse
+	GetEnrolledActivitiesRequest     = activity.GetEnrolledActivitiesRequest
+	GetMyActivitiesRequest           = activity.GetMyActivitiesRequest
+	GetParticipantsRequest           = activity.GetParticipantsRequest
+	GetParticipantsResponse          = activity.GetParticipantsResponse
+	ParticipantInfo                  = activity.ParticipantInfo
+	UpdateActivityRequest            = activity.UpdateActivityRequest
+	UpdateAuditStatusRequest         = activity.UpdateAuditStatusRequest
+	UpdateAuditStatusResponse        = activity.UpdateAuditStatusResponse
 	UpdateCommentAuditStatusRequest  = activity.UpdateCommentAuditStatusRequest
 	UpdateCommentAuditStatusResponse = activity.UpdateCommentAuditStatusResponse
 

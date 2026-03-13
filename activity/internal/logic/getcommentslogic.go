@@ -28,8 +28,11 @@ func (l *GetCommentsLogic) GetComments(in *activity.GetCommentsRequest) (*activi
 	if in.ActivityId == 0 {
 		return nil, errors.New("activity_id required")
 	}
+	if in.ParentId > 0 && in.ActivityId == 0 {
+		return nil, errors.New("activity_id required")
+	}
 
-	list, total, err := queryComments(l.ctx, l.svcCtx.DB, in.ActivityId, in.ViewerUserId, in.Page, in.PageSize)
+	list, total, err := queryComments(l.ctx, l.svcCtx.DB, in.ActivityId, in.ParentId, in.ViewerUserId, in.Page, in.PageSize)
 	if err != nil {
 		return nil, err
 	}

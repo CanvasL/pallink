@@ -42,6 +42,7 @@ func (l *GetPublicCommentsLogic) GetPublicComments(req *types.GetCommentsReq) (r
 		Page:         page,
 		PageSize:     pageSize,
 		ViewerUserId: 0,
+		ParentId:     req.ParentId,
 	})
 	if err != nil {
 		return nil, err

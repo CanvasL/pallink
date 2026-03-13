@@ -72,6 +72,7 @@ func toCommentInfo(in *activityclient.CommentInfo) types.CommentInfo {
 		Id:          in.Id,
 		ActivityId:  in.ActivityId,
 		UserId:      in.UserId,
+		ParentId:    in.ParentId,
 		Content:     in.Content,
 		CreatedAt:   tsToUnix(in.CreatedAt),
 		AuditStatus: in.AuditStatus,

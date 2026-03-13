@@ -883,11 +883,12 @@ type CommentInfo struct {
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	ActivityId    uint64                 `protobuf:"varint,2,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
 	UserId        uint64                 `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	AuditStatus   int32                  `protobuf:"varint,6,opt,name=audit_status,json=auditStatus,proto3" json:"audit_status,omitempty"`
-	Nickname      string                 `protobuf:"bytes,7,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	Avatar        string                 `protobuf:"bytes,8,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	ParentId      uint64                 `protobuf:"varint,4,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
+	Content       string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	AuditStatus   int32                  `protobuf:"varint,7,opt,name=audit_status,json=auditStatus,proto3" json:"audit_status,omitempty"`
+	Nickname      string                 `protobuf:"bytes,8,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Avatar        string                 `protobuf:"bytes,9,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -943,6 +944,13 @@ func (x *CommentInfo) GetUserId() uint64 {
 	return 0
 }
 
+func (x *CommentInfo) GetParentId() uint64 {
+	if x != nil {
+		return x.ParentId
+	}
+	return 0
+}
+
 func (x *CommentInfo) GetContent() string {
 	if x != nil {
 		return x.Content
@@ -983,6 +991,7 @@ type CreateCommentRequest struct {
 	ActivityId    uint64                 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
 	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	ParentId      uint64                 `protobuf:"varint,4,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1038,6 +1047,13 @@ func (x *CreateCommentRequest) GetContent() string {
 	return ""
 }
 
+func (x *CreateCommentRequest) GetParentId() uint64 {
+	if x != nil {
+		return x.ParentId
+	}
+	return 0
+}
+
 type CreateCommentResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CommentId     uint64                 `protobuf:"varint,1,opt,name=comment_id,json=commentId,proto3" json:"comment_id,omitempty"`
@@ -1088,6 +1104,7 @@ type GetCommentsRequest struct {
 	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
 	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	ViewerUserId  uint64                 `protobuf:"varint,4,opt,name=viewer_user_id,json=viewerUserId,proto3" json:"viewer_user_id,omitempty"`
+	ParentId      uint64                 `protobuf:"varint,5,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1146,6 +1163,13 @@ func (x *GetCommentsRequest) GetPageSize() int32 {
 func (x *GetCommentsRequest) GetViewerUserId() uint64 {
 	if x != nil {
 		return x.ViewerUserId
+	}
+	return 0
+}
+
+func (x *GetCommentsRequest) GetParentId() uint64 {
+	if x != nil {
+		return x.ParentId
 	}
 	return 0
 }
@@ -1709,32 +1733,35 @@ const file_activity_activity_proto_rawDesc = "" +
 	"\faudit_status\x18\x02 \x01(\x05R\vauditStatus\"O\n" +
 	"\x19UpdateAuditStatusResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"\x83\x02\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xa0\x02\n" +
 	"\vCommentInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1f\n" +
 	"\vactivity_id\x18\x02 \x01(\x04R\n" +
 	"activityId\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\x04R\x06userId\x12\x18\n" +
-	"\acontent\x18\x04 \x01(\tR\acontent\x129\n" +
+	"\auser_id\x18\x03 \x01(\x04R\x06userId\x12\x1b\n" +
+	"\tparent_id\x18\x04 \x01(\x04R\bparentId\x12\x18\n" +
+	"\acontent\x18\x05 \x01(\tR\acontent\x129\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12!\n" +
-	"\faudit_status\x18\x06 \x01(\x05R\vauditStatus\x12\x1a\n" +
-	"\bnickname\x18\a \x01(\tR\bnickname\x12\x16\n" +
-	"\x06avatar\x18\b \x01(\tR\x06avatar\"j\n" +
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12!\n" +
+	"\faudit_status\x18\a \x01(\x05R\vauditStatus\x12\x1a\n" +
+	"\bnickname\x18\b \x01(\tR\bnickname\x12\x16\n" +
+	"\x06avatar\x18\t \x01(\tR\x06avatar\"\x87\x01\n" +
 	"\x14CreateCommentRequest\x12\x1f\n" +
 	"\vactivity_id\x18\x01 \x01(\x04R\n" +
 	"activityId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x04R\x06userId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\"6\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x12\x1b\n" +
+	"\tparent_id\x18\x04 \x01(\x04R\bparentId\"6\n" +
 	"\x15CreateCommentResponse\x12\x1d\n" +
 	"\n" +
-	"comment_id\x18\x01 \x01(\x04R\tcommentId\"\x8c\x01\n" +
+	"comment_id\x18\x01 \x01(\x04R\tcommentId\"\xa9\x01\n" +
 	"\x12GetCommentsRequest\x12\x1f\n" +
 	"\vactivity_id\x18\x01 \x01(\x04R\n" +
 	"activityId\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
 	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x12$\n" +
-	"\x0eviewer_user_id\x18\x04 \x01(\x04R\fviewerUserId\"^\n" +
+	"\x0eviewer_user_id\x18\x04 \x01(\x04R\fviewerUserId\x12\x1b\n" +
+	"\tparent_id\x18\x05 \x01(\x04R\bparentId\"^\n" +
 	"\x13GetCommentsResponse\x121\n" +
 	"\bcomments\x18\x01 \x03(\v2\x15.activity.CommentInfoR\bcomments\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"c\n" +

@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS activity_comment (
     id BIGSERIAL PRIMARY KEY,
     activity_id BIGINT NOT NULL REFERENCES activity(id) ON DELETE CASCADE,
     user_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    parent_id BIGINT REFERENCES activity_comment(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     audit_status SMALLINT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -54,4 +55,5 @@ CREATE INDEX IF NOT EXISTS idx_activity_status ON activity (status);
 CREATE INDEX IF NOT EXISTS idx_activity_audit_status ON activity (audit_status);
 CREATE INDEX IF NOT EXISTS idx_enrollment_user ON enrollment (user_id);
 CREATE INDEX IF NOT EXISTS idx_comment_activity ON activity_comment (activity_id);
+CREATE INDEX IF NOT EXISTS idx_comment_parent ON activity_comment (parent_id);
 CREATE INDEX IF NOT EXISTS idx_comment_audit_status ON activity_comment (audit_status);

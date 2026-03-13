@@ -45,6 +45,7 @@ func (l *CreateCommentLogic) CreateComment(req *types.CreateCommentReq) (resp *t
 		ActivityId: req.ActivityId,
 		UserId:     userID,
 		Content:    req.Content,
+		ParentId:   req.ParentId,
 	})
 	if err != nil {
 		return nil, err

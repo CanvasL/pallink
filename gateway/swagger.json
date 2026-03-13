@@ -162,6 +162,9 @@
                 },
                 "content": {
                   "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
                 }
               }
             }
@@ -966,6 +969,12 @@
           },
           {
             "type": "integer",
+            "name": "parent_id",
+            "in": "query",
+            "allowEmptyValue": true
+          },
+          {
+            "type": "integer",
             "default": 1,
             "name": "page",
             "in": "query",
@@ -993,6 +1002,7 @@
                       "id",
                       "activity_id",
                       "user_id",
+                      "parent_id",
                       "content",
                       "created_at",
                       "audit_status",
@@ -1020,6 +1030,9 @@
                       },
                       "nickname": {
                         "type": "string"
+                      },
+                      "parent_id": {
+                        "type": "integer"
                       },
                       "user_id": {
                         "type": "integer"
@@ -1668,7 +1681,7 @@
       }
     }
   },
-  "x-date": "2026-03-13 15:20:01",
+  "x-date": "2026-03-13 15:47:01",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",

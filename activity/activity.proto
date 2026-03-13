@@ -115,17 +115,19 @@ message CommentInfo {
     uint64 id = 1;
     uint64 activity_id = 2;
     uint64 user_id = 3;
-    string content = 4;
-    google.protobuf.Timestamp created_at = 5;
-    int32 audit_status = 6;
-    string nickname = 7;
-    string avatar = 8;
+    uint64 parent_id = 4;
+    string content = 5;
+    google.protobuf.Timestamp created_at = 6;
+    int32 audit_status = 7;
+    string nickname = 8;
+    string avatar = 9;
 }
 
 message CreateCommentRequest {
     uint64 activity_id = 1;
     uint64 user_id = 2;
     string content = 3;
+    uint64 parent_id = 4;
 }
 
 message CreateCommentResponse {
@@ -137,6 +139,7 @@ message GetCommentsRequest {
     int32 page = 2;
     int32 page_size = 3;
     uint64 viewer_user_id = 4;
+    uint64 parent_id = 5;
 }
 
 message GetCommentsResponse {

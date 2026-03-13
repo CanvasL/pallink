@@ -185,6 +185,7 @@ type CommentInfo struct {
 	Id          uint64 `json:"id"`
 	ActivityId  uint64 `json:"activity_id"`
 	UserId      uint64 `json:"user_id"`
+	ParentId    uint64 `json:"parent_id"`
 	Content     string `json:"content"`
 	CreatedAt   int64  `json:"created_at"`
 	AuditStatus int32  `json:"audit_status"`
@@ -195,6 +196,7 @@ type CommentInfo struct {
 type CreateCommentReq struct {
 	ActivityId uint64 `json:"activity_id"`
 	Content    string `json:"content"`
+	ParentId   uint64 `json:"parent_id,optional"`
 }
 
 type CreateCommentResp struct {
@@ -203,6 +205,7 @@ type CreateCommentResp struct {
 
 type GetCommentsReq struct {
 	ActivityId uint64 `form:"activity_id"`
+	ParentId   uint64 `form:"parent_id,optional"`
 	Page       int32  `form:"page,default=1"`
 	PageSize   int32  `form:"page_size,default=20"`
 }
