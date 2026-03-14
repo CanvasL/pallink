@@ -1,5 +1,9 @@
 Name: notification.rpc
 ListenOn: 0.0.0.0:8006
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9105
+  Path: /metrics
 Etcd:
   Hosts:
   - etcd:2379

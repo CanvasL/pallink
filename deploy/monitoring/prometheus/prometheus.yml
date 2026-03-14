@@ -1,0 +1,34 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - prometheus:9090
+
+  - job_name: gateway-api
+    static_configs:
+      - targets:
+          - gateway-api:9101
+
+  - job_name: user-rpc
+    static_configs:
+      - targets:
+          - user-rpc:9102
+
+  - job_name: activity-rpc
+    static_configs:
+      - targets:
+          - activity-rpc:9103
+
+  - job_name: im-rpc
+    static_configs:
+      - targets:
+          - im-rpc:9104
+
+  - job_name: notification-rpc
+    static_configs:
+      - targets:
+          - notification-rpc:9105

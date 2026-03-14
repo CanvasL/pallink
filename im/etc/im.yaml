@@ -1,5 +1,9 @@
 Name: im.rpc
 ListenOn: 0.0.0.0:8005
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9104
+  Path: /metrics
 Etcd:
   Hosts:
   - etcd:2379
