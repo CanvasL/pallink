@@ -1,0 +1,21 @@
+:80 {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy no-referrer-when-downgrade
+	}
+
+	redir /docs /docs/
+
+	handle /docs/* {
+		reverse_proxy swagger-ui:8080
+	}
+
+	handle /swagger/* {
+		reverse_proxy swagger-ui:8080
+	}
+
+	reverse_proxy gateway-api:8080
+}

@@ -10,9 +10,8 @@ services:
       - im-rpc
       - etcd
       - redis
-    ports:
-      - "8080:8080"
     expose:
+      - "8080"
       - "9101"
 
   user-rpc:
@@ -137,14 +136,26 @@ services:
       timeout: 3s
       retries: 12
 
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - gateway-api
+      - swagger-ui
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+
   swagger-ui:
     image: swaggerapi/swagger-ui:v5.32.0
     environment:
+      BASE_URL: /docs
       SWAGGER_JSON: /swagger/swagger.json
     volumes:
       - ./gateway/swagger.json:/swagger/swagger.json:ro
-    ports:
-      - "8090:8080"
+    expose:
+      - "8080"
 
   prometheus:
     image: prom/prometheus
