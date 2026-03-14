@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"pallink/common/mq"
+	"pallink/user/internal/dao"
 	"pallink/user/internal/svc"
 	"pallink/user/user"
 
-	sq "github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -36,28 +36,13 @@ func (l *UpdateUserInfoLogic) UpdateUserInfo(in *user.UpdateUserInfoRequest) (*u
 		return nil, errors.New("no fields to update")
 	}
 
-	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
-		Update(`"user"`).
-		Set("audit_status", 0).
-		Set("updated_at", sq.Expr("now()")).
-		Where(sq.Eq{"id": in.UserId})
-
-	if in.Nickname != "" {
-		builder = builder.Set("nickname", strings.TrimSpace(in.Nickname))
-	}
-	if in.Avatar != "" {
-		builder = builder.Set("avatar", strings.TrimSpace(in.Avatar))
-	}
-
-	query, args, err := builder.ToSql()
+	nickname := strings.TrimSpace(in.Nickname)
+	avatar := strings.TrimSpace(in.Avatar)
+	ok, err := dao.UpdateUserInfo(l.ctx, l.svcCtx.DB, in.UserId, nickname, avatar)
 	if err != nil {
 		return nil, err
 	}
-	cmd, err := l.svcCtx.DB.Exec(l.ctx, query, args...)
-	if err != nil {
-		return nil, err
-	}
-	if cmd.RowsAffected() == 0 {
+	if !ok {
 		return nil, errors.New("user not found")
 	}
 

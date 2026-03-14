@@ -5,10 +5,10 @@ import (
 	"errors"
 	"time"
 
+	"pallink/notify/internal/dao/sqlc"
 	"pallink/notify/notify"
 
-	sq "github.com/Masterminds/squirrel"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -19,7 +19,7 @@ type ListFilter struct {
 	PageSize   int32
 }
 
-func QueryNotifications(ctx context.Context, db *pgxpool.Pool, filter ListFilter) ([]*notify.NotificationInfo, int32, error) {
+func QueryNotifications(ctx context.Context, db sqlc.DBTX, filter ListFilter) ([]*notify.NotificationInfo, int32, error) {
 	if filter.UserID == 0 {
 		return nil, 0, errors.New("user_id required")
 	}
@@ -32,105 +32,90 @@ func QueryNotifications(ctx context.Context, db *pgxpool.Pool, filter ListFilter
 		pageSize = 20
 	}
 
-	base := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-	countQ := base.Select("count(*)").From("notification").Where(sq.Eq{"user_id": filter.UserID})
-	listQ := base.Select(
-		"id",
-		"user_id",
-		"actor_id",
-		"type",
-		"COALESCE(activity_id,0)",
-		"COALESCE(comment_id,0)",
-		"COALESCE(parent_id,0)",
-		"content",
-		"created_at",
-		"read_at",
-	).From("notification").Where(sq.Eq{"user_id": filter.UserID})
-
-	if filter.UnreadOnly {
-		countQ = countQ.Where("read_at IS NULL")
-		listQ = listQ.Where("read_at IS NULL")
-	}
-
-	countSQL, countArgs, err := countQ.ToSql()
-	if err != nil {
-		return nil, 0, err
-	}
-	var total int32
-	if err := db.QueryRow(ctx, countSQL, countArgs...).Scan(&total); err != nil {
-		return nil, 0, err
-	}
-
-	listQ = listQ.OrderBy("created_at DESC").Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-	listSQL, listArgs, err := listQ.ToSql()
+	q := sqlc.New(db)
+	total64, err := q.CountNotifications(ctx, sqlc.CountNotificationsParams{
+		UserID:     int64(filter.UserID),
+		UnreadOnly: filter.UnreadOnly,
+	})
 	if err != nil {
 		return nil, 0, err
 	}
 
-	rows, err := db.Query(ctx, listSQL, listArgs...)
+	rows, err := q.ListNotifications(ctx, sqlc.ListNotificationsParams{
+		UserID:     int64(filter.UserID),
+		UnreadOnly: filter.UnreadOnly,
+		PageOffset: (page - 1) * pageSize,
+		PageLimit:  pageSize,
+	})
 	if err != nil {
 		return nil, 0, err
 	}
-	defer rows.Close()
 
-	list := make([]*notify.NotificationInfo, 0)
-	for rows.Next() {
-		var (
-			item      notify.NotificationInfo
-			createdAt time.Time
-			readAt    *time.Time
-		)
-		if err := rows.Scan(
-			&item.Id,
-			&item.UserId,
-			&item.ActorId,
-			&item.Type,
-			&item.ActivityId,
-			&item.CommentId,
-			&item.ParentId,
-			&item.Content,
-			&createdAt,
-			&readAt,
-		); err != nil {
-			return nil, 0, err
+	list := make([]*notify.NotificationInfo, 0, len(rows))
+	for _, row := range rows {
+		item := notify.NotificationInfo{
+			Id:         uint64(row.ID),
+			UserId:     uint64(row.UserID),
+			ActorId:    uint64(row.ActorID),
+			Type:       row.Type,
+			ActivityId: uint64(row.ActivityID),
+			CommentId:  uint64(row.CommentID),
+			ParentId:   uint64(row.ParentID),
+			Content:    row.Content,
+			CreatedAt:  timestamppb.New(timeFromTimestamptz(row.CreatedAt)),
 		}
-		item.CreatedAt = timestamppb.New(createdAt)
-		if readAt != nil {
-			item.ReadAt = timestamppb.New(*readAt)
+		if row.ReadAt.Valid {
+			item.ReadAt = timestamppb.New(timeFromTimestamptz(row.ReadAt))
 		}
 		list = append(list, &item)
 	}
-	if err := rows.Err(); err != nil {
-		return nil, 0, err
-	}
 
-	return list, total, nil
+	return list, int32(total64), nil
 }
 
-func MarkRead(ctx context.Context, db *pgxpool.Pool, userID, notificationID uint64) error {
+func MarkRead(ctx context.Context, db sqlc.DBTX, userID, notificationID uint64) error {
 	if userID == 0 {
 		return errors.New("user_id required")
 	}
+	q := sqlc.New(db)
 	if notificationID == 0 {
-		_, err := db.Exec(ctx, `UPDATE notification SET read_at=now() WHERE user_id=$1 AND read_at IS NULL`, userID)
-		return err
+		return q.MarkReadAll(ctx, int64(userID))
 	}
-	_, err := db.Exec(ctx, `UPDATE notification SET read_at=now() WHERE user_id=$1 AND id=$2`, userID, notificationID)
-	return err
+	return q.MarkReadOne(ctx, sqlc.MarkReadOneParams{
+		UserID: int64(userID),
+		ID:     int64(notificationID),
+	})
 }
 
-func InsertNotification(ctx context.Context, db *pgxpool.Pool, userID, actorID uint64, typ string, activityID, commentID, parentID uint64, content string) error {
+func InsertNotification(ctx context.Context, db sqlc.DBTX, userID, actorID uint64, typ string, activityID, commentID, parentID uint64, content string) error {
 	if userID == 0 || actorID == 0 {
 		return errors.New("user_id/actor_id required")
 	}
 	if typ == "" {
 		return errors.New("type required")
 	}
-	_, err := db.Exec(
-		ctx,
-		`INSERT INTO notification (user_id, actor_id, type, activity_id, comment_id, parent_id, content, created_at)
-		 VALUES ($1,$2,$3,$4,$5,$6,$7,now())`,
-		userID, actorID, typ, activityID, commentID, parentID, content,
-	)
-	return err
+	q := sqlc.New(db)
+	return q.InsertNotification(ctx, sqlc.InsertNotificationParams{
+		UserID:     int64(userID),
+		ActorID:    int64(actorID),
+		Type:       typ,
+		ActivityID: optionalInt8(activityID),
+		CommentID:  optionalInt8(commentID),
+		ParentID:   optionalInt8(parentID),
+		Content:    content,
+	})
+}
+
+func optionalInt8(val uint64) pgtype.Int8 {
+	if val == 0 {
+		return pgtype.Int8{}
+	}
+	return pgtype.Int8{Int64: int64(val), Valid: true}
+}
+
+func timeFromTimestamptz(ts pgtype.Timestamptz) time.Time {
+	if !ts.Valid {
+		return time.Time{}
+	}
+	return ts.Time
 }
