@@ -217,6 +217,43 @@ type GetCommentsResp struct {
 	PageSize int32         `json:"page_size"`
 }
 
+type ConversationInfo struct {
+	Id            uint64 `json:"id"`
+	PeerUserId    uint64 `json:"peer_user_id"`
+	PeerNickname  string `json:"peer_nickname"`
+	PeerAvatar    string `json:"peer_avatar"`
+	LastMessageId uint64 `json:"last_message_id"`
+	LastSenderId  uint64 `json:"last_sender_id"`
+	LastMessage   string `json:"last_message"`
+	LastMessageAt int64  `json:"last_message_at"`
+	UnreadCount   int32  `json:"unread_count"`
+	CreatedAt     int64  `json:"created_at"`
+}
+
+type GetConversationListReq struct {
+	Page     int32 `form:"page,default=1"`
+	PageSize int32 `form:"page_size,default=20"`
+}
+
+type GetConversationListResp struct {
+	List     []ConversationInfo `json:"list"`
+	Total    int32              `json:"total"`
+	Page     int32              `json:"page"`
+	PageSize int32              `json:"page_size"`
+}
+
+type GetMessagesReq struct {
+	ConversationId  uint64 `form:"conversation_id"`
+	BeforeMessageId uint64 `form:"before_message_id,optional"`
+	PageSize        int32  `form:"page_size,default=20"`
+}
+
+type GetMessagesResp struct {
+	List     []MessageInfo `json:"list"`
+	HasMore  bool          `json:"has_more"`
+	PageSize int32         `json:"page_size"`
+}
+
 type GetNotificationsReq struct {
 	Page       int32 `form:"page,default=1"`
 	PageSize   int32 `form:"page_size,default=20"`
@@ -237,6 +274,26 @@ type MarkReadReq struct {
 type MarkReadResp struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
+}
+
+type MarkConversationReadReq struct {
+	ConversationId uint64 `json:"conversation_id"`
+	LastReadMsgId  uint64 `json:"last_read_msg_id,optional"`
+}
+
+type MarkConversationReadResp struct {
+	Success       bool   `json:"success"`
+	Message       string `json:"message"`
+	LastReadMsgId uint64 `json:"last_read_msg_id"`
+}
+
+type MessageInfo struct {
+	Id             uint64 `json:"id"`
+	ConversationId uint64 `json:"conversation_id"`
+	SenderId       uint64 `json:"sender_id"`
+	Content        string `json:"content"`
+	AuditStatus    int32  `json:"audit_status"`
+	CreatedAt      int64  `json:"created_at"`
 }
 
 type NotificationInfo struct {
@@ -272,4 +329,21 @@ type UserInfo struct {
 	Mobile   string `json:"mobile"`
 	Nickname string `json:"nickname"`
 	Avatar   string `json:"avatar"`
+}
+
+type OpenConversationReq struct {
+	PeerUserId uint64 `json:"peer_user_id"`
+}
+
+type OpenConversationResp struct {
+	Conversation ConversationInfo `json:"conversation"`
+}
+
+type SendMessageReq struct {
+	PeerUserId uint64 `json:"peer_user_id"`
+	Content    string `json:"content"`
+}
+
+type SendMessageResp struct {
+	Message MessageInfo `json:"message"`
 }

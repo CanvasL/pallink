@@ -24,17 +24,7 @@ func NewClient(cfg Config) (*Client, error) {
 	if cfg.URL == "" || cfg.Queue == "" {
 		return nil, errors.New("rabbitmq url/queue required")
 	}
-	var (
-		conn *amqp.Connection
-		err  error
-	)
-	for i := 0; i < 30; i++ {
-		conn, err = amqp.Dial(cfg.URL)
-		if err == nil {
-			break
-		}
-		time.Sleep(1 * time.Second)
-	}
+	conn, err := dialWithRetry(cfg.URL)
 	if err != nil {
 		return nil, err
 	}

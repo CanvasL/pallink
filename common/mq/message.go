@@ -14,3 +14,23 @@ type CommentNotifyEvent struct {
 	ParentUserId      uint64 `json:"parent_user_id"`
 	Content           string `json:"content"`
 }
+
+type ImMessageNotifyEvent struct {
+	MessageId      uint64 `json:"message_id"`
+	ConversationId uint64 `json:"conversation_id"`
+	ActorId        uint64 `json:"actor_id"`
+	ReceiverId     uint64 `json:"receiver_id"`
+	Content        string `json:"content"`
+}
+
+type ImRealtimeEvent struct {
+	Type           string   `json:"type"`
+	Targets        []uint64 `json:"targets"`
+	MessageId      uint64   `json:"message_id"`
+	ConversationId uint64   `json:"conversation_id"`
+	SenderId       uint64   `json:"sender_id"`
+	ReceiverId     uint64   `json:"receiver_id"`
+	Content        string   `json:"content"`
+	AuditStatus    int32    `json:"audit_status"`
+	CreatedAt      int64    `json:"created_at"`
+}

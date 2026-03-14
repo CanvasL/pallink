@@ -4,6 +4,8 @@
 package config
 
 import (
+	"pallink/common/mq"
+
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -17,4 +19,6 @@ type Config struct {
 	UserRpc     zrpc.RpcClientConf
 	ActivityRpc zrpc.RpcClientConf
 	NotifyRpc   zrpc.RpcClientConf
+	ImRpc       zrpc.RpcClientConf
+	RealtimeMQ  mq.FanoutConfig
 }

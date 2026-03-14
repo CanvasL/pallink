@@ -5,10 +5,14 @@ package svc
 
 import (
 	"pallink/activity/activityclient"
+	"pallink/common/mq"
 	"pallink/gateway/internal/config"
+	gatewayws "pallink/gateway/internal/ws"
+	"pallink/im/imclient"
 	"pallink/notify/notifyclient"
 	"pallink/user/userclient"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
@@ -17,16 +21,36 @@ type ServiceContext struct {
 	UserRpc     userclient.User
 	ActivityRpc activityclient.Activity
 	NotifyRpc   notifyclient.Notify
+	ImRpc       imclient.Im
+	RealtimeMQ  *mq.FanoutSubscriber
+	WsHub       *gatewayws.Hub
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	userCli := zrpc.MustNewClient(c.UserRpc)
 	activityCli := zrpc.MustNewClient(c.ActivityRpc)
 	notifyCli := zrpc.MustNewClient(c.NotifyRpc)
+	imCli := zrpc.MustNewClient(c.ImRpc)
+	realtimeMQ, err := mq.NewFanoutSubscriber(c.RealtimeMQ)
+	if err != nil {
+		logx.Must(err)
+	}
 	return &ServiceContext{
 		Config:      c,
 		UserRpc:     userclient.NewUser(userCli),
 		ActivityRpc: activityclient.NewActivity(activityCli),
 		NotifyRpc:   notifyclient.NewNotify(notifyCli),
+		ImRpc:       imclient.NewIm(imCli),
+		RealtimeMQ:  realtimeMQ,
+		WsHub:       gatewayws.NewHub(),
+	}
+}
+
+func (s *ServiceContext) Close() {
+	if s.RealtimeMQ != nil {
+		_ = s.RealtimeMQ.Close()
+	}
+	if s.WsHub != nil {
+		s.WsHub.Close()
 	}
 }

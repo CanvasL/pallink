@@ -3,6 +3,7 @@ package logic
 import (
 	"pallink/activity/activityclient"
 	"pallink/gateway/internal/types"
+	"pallink/im/imclient"
 	"pallink/user/userclient"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -78,6 +79,38 @@ func toCommentInfo(in *activityclient.CommentInfo) types.CommentInfo {
 		AuditStatus: in.AuditStatus,
 		Nickname:    in.Nickname,
 		Avatar:      in.Avatar,
+	}
+}
+
+func toConversationInfo(in *imclient.ConversationInfo) types.ConversationInfo {
+	if in == nil {
+		return types.ConversationInfo{}
+	}
+	return types.ConversationInfo{
+		Id:            in.Id,
+		PeerUserId:    in.PeerUserId,
+		PeerNickname:  in.PeerNickname,
+		PeerAvatar:    in.PeerAvatar,
+		LastMessageId: in.LastMessageId,
+		LastSenderId:  in.LastSenderId,
+		LastMessage:   in.LastMessage,
+		LastMessageAt: tsToUnix(in.LastMessageAt),
+		UnreadCount:   in.UnreadCount,
+		CreatedAt:     tsToUnix(in.CreatedAt),
+	}
+}
+
+func toMessageInfo(in *imclient.MessageInfo) types.MessageInfo {
+	if in == nil {
+		return types.MessageInfo{}
+	}
+	return types.MessageInfo{
+		Id:             in.Id,
+		ConversationId: in.ConversationId,
+		SenderId:       in.SenderId,
+		Content:        in.Content,
+		AuditStatus:    in.AuditStatus,
+		CreatedAt:      tsToUnix(in.CreatedAt),
 	}
 }
 

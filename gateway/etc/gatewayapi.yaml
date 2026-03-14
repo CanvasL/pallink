@@ -19,3 +19,11 @@ NotifyRpc:
     Hosts:
     - etcd:2379
     Key: notify.rpc
+ImRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: im.rpc
+RealtimeMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Exchange: "im_realtime_events"

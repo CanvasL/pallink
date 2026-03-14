@@ -61,6 +61,35 @@ CREATE TABLE IF NOT EXISTS notification (
     read_at TIMESTAMPTZ
 );
 
+CREATE TABLE IF NOT EXISTS im_conversation (
+    id BIGSERIAL PRIMARY KEY,
+    user1_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    user2_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uk_im_conversation_users UNIQUE (user1_id, user2_id),
+    CONSTRAINT ck_im_conversation_order CHECK (user1_id < user2_id)
+);
+
+CREATE TABLE IF NOT EXISTS im_conversation_member (
+    id BIGSERIAL PRIMARY KEY,
+    conversation_id BIGINT NOT NULL REFERENCES im_conversation(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    last_read_msg_id BIGINT NOT NULL DEFAULT 0,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uk_im_conversation_member UNIQUE (conversation_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS im_message (
+    id BIGSERIAL PRIMARY KEY,
+    conversation_id BIGINT NOT NULL REFERENCES im_conversation(id) ON DELETE CASCADE,
+    sender_id BIGINT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    audit_status SMALLINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE INDEX IF NOT EXISTS idx_user_mobile ON "user" (mobile);
 CREATE INDEX IF NOT EXISTS idx_user_audit_status ON "user" (audit_status);
 CREATE INDEX IF NOT EXISTS idx_activity_creator ON activity (creator_id);
@@ -72,3 +101,9 @@ CREATE INDEX IF NOT EXISTS idx_comment_parent ON activity_comment (parent_id);
 CREATE INDEX IF NOT EXISTS idx_comment_audit_status ON activity_comment (audit_status);
 CREATE INDEX IF NOT EXISTS idx_notification_user ON notification (user_id);
 CREATE INDEX IF NOT EXISTS idx_notification_user_read ON notification (user_id, read_at);
+CREATE INDEX IF NOT EXISTS idx_im_conversation_user1 ON im_conversation (user1_id);
+CREATE INDEX IF NOT EXISTS idx_im_conversation_user2 ON im_conversation (user2_id);
+CREATE INDEX IF NOT EXISTS idx_im_member_user ON im_conversation_member (user_id);
+CREATE INDEX IF NOT EXISTS idx_im_message_conversation ON im_message (conversation_id, id DESC);
+CREATE INDEX IF NOT EXISTS idx_im_message_sender ON im_message (sender_id);
+CREATE INDEX IF NOT EXISTS idx_im_message_audit ON im_message (audit_status);

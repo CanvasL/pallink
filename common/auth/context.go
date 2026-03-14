@@ -13,7 +13,10 @@ func GetUserIDFromCtx(ctx context.Context) (uint64, bool) {
 		return 0, false
 	}
 
-	val := ctx.Value("userId")
+	return parseUserID(ctx.Value("userId"))
+}
+
+func parseUserID(val any) (uint64, bool) {
 	switch v := val.(type) {
 	case uint64:
 		return v, true

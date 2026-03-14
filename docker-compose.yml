@@ -99,6 +99,19 @@ services:
     ports:
       - "8006:8006"
 
+  im-rpc:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/im-rpc.Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+      - etcd
+      - user-rpc
+    restart: unless-stopped
+    ports:
+      - "8005:8005"
+
   gateway-api:
     build:
       context: .
@@ -107,6 +120,7 @@ services:
       - user-rpc
       - activity-rpc
       - notify-rpc
+      - im-rpc
       - etcd
     ports:
       - "8080:8080"

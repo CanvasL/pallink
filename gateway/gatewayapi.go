@@ -4,12 +4,14 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 
 	"pallink/gateway/internal/config"
 	"pallink/gateway/internal/handler"
 	"pallink/gateway/internal/svc"
+	gatewayws "pallink/gateway/internal/ws"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -31,6 +33,10 @@ func main() {
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
+	defer ctx.Close()
+	runCtx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go gatewayws.StartRealtimeConsumer(runCtx, ctx.RealtimeMQ, ctx.WsHub)
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)

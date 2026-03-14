@@ -3,6 +3,7 @@ syntax = "v1"
 import "user.api"
 import "activity.api"
 import "notify.api"
+import "im.api"
 
 info (
 	title:   "PalLink Gateway API"
@@ -53,6 +54,38 @@ service gatewayApi {
 	)
 	@handler MarkRead
 	post /notify/read (MarkReadReq) returns (MarkReadResp)
+
+	// IM
+	// 私聊
+	@doc (
+		group: "im"
+	)
+	@handler OpenConversation
+	post /im/conversation/open (OpenConversationReq) returns (OpenConversationResp)
+
+	@doc (
+		group: "im"
+	)
+	@handler GetConversationList
+	get /im/conversation/list (GetConversationListReq) returns (GetConversationListResp)
+
+	@doc (
+		group: "im"
+	)
+	@handler SendMessage
+	post /im/message/send (SendMessageReq) returns (SendMessageResp)
+
+	@doc (
+		group: "im"
+	)
+	@handler GetMessages
+	get /im/message/list (GetMessagesReq) returns (GetMessagesResp)
+
+	@doc (
+		group: "im"
+	)
+	@handler MarkConversationRead
+	post /im/conversation/read (MarkConversationReadReq) returns (MarkConversationReadResp)
 
 	// Activity
 	// 活动

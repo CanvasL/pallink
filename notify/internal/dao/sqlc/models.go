@@ -45,6 +45,30 @@ type Enrollment struct {
 	UpdatedAt   pgtype.Timestamptz
 }
 
+type ImConversation struct {
+	ID        int64
+	User1ID   int64
+	User2ID   int64
+	CreatedAt pgtype.Timestamptz
+}
+
+type ImConversationMember struct {
+	ID             int64
+	ConversationID int64
+	UserID         int64
+	LastReadMsgID  int64
+	UpdatedAt      pgtype.Timestamptz
+}
+
+type ImMessage struct {
+	ID             int64
+	ConversationID int64
+	SenderID       int64
+	Content        string
+	AuditStatus    int16
+	CreatedAt      pgtype.Timestamptz
+}
+
 type Notification struct {
 	ID         int64
 	UserID     int64

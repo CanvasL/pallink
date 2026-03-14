@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package im;
+option go_package = "./im";
+
+import "google/protobuf/timestamp.proto";
+
+service Im {
+    rpc OpenConversation(OpenConversationRequest) returns (ConversationInfo);
+    rpc GetConversationList(GetConversationListRequest) returns (GetConversationListResponse);
+    rpc SendMessage(SendMessageRequest) returns (MessageInfo);
+    rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
+    rpc MarkConversationRead(MarkConversationReadRequest) returns (MarkConversationReadResponse);
+}
+
+message ConversationInfo {
+    uint64 id = 1;
+    uint64 peer_user_id = 2;
+    string peer_nickname = 3;
+    string peer_avatar = 4;
+    uint64 last_message_id = 5;
+    uint64 last_sender_id = 6;
+    string last_message = 7;
+    google.protobuf.Timestamp last_message_at = 8;
+    int32 unread_count = 9;
+    google.protobuf.Timestamp created_at = 10;
+}
+
+message MessageInfo {
+    uint64 id = 1;
+    uint64 conversation_id = 2;
+    uint64 sender_id = 3;
+    string content = 4;
+    int32 audit_status = 5;
+    google.protobuf.Timestamp created_at = 6;
+}
+
+message OpenConversationRequest {
+    uint64 user_id = 1;
+    uint64 peer_user_id = 2;
+}
+
+message GetConversationListRequest {
+    uint64 user_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+}
+
+message GetConversationListResponse {
+    repeated ConversationInfo list = 1;
+    int32 total = 2;
+}
+
+message SendMessageRequest {
+    uint64 sender_id = 1;
+    uint64 peer_user_id = 2;
+    string content = 3;
+}
+
+message GetMessagesRequest {
+    uint64 user_id = 1;
+    uint64 conversation_id = 2;
+    uint64 before_message_id = 3;
+    int32 page_size = 4;
+}
+
+message GetMessagesResponse {
+    repeated MessageInfo list = 1;
+    bool has_more = 2;
+}
+
+message MarkConversationReadRequest {
+    uint64 user_id = 1;
+    uint64 conversation_id = 2;
+    uint64 last_read_msg_id = 3;
+}
+
+message MarkConversationReadResponse {
+    bool success = 1;
+    string message = 2;
+    uint64 last_read_msg_id = 3;
+}

@@ -39,6 +39,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/register",
 				Handler: RegisterHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/im/ws",
+				Handler: ImWsHandler(serverCtx),
+			},
 		},
 	)
 
@@ -118,6 +123,31 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/notify/read",
 				Handler: MarkReadHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/im/conversation/open",
+				Handler: OpenConversationHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/im/conversation/list",
+				Handler: GetConversationListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/im/message/send",
+				Handler: SendMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/im/message/list",
+				Handler: GetMessagesHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/im/conversation/read",
+				Handler: MarkConversationReadHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
