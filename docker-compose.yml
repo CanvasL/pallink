@@ -81,6 +81,12 @@ services:
 
   postgres:
     image: postgres:15
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - pg_stat_statements.track=all
     environment:
       POSTGRES_USER: pallink
       POSTGRES_PASSWORD: pallink
@@ -141,6 +147,9 @@ services:
     depends_on:
       - gateway-api
       - swagger-ui
+      - pghero
+      - prometheus
+      - grafana
     restart: unless-stopped
     ports:
       - "8080:80"
@@ -157,6 +166,18 @@ services:
     expose:
       - "8080"
 
+  pghero:
+    image: ankane/pghero:v3.7.0
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://pallink:pallink@postgres:5432/pallink
+      PGHERO_USERNAME: admin
+      PGHERO_PASSWORD: pallink
+    restart: unless-stopped
+    expose:
+      - "8080"
+
   prometheus:
     image: prom/prometheus
     command:
@@ -164,8 +185,8 @@ services:
       - --storage.tsdb.path=/prometheus
       - --web.enable-lifecycle
     restart: unless-stopped
-    ports:
-      - "9090:9090"
+    expose:
+      - "9090"
     volumes:
       - ./deploy/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -177,8 +198,8 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: pallink
       GF_USERS_ALLOW_SIGN_UP: "false"
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       - prometheus
     volumes:
