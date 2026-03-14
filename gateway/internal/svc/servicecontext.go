@@ -7,6 +7,7 @@ import (
 	"pallink/activity/activityclient"
 	"pallink/common/mq"
 	"pallink/gateway/internal/config"
+	"pallink/gateway/internal/middleware"
 	gatewayws "pallink/gateway/internal/ws"
 	"pallink/im/imclient"
 	"pallink/notification/notificationclient"
@@ -23,6 +24,7 @@ type ServiceContext struct {
 	NotificationRpc notificationclient.Notification
 	ImRpc           imclient.Im
 	RealtimeMQ      *mq.FanoutSubscriber
+	RateLimiter     *middleware.RateLimitMiddleware
 	WsHub           *gatewayws.Hub
 }
 
@@ -31,6 +33,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	activityCli := zrpc.MustNewClient(c.ActivityRpc)
 	notificationCli := zrpc.MustNewClient(c.NotificationRpc)
 	imCli := zrpc.MustNewClient(c.ImRpc)
+	rateLimiter, err := middleware.NewRateLimitMiddleware(c.Redis.RateLimit, c.RateLimit)
+	if err != nil {
+		logx.Must(err)
+	}
 	realtimeMQ, err := mq.NewFanoutSubscriber(c.RealtimeMQ)
 	if err != nil {
 		logx.Must(err)
@@ -42,6 +48,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		NotificationRpc: notificationclient.NewNotification(notificationCli),
 		ImRpc:           imclient.NewIm(imCli),
 		RealtimeMQ:      realtimeMQ,
+		RateLimiter:     rateLimiter,
 		WsHub:           gatewayws.NewHub(),
 	}
 }

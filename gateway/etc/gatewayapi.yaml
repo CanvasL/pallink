@@ -1,6 +1,22 @@
 Name: gatewayApi
 Host: 0.0.0.0
 Port: 8080
+MaxConns: 2048
+MaxBytes: 1048576
+Timeout: 2000
+CpuThreshold: 700
+Middlewares:
+  Trace: true
+  Log: true
+  Prometheus: true
+  MaxConns: true
+  Breaker: true
+  Shedding: true
+  Timeout: true
+  Recover: true
+  Metrics: true
+  MaxBytes: true
+  Gunzip: true
 Prometheus:
   Host: 0.0.0.0
   Port: 9101
@@ -9,21 +25,45 @@ Auth:
   AccessSecret: "pallink-mvp-secret"
   AccessExpire: 86400
 UserRpc:
+  Timeout: 1500
+  Middlewares:
+    Breaker: true
+    Timeout: true
+    Duration: true
+    Prometheus: true
   Etcd:
     Hosts:
     - etcd:2379
     Key: user.rpc
 ActivityRpc:
+  Timeout: 1500
+  Middlewares:
+    Breaker: true
+    Timeout: true
+    Duration: true
+    Prometheus: true
   Etcd:
     Hosts:
     - etcd:2379
     Key: activity.rpc
 NotificationRpc:
+  Timeout: 1500
+  Middlewares:
+    Breaker: true
+    Timeout: true
+    Duration: true
+    Prometheus: true
   Etcd:
     Hosts:
     - etcd:2379
     Key: notification.rpc
 ImRpc:
+  Timeout: 1500
+  Middlewares:
+    Breaker: true
+    Timeout: true
+    Duration: true
+    Prometheus: true
   Etcd:
     Hosts:
     - etcd:2379
@@ -31,3 +71,35 @@ ImRpc:
 RealtimeMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
   Exchange: "im_realtime_events"
+Redis:
+  RateLimit:
+    Host: "redis:6379"
+    Type: node
+  Cache:
+    Host: "redis:6379"
+    Type: node
+  DistributedLock:
+    Host: "redis:6379"
+    Type: node
+RateLimit:
+  Enabled: true
+  FailOpen: true
+  KeyPrefix: "gateway:ratelimit:"
+  Login:
+    Period: 60
+    Quota: 12
+  Register:
+    Period: 600
+    Quota: 10
+  Public:
+    Period: 1
+    Quota: 30
+  UserRead:
+    Period: 1
+    Quota: 20
+  UserWrite:
+    Period: 1
+    Quota: 8
+  Websocket:
+    Period: 60
+    Quota: 20

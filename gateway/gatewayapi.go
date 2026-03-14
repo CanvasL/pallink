@@ -34,6 +34,9 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	defer ctx.Close()
+	if ctx.RateLimiter != nil {
+		server.Use(ctx.RateLimiter.Handle)
+	}
 	runCtx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	go gatewayws.StartRealtimeConsumer(runCtx, ctx.RealtimeMQ, ctx.WsHub)
