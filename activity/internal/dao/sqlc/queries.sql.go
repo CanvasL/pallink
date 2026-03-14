@@ -232,6 +232,26 @@ func (q *Queries) GetActivityEnrollInfo(ctx context.Context, activityID int64) (
 	return i, err
 }
 
+const getActivityEnrollInfoForUpdate = `-- name: GetActivityEnrollInfoForUpdate :one
+SELECT max_people, current_people, status
+FROM activity
+WHERE id = $1
+FOR UPDATE
+`
+
+type GetActivityEnrollInfoForUpdateRow struct {
+	MaxPeople     int32
+	CurrentPeople int32
+	Status        int16
+}
+
+func (q *Queries) GetActivityEnrollInfoForUpdate(ctx context.Context, activityID int64) (GetActivityEnrollInfoForUpdateRow, error) {
+	row := q.db.QueryRow(ctx, getActivityEnrollInfoForUpdate, activityID)
+	var i GetActivityEnrollInfoForUpdateRow
+	err := row.Scan(&i.MaxPeople, &i.CurrentPeople, &i.Status)
+	return i, err
+}
+
 const getCommentParent = `-- name: GetCommentParent :one
 SELECT activity_id, user_id
 FROM activity_comment
@@ -264,6 +284,26 @@ type GetEnrollmentStatusParams struct {
 
 func (q *Queries) GetEnrollmentStatus(ctx context.Context, arg GetEnrollmentStatusParams) (int16, error) {
 	row := q.db.QueryRow(ctx, getEnrollmentStatus, arg.ActivityID, arg.UserID)
+	var status int16
+	err := row.Scan(&status)
+	return status, err
+}
+
+const getEnrollmentStatusForUpdate = `-- name: GetEnrollmentStatusForUpdate :one
+SELECT status
+FROM enrollment
+WHERE activity_id = $1
+  AND user_id = $2
+FOR UPDATE
+`
+
+type GetEnrollmentStatusForUpdateParams struct {
+	ActivityID int64
+	UserID     int64
+}
+
+func (q *Queries) GetEnrollmentStatusForUpdate(ctx context.Context, arg GetEnrollmentStatusForUpdateParams) (int16, error) {
+	row := q.db.QueryRow(ctx, getEnrollmentStatusForUpdate, arg.ActivityID, arg.UserID)
 	var status int16
 	err := row.Scan(&status)
 	return status, err

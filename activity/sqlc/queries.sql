@@ -103,6 +103,12 @@ SELECT max_people, current_people, status
 FROM activity
 WHERE id = @activity_id;
 
+-- name: GetActivityEnrollInfoForUpdate :one
+SELECT max_people, current_people, status
+FROM activity
+WHERE id = @activity_id
+FOR UPDATE;
+
 -- name: GetActivityCheckInInfo :one
 SELECT start_time, status
 FROM activity
@@ -113,6 +119,13 @@ SELECT status
 FROM enrollment
 WHERE activity_id = @activity_id
   AND user_id = @user_id;
+
+-- name: GetEnrollmentStatusForUpdate :one
+SELECT status
+FROM enrollment
+WHERE activity_id = @activity_id
+  AND user_id = @user_id
+FOR UPDATE;
 
 -- name: UpdateEnrollmentStatus :exec
 UPDATE enrollment

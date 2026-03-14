@@ -20,6 +20,15 @@ func GetActivityEnrollInfo(ctx context.Context, db sqlc.DBTX, activityID uint64)
 	return row.MaxPeople, row.CurrentPeople, int32(row.Status), nil
 }
 
+func GetActivityEnrollInfoForUpdate(ctx context.Context, db sqlc.DBTX, activityID uint64) (int32, int32, int32, error) {
+	q := sqlc.New(db)
+	row, err := q.GetActivityEnrollInfoForUpdate(ctx, int64(activityID))
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	return row.MaxPeople, row.CurrentPeople, int32(row.Status), nil
+}
+
 func GetActivityCheckInInfo(ctx context.Context, db sqlc.DBTX, activityID uint64) (time.Time, int32, error) {
 	q := sqlc.New(db)
 	row, err := q.GetActivityCheckInInfo(ctx, int64(activityID))
@@ -35,6 +44,21 @@ func GetActivityCheckInInfo(ctx context.Context, db sqlc.DBTX, activityID uint64
 func GetEnrollmentStatus(ctx context.Context, db sqlc.DBTX, activityID, userID uint64) (int32, bool, error) {
 	q := sqlc.New(db)
 	status, err := q.GetEnrollmentStatus(ctx, sqlc.GetEnrollmentStatusParams{
+		ActivityID: int64(activityID),
+		UserID:     int64(userID),
+	})
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return 0, false, nil
+		}
+		return 0, false, err
+	}
+	return int32(status), true, nil
+}
+
+func GetEnrollmentStatusForUpdate(ctx context.Context, db sqlc.DBTX, activityID, userID uint64) (int32, bool, error) {
+	q := sqlc.New(db)
+	status, err := q.GetEnrollmentStatusForUpdate(ctx, sqlc.GetEnrollmentStatusForUpdateParams{
 		ActivityID: int64(activityID),
 		UserID:     int64(userID),
 	})

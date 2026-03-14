@@ -2,12 +2,13 @@ package logic
 
 import (
 	"context"
-	"time"
+	"errors"
 
 	"pallink/activity/activity"
 	"pallink/activity/internal/dao"
 	"pallink/activity/internal/svc"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -36,7 +37,14 @@ func (l *CancelEnrollLogic) CancelEnroll(in *activity.CancelEnrollRequest) (*act
 	}
 	defer tx.Rollback(l.ctx)
 
-	status, exists, err := dao.GetEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId)
+	if _, _, _, err := dao.GetActivityEnrollInfoForUpdate(l.ctx, tx, in.ActivityId); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return &activity.EnrollActivityResponse{Success: false, Message: "activity not found"}, nil
+		}
+		return nil, err
+	}
+
+	status, exists, err := dao.GetEnrollmentStatusForUpdate(l.ctx, tx, in.ActivityId, in.UserId)
 	if err != nil {
 		return nil, err
 	}
@@ -48,8 +56,7 @@ func (l *CancelEnrollLogic) CancelEnroll(in *activity.CancelEnrollRequest) (*act
 		return &activity.EnrollActivityResponse{Success: false, Message: "already canceled"}, nil
 	}
 
-	now := time.Now()
-	if err := dao.UpdateEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId, 3, &now, nil); err != nil {
+	if err := dao.UpdateEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId, 3, nil, nil); err != nil {
 		return nil, err
 	}
 

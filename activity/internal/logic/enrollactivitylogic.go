@@ -38,7 +38,7 @@ func (l *EnrollActivityLogic) EnrollActivity(in *activity.EnrollActivityRequest)
 	}
 	defer tx.Rollback(l.ctx)
 
-	maxPeople, currentPeople, status, err := dao.GetActivityEnrollInfo(l.ctx, tx, in.ActivityId)
+	maxPeople, currentPeople, status, err := dao.GetActivityEnrollInfoForUpdate(l.ctx, tx, in.ActivityId)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return &activity.EnrollActivityResponse{Success: false, Message: "activity not found"}, nil
@@ -52,7 +52,7 @@ func (l *EnrollActivityLogic) EnrollActivity(in *activity.EnrollActivityRequest)
 		return &activity.EnrollActivityResponse{Success: false, Message: "activity is full"}, nil
 	}
 
-	existingStatus, exists, err := dao.GetEnrollmentStatus(l.ctx, tx, in.ActivityId, in.UserId)
+	existingStatus, exists, err := dao.GetEnrollmentStatusForUpdate(l.ctx, tx, in.ActivityId, in.UserId)
 	if err != nil {
 		return nil, err
 	}
