@@ -117,6 +117,24 @@ func (q *Queries) CreateActivity(ctx context.Context, arg CreateActivityParams) 
 	return id, err
 }
 
+const getActivityCheckInInfo = `-- name: GetActivityCheckInInfo :one
+SELECT start_time, status
+FROM activity
+WHERE id = $1
+`
+
+type GetActivityCheckInInfoRow struct {
+	StartTime pgtype.Timestamptz
+	Status    int16
+}
+
+func (q *Queries) GetActivityCheckInInfo(ctx context.Context, activityID int64) (GetActivityCheckInInfoRow, error) {
+	row := q.db.QueryRow(ctx, getActivityCheckInInfo, activityID)
+	var i GetActivityCheckInInfoRow
+	err := row.Scan(&i.StartTime, &i.Status)
+	return i, err
+}
+
 const getActivityCreator = `-- name: GetActivityCreator :one
 SELECT creator_id FROM activity WHERE id = $1
 `

@@ -103,6 +103,11 @@ SELECT max_people, current_people, status
 FROM activity
 WHERE id = @activity_id;
 
+-- name: GetActivityCheckInInfo :one
+SELECT start_time, status
+FROM activity
+WHERE id = @activity_id;
+
 -- name: GetEnrollmentStatus :one
 SELECT status
 FROM enrollment

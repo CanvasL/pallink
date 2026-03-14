@@ -20,6 +20,18 @@ func GetActivityEnrollInfo(ctx context.Context, db sqlc.DBTX, activityID uint64)
 	return row.MaxPeople, row.CurrentPeople, int32(row.Status), nil
 }
 
+func GetActivityCheckInInfo(ctx context.Context, db sqlc.DBTX, activityID uint64) (time.Time, int32, error) {
+	q := sqlc.New(db)
+	row, err := q.GetActivityCheckInInfo(ctx, int64(activityID))
+	if err != nil {
+		return time.Time{}, 0, err
+	}
+	if !row.StartTime.Valid {
+		return time.Time{}, 0, errors.New("activity start_time required")
+	}
+	return row.StartTime.Time, int32(row.Status), nil
+}
+
 func GetEnrollmentStatus(ctx context.Context, db sqlc.DBTX, activityID, userID uint64) (int32, bool, error) {
 	q := sqlc.New(db)
 	status, err := q.GetEnrollmentStatus(ctx, sqlc.GetEnrollmentStatusParams{
