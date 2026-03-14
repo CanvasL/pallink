@@ -16,9 +16,9 @@ UserRpc:
     Hosts:
     - etcd:2379
     Key: user.rpc
-NotifyMQ:
+NotificationMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
-  Queue: "notify_events"
+  Queue: "notification_events"
 RealtimeMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
   Exchange: "im_realtime_events"

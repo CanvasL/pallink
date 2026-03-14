@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"pallink/notify/internal/dao"
-	"pallink/notify/internal/svc"
-	"pallink/notify/notify"
+	"pallink/notification/internal/dao"
+	"pallink/notification/internal/svc"
+	"pallink/notification/notification"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,12 +25,12 @@ func NewMarkReadLogic(ctx context.Context, svcCtx *svc.ServiceContext) *MarkRead
 	}
 }
 
-func (l *MarkReadLogic) MarkRead(in *notify.MarkReadRequest) (*notify.MarkReadResponse, error) {
+func (l *MarkReadLogic) MarkRead(in *notification.MarkReadRequest) (*notification.MarkReadResponse, error) {
 	if in.UserId == 0 {
 		return nil, errors.New("user_id required")
 	}
 	if err := dao.MarkRead(l.ctx, l.svcCtx.DB, in.UserId, in.NotificationId); err != nil {
 		return nil, err
 	}
-	return &notify.MarkReadResponse{Success: true, Message: "ok"}, nil
+	return &notification.MarkReadResponse{Success: true, Message: "ok"}, nil
 }

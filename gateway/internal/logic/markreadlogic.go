@@ -10,7 +10,7 @@ import (
 	"pallink/common/auth"
 	"pallink/gateway/internal/svc"
 	"pallink/gateway/internal/types"
-	"pallink/notify/notifyclient"
+	"pallink/notification/notificationclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -35,7 +35,7 @@ func (l *MarkReadLogic) MarkRead(req *types.MarkReadReq) (resp *types.MarkReadRe
 		return nil, errors.New("unauthorized")
 	}
 
-	_, err = l.svcCtx.NotifyRpc.MarkRead(l.ctx, &notifyclient.MarkReadRequest{
+	_, err = l.svcCtx.NotificationRpc.MarkRead(l.ctx, &notificationclient.MarkReadRequest{
 		UserId:         userID,
 		NotificationId: req.NotificationId,
 	})

@@ -10,7 +10,7 @@ import (
 	"pallink/common/auth"
 	"pallink/gateway/internal/svc"
 	"pallink/gateway/internal/types"
-	"pallink/notify/notifyclient"
+	"pallink/notification/notificationclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -44,7 +44,7 @@ func (l *GetNotificationsLogic) GetNotifications(req *types.GetNotificationsReq)
 		pageSize = 20
 	}
 
-	rpcResp, err := l.svcCtx.NotifyRpc.GetNotifications(l.ctx, &notifyclient.GetNotificationsRequest{
+	rpcResp, err := l.svcCtx.NotificationRpc.GetNotifications(l.ctx, &notificationclient.GetNotificationsRequest{
 		UserId:     userID,
 		Page:       page,
 		PageSize:   pageSize,

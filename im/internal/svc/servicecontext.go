@@ -14,11 +14,11 @@ import (
 )
 
 type ServiceContext struct {
-	Config     config.Config
-	DB         *pgxpool.Pool
-	UserRpc    userclient.User
-	NotifyMQ   *mq.Client
-	RealtimeMQ *mq.FanoutPublisher
+	Config         config.Config
+	DB             *pgxpool.Pool
+	UserRpc        userclient.User
+	NotificationMQ *mq.Client
+	RealtimeMQ     *mq.FanoutPublisher
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -27,7 +27,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		logx.Must(err)
 	}
 	userCli := zrpc.MustNewClient(c.UserRpc)
-	notifyMQ, err := mq.NewClient(c.NotifyMQ)
+	notifyMQ, err := mq.NewClient(c.NotificationMQ)
 	if err != nil {
 		logx.Must(err)
 	}
@@ -37,11 +37,11 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	return &ServiceContext{
-		Config:     c,
-		DB:         pool,
-		UserRpc:    userclient.NewUser(userCli),
-		NotifyMQ:   notifyMQ,
-		RealtimeMQ: realtimeMQ,
+		Config:         c,
+		DB:             pool,
+		UserRpc:        userclient.NewUser(userCli),
+		NotificationMQ: notifyMQ,
+		RealtimeMQ:     realtimeMQ,
 	}
 }
 
@@ -49,8 +49,8 @@ func (s *ServiceContext) Close() {
 	if s.DB != nil {
 		s.DB.Close()
 	}
-	if s.NotifyMQ != nil {
-		_ = s.NotifyMQ.Close()
+	if s.NotificationMQ != nil {
+		_ = s.NotificationMQ.Close()
 	}
 	if s.RealtimeMQ != nil {
 		_ = s.RealtimeMQ.Close()

@@ -58,7 +58,7 @@ func (l *SendMessageLogic) SendMessage(in *im.SendMessageRequest) (*im.MessageIn
 		return nil, err
 	}
 
-	if err := l.svcCtx.NotifyMQ.PublishJSON(l.ctx, mq.ImMessageNotifyEvent{
+	if err := l.svcCtx.NotificationMQ.PublishJSON(l.ctx, mq.ImMessageNotificationEvent{
 		MessageId:      msg.Id,
 		ConversationId: msg.ConversationId,
 		ActorId:        in.SenderId,

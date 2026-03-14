@@ -19,12 +19,12 @@ sql:
         sql_package: "pgx/v5"
         emit_empty_slices: true
   - schema: "deploy/docker/init.sql"
-    queries: "notify/sqlc/queries.sql"
+    queries: "notification/sqlc/queries.sql"
     engine: "postgresql"
     gen:
       go:
         package: "sqlc"
-        out: "notify/internal/dao/sqlc"
+        out: "notification/internal/dao/sqlc"
         sql_package: "pgx/v5"
         emit_empty_slices: true
   - schema: "deploy/docker/init.sql"

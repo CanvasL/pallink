@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package notify;
-option go_package = "./notify";
+package notification;
+option go_package = "./notification";
 
 import "google/protobuf/timestamp.proto";
 
-service Notify {
+service Notification {
     rpc GetNotifications(GetNotificationsRequest) returns (GetNotificationsResponse);
     rpc MarkRead(MarkReadRequest) returns (MarkReadResponse);
 }

@@ -9,6 +9,6 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	Postgres postgres.Config
-	NotifyMQ mq.Config
+	Postgres       postgres.Config
+	NotificationMQ mq.Config
 }

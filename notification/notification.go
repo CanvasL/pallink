@@ -5,11 +5,11 @@ import (
 	"flag"
 	"fmt"
 
-	"pallink/notify/internal/config"
-	"pallink/notify/internal/logic"
-	"pallink/notify/internal/server"
-	"pallink/notify/internal/svc"
-	"pallink/notify/notify"
+	"pallink/notification/internal/config"
+	"pallink/notification/internal/logic"
+	"pallink/notification/internal/server"
+	"pallink/notification/internal/svc"
+	"pallink/notification/notification"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -18,7 +18,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/notify.yaml", "the config file")
+var configFile = flag.String("f", "etc/notification.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -31,7 +31,7 @@ func main() {
 	go logic.StartConsumer(context.Background(), ctx)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		notify.RegisterNotifyServer(grpcServer, server.NewNotifyServer(ctx))
+		notification.RegisterNotificationServer(grpcServer, server.NewNotificationServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

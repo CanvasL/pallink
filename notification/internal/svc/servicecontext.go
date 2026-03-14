@@ -5,7 +5,7 @@ import (
 
 	"pallink/common/mq"
 	"pallink/common/postgres"
-	"pallink/notify/internal/config"
+	"pallink/notification/internal/config"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -22,7 +22,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		logx.Must(err)
 	}
-	mqClient, err := mq.NewClient(c.NotifyMQ)
+	mqClient, err := mq.NewClient(c.NotificationMQ)
 	if err != nil {
 		logx.Must(err)
 	}

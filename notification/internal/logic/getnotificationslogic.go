@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"pallink/notify/internal/dao"
-	"pallink/notify/internal/svc"
-	"pallink/notify/notify"
+	"pallink/notification/internal/dao"
+	"pallink/notification/internal/svc"
+	"pallink/notification/notification"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,7 +25,7 @@ func NewGetNotificationsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetNotificationsLogic) GetNotifications(in *notify.GetNotificationsRequest) (*notify.GetNotificationsResponse, error) {
+func (l *GetNotificationsLogic) GetNotifications(in *notification.GetNotificationsRequest) (*notification.GetNotificationsResponse, error) {
 	if in.UserId == 0 {
 		return nil, errors.New("user_id required")
 	}
@@ -40,5 +40,5 @@ func (l *GetNotificationsLogic) GetNotifications(in *notify.GetNotificationsRequ
 		return nil, err
 	}
 
-	return &notify.GetNotificationsResponse{List: list, Total: total}, nil
+	return &notification.GetNotificationsResponse{List: list, Total: total}, nil
 }

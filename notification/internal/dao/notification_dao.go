@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"pallink/notify/internal/dao/sqlc"
-	"pallink/notify/notify"
+	"pallink/notification/internal/dao/sqlc"
+	"pallink/notification/notification"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -19,7 +19,7 @@ type ListFilter struct {
 	PageSize   int32
 }
 
-func QueryNotifications(ctx context.Context, db sqlc.DBTX, filter ListFilter) ([]*notify.NotificationInfo, int32, error) {
+func QueryNotifications(ctx context.Context, db sqlc.DBTX, filter ListFilter) ([]*notification.NotificationInfo, int32, error) {
 	if filter.UserID == 0 {
 		return nil, 0, errors.New("user_id required")
 	}
@@ -51,9 +51,9 @@ func QueryNotifications(ctx context.Context, db sqlc.DBTX, filter ListFilter) ([
 		return nil, 0, err
 	}
 
-	list := make([]*notify.NotificationInfo, 0, len(rows))
+	list := make([]*notification.NotificationInfo, 0, len(rows))
 	for _, row := range rows {
-		item := notify.NotificationInfo{
+		item := notification.NotificationInfo{
 			Id:         uint64(row.ID),
 			UserId:     uint64(row.UserID),
 			ActorId:    uint64(row.ActorID),

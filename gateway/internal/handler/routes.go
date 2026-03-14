@@ -116,12 +116,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/notify/list",
+				Path:    "/notification/list",
 				Handler: GetNotificationsHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/notify/read",
+				Path:    "/notification/read",
 				Handler: MarkReadHandler(serverCtx),
 			},
 			{

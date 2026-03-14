@@ -44,7 +44,7 @@ PalLink 是一个连接搭子的社交平台，帮助用户找到兴趣相投的
    ▼          ▼          ▼          ▼
 ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
 │ 用户服务 │ │ 活动服务 │ │  IM服务  │ │ 通知服务 │
-│ user-rpc│ │activity-│ │  im-rpc │ │notify-  │
+│ user-rpc│ │activity-│ │  im-rpc │ │notification-  │
 │         │ │   rpc   │ │         │ │   rpc   │
 └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘
      │           │           │           │
@@ -70,7 +70,7 @@ PalLink 是一个连接搭子的社交平台，帮助用户找到兴趣相投的
 | activity-rpc | 8004 | 活动核心逻辑 | PostgreSQL, Redis, RabbitMQ |
 | im-api | 8005 | IM HTTP/WebSocket | im-rpc |
 | im-rpc | 8006 | IM核心逻辑 | PostgreSQL, Redis, RabbitMQ |
-| notify-rpc | 8007 | 通知服务 | RabbitMQ |
+| notification-rpc | 8007 | 通知服务 | RabbitMQ |
 | gateway | 8080 | API网关 | 所有服务 |
 
 ---
@@ -362,7 +362,7 @@ CREATE TABLE group_message (
 CREATE INDEX idx_group_message_group ON group_message (group_id, created_at);
 ```
 
-### 3.5 通知服务 (notify-rpc)
+### 3.5 通知服务 (notification-rpc)
 
 ```sql
 -- 通知表

@@ -14,11 +14,11 @@ import (
 )
 
 type ServiceContext struct {
-	Config   config.Config
-	DB       *pgxpool.Pool
-	UserRpc  userclient.User
-	MQ       *mq.Client
-	NotifyMQ *mq.Client
+	Config         config.Config
+	DB             *pgxpool.Pool
+	UserRpc        userclient.User
+	MQ             *mq.Client
+	NotificationMQ *mq.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -31,17 +31,17 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		logx.Must(err)
 	}
-	notifyClient, err := mq.NewClient(c.NotifyMQ)
+	notifyClient, err := mq.NewClient(c.NotificationMQ)
 	if err != nil {
 		logx.Must(err)
 	}
 
 	return &ServiceContext{
-		Config:   c,
-		DB:       pool,
-		UserRpc:  userclient.NewUser(userCli),
-		MQ:       mqClient,
-		NotifyMQ: notifyClient,
+		Config:         c,
+		DB:             pool,
+		UserRpc:        userclient.NewUser(userCli),
+		MQ:             mqClient,
+		NotificationMQ: notifyClient,
 	}
 }
 
@@ -52,7 +52,7 @@ func (s *ServiceContext) Close() {
 	if s.MQ != nil {
 		_ = s.MQ.Close()
 	}
-	if s.NotifyMQ != nil {
-		_ = s.NotifyMQ.Close()
+	if s.NotificationMQ != nil {
+		_ = s.NotificationMQ.Close()
 	}
 }

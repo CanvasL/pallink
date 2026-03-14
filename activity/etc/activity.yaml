@@ -19,6 +19,6 @@ UserRpc:
 AuditMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
   Queue: "audit_events"
-NotifyMQ:
+NotificationMQ:
   Url: "amqp://pallink:pallink@rabbitmq:5672/"
-  Queue: "notify_events"
+  Queue: "notification_events"

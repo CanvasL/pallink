@@ -16,9 +16,9 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
-	UserRpc     zrpc.RpcClientConf
-	ActivityRpc zrpc.RpcClientConf
-	NotifyRpc   zrpc.RpcClientConf
-	ImRpc       zrpc.RpcClientConf
-	RealtimeMQ  mq.FanoutConfig
+	UserRpc         zrpc.RpcClientConf
+	ActivityRpc     zrpc.RpcClientConf
+	NotificationRpc zrpc.RpcClientConf
+	ImRpc           zrpc.RpcClientConf
+	RealtimeMQ      mq.FanoutConfig
 }

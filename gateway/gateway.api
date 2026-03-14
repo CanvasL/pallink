@@ -2,7 +2,7 @@ syntax = "v1"
 
 import "user.api"
 import "activity.api"
-import "notify.api"
+import "notification.api"
 import "im.api"
 
 info (
@@ -41,19 +41,19 @@ service gatewayApi {
 	@handler UpdateUserInfo
 	post /user/update (UpdateUserRequest) returns (UpdateUserResponse)
 
-	// Notify
+	// Notification
 	// 通知
 	@doc (
-		group: "notify"
+		group: "notification"
 	)
 	@handler GetNotifications
-	get /notify/list (GetNotificationsReq) returns (GetNotificationsResp)
+	get /notification/list (GetNotificationsReq) returns (GetNotificationsResp)
 
 	@doc (
-		group: "notify"
+		group: "notification"
 	)
 	@handler MarkRead
-	post /notify/read (MarkReadReq) returns (MarkReadResp)
+	post /notification/read (MarkReadReq) returns (MarkReadResp)
 
 	// IM
 	// 私聊

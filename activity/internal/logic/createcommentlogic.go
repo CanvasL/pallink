@@ -46,7 +46,7 @@ func (l *CreateCommentLogic) CreateComment(in *activity.CreateCommentRequest) (*
 	if err := l.svcCtx.MQ.PublishJSON(l.ctx, mq.AuditMessage{Type: "comment", ID: id}); err != nil {
 		return nil, err
 	}
-	if err := l.svcCtx.NotifyMQ.PublishJSON(l.ctx, mq.CommentNotifyEvent{
+	if err := l.svcCtx.NotificationMQ.PublishJSON(l.ctx, mq.CommentNotificationEvent{
 		CommentId:         id,
 		ActivityId:        in.ActivityId,
 		ParentId:          in.ParentId,

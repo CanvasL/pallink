@@ -87,10 +87,10 @@ services:
       - activity-rpc
     restart: unless-stopped
 
-  notify-rpc:
+  notification-rpc:
     build:
       context: .
-      dockerfile: ./deploy/docker/notify-rpc.Dockerfile
+      dockerfile: ./deploy/docker/notification-rpc.Dockerfile
     depends_on:
       - postgres
       - rabbitmq
@@ -119,7 +119,7 @@ services:
     depends_on:
       - user-rpc
       - activity-rpc
-      - notify-rpc
+      - notification-rpc
       - im-rpc
       - etcd
     ports:

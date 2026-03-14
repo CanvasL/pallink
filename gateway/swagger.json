@@ -1421,7 +1421,7 @@
         ]
       }
     },
-    "/notify/list": {
+    "/notification/list": {
       "get": {
         "produces": [
           "application/json"
@@ -1523,7 +1523,7 @@
           }
         },
         "tags": [
-          "notify"
+          "notification"
         ],
         "security": [
           {
@@ -1532,7 +1532,7 @@
         ]
       }
     },
-    "/notify/read": {
+    "/notification/read": {
       "post": {
         "consumes": [
           "application/json"
@@ -1577,7 +1577,7 @@
           }
         },
         "tags": [
-          "notify"
+          "notification"
         ],
         "security": [
           {
@@ -1862,8 +1862,8 @@
       "description": "Activity APIs"
     },
     {
-      "name": "notify",
-      "description": "Notify APIs"
+      "name": "notification",
+      "description": "Notification APIs"
     }
   ],
   "securityDefinitions": {

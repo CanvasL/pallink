@@ -9,7 +9,7 @@ import (
 	"pallink/gateway/internal/config"
 	gatewayws "pallink/gateway/internal/ws"
 	"pallink/im/imclient"
-	"pallink/notify/notifyclient"
+	"pallink/notification/notificationclient"
 	"pallink/user/userclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -17,32 +17,32 @@ import (
 )
 
 type ServiceContext struct {
-	Config      config.Config
-	UserRpc     userclient.User
-	ActivityRpc activityclient.Activity
-	NotifyRpc   notifyclient.Notify
-	ImRpc       imclient.Im
-	RealtimeMQ  *mq.FanoutSubscriber
-	WsHub       *gatewayws.Hub
+	Config          config.Config
+	UserRpc         userclient.User
+	ActivityRpc     activityclient.Activity
+	NotificationRpc notificationclient.Notification
+	ImRpc           imclient.Im
+	RealtimeMQ      *mq.FanoutSubscriber
+	WsHub           *gatewayws.Hub
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	userCli := zrpc.MustNewClient(c.UserRpc)
 	activityCli := zrpc.MustNewClient(c.ActivityRpc)
-	notifyCli := zrpc.MustNewClient(c.NotifyRpc)
+	notificationCli := zrpc.MustNewClient(c.NotificationRpc)
 	imCli := zrpc.MustNewClient(c.ImRpc)
 	realtimeMQ, err := mq.NewFanoutSubscriber(c.RealtimeMQ)
 	if err != nil {
 		logx.Must(err)
 	}
 	return &ServiceContext{
-		Config:      c,
-		UserRpc:     userclient.NewUser(userCli),
-		ActivityRpc: activityclient.NewActivity(activityCli),
-		NotifyRpc:   notifyclient.NewNotify(notifyCli),
-		ImRpc:       imclient.NewIm(imCli),
-		RealtimeMQ:  realtimeMQ,
-		WsHub:       gatewayws.NewHub(),
+		Config:          c,
+		UserRpc:         userclient.NewUser(userCli),
+		ActivityRpc:     activityclient.NewActivity(activityCli),
+		NotificationRpc: notificationclient.NewNotification(notificationCli),
+		ImRpc:           imclient.NewIm(imCli),
+		RealtimeMQ:      realtimeMQ,
+		WsHub:           gatewayws.NewHub(),
 	}
 }
 

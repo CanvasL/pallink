@@ -5,7 +5,7 @@ type AuditMessage struct {
 	ID   uint64 `json:"id"`
 }
 
-type CommentNotifyEvent struct {
+type CommentNotificationEvent struct {
 	CommentId         uint64 `json:"comment_id"`
 	ActivityId        uint64 `json:"activity_id"`
 	ParentId          uint64 `json:"parent_id"`
@@ -15,7 +15,7 @@ type CommentNotifyEvent struct {
 	Content           string `json:"content"`
 }
 
-type ImMessageNotifyEvent struct {
+type ImMessageNotificationEvent struct {
 	MessageId      uint64 `json:"message_id"`
 	ConversationId uint64 `json:"conversation_id"`
 	ActorId        uint64 `json:"actor_id"`
