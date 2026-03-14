@@ -1,56 +1,44 @@
 {
+  "basePath": "/",
   "consumes": [
     "application/json"
   ],
-  "produces": [
-    "application/json"
-  ],
-  "schemes": [
-    "http"
-  ],
-  "swagger": "2.0",
   "info": {
     "title": "PalLink Gateway API",
     "version": "v1"
   },
-  "basePath": "/",
   "paths": {
     "/activity/cancelEnroll": {
       "post": {
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "CancelEnroll",
         "operationId": "cancelEnroll",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
               "properties": {
                 "id": {
                   "type": "integer"
                 }
-              }
+              },
+              "required": [
+                "id"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "message": {
                   "type": "string"
@@ -58,17 +46,19 @@
                 "success": {
                   "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "CancelEnroll",
+        "tags": [
+          "activity"
         ]
       }
     },
@@ -77,24 +67,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "CheckIn",
         "operationId": "checkIn",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
               "properties": {
                 "code": {
                   "type": "string"
@@ -102,15 +81,21 @@
                 "id": {
                   "type": "integer"
                 }
-              }
+              },
+              "required": [
+                "id"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "message": {
                   "type": "string"
@@ -118,17 +103,19 @@
                 "success": {
                   "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "CheckIn",
+        "tags": [
+          "activity"
         ]
       }
     },
@@ -137,25 +124,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "CreateComment",
         "operationId": "createComment",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "activity_id",
-                "content"
-              ],
               "properties": {
                 "activity_id": {
                   "type": "integer"
@@ -166,30 +141,39 @@
                 "parent_id": {
                   "type": "integer"
                 }
-              }
+              },
+              "required": [
+                "activity_id",
+                "content"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "comment_id": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "CreateComment",
+        "tags": [
+          "activity"
         ]
       }
     },
@@ -198,28 +182,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "CreateActivity",
         "operationId": "createActivity",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "title",
-                "description",
-                "location",
-                "start_time",
-                "end_time"
-              ],
               "properties": {
                 "description": {
                   "type": "string"
@@ -239,35 +208,27 @@
                 "title": {
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "title",
+                "description",
+                "location",
+                "start_time",
+                "end_time"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "activity": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "creator_id",
-                    "title",
-                    "description",
-                    "location",
-                    "start_time",
-                    "end_time",
-                    "max_people",
-                    "current_people",
-                    "status",
-                    "audit_status",
-                    "created_at",
-                    "is_enrolled",
-                    "creator_name",
-                    "creator_avatar"
-                  ],
                   "properties": {
                     "audit_status": {
                       "type": "integer"
@@ -314,65 +275,62 @@
                     "title": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "creator_id",
+                    "title",
+                    "description",
+                    "location",
+                    "start_time",
+                    "end_time",
+                    "max_people",
+                    "current_people",
+                    "status",
+                    "audit_status",
+                    "created_at",
+                    "is_enrolled",
+                    "creator_name",
+                    "creator_avatar"
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "CreateActivity",
+        "tags": [
+          "activity"
         ]
       }
     },
     "/activity/detail": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetActivityDetail",
         "operationId": "getActivityDetail",
         "parameters": [
           {
-            "type": "integer",
-            "name": "id",
             "in": "query",
-            "required": true
+            "name": "id",
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "activity": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "creator_id",
-                    "title",
-                    "description",
-                    "location",
-                    "start_time",
-                    "end_time",
-                    "max_people",
-                    "current_people",
-                    "status",
-                    "audit_status",
-                    "created_at",
-                    "is_enrolled",
-                    "creator_name",
-                    "creator_avatar"
-                  ],
                   "properties": {
                     "audit_status": {
                       "type": "integer"
@@ -419,19 +377,39 @@
                     "title": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "creator_id",
+                    "title",
+                    "description",
+                    "location",
+                    "start_time",
+                    "end_time",
+                    "max_people",
+                    "current_people",
+                    "status",
+                    "audit_status",
+                    "created_at",
+                    "is_enrolled",
+                    "creator_name",
+                    "creator_avatar"
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetActivityDetail",
+        "tags": [
+          "activity"
         ]
       }
     },
@@ -440,37 +418,32 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "EnrollActivity",
         "operationId": "enrollActivity",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
               "properties": {
                 "id": {
                   "type": "integer"
                 }
-              }
+              },
+              "required": [
+                "id"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "message": {
                   "type": "string"
@@ -478,71 +451,51 @@
                 "success": {
                   "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "EnrollActivity",
+        "tags": [
+          "activity"
         ]
       }
     },
     "/activity/enrolled": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetEnrolledActivities",
         "operationId": "getEnrolledActivities",
         "parameters": [
           {
-            "type": "integer",
             "default": 1,
-            "name": "page",
             "in": "query",
-            "required": true
+            "name": "page",
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
-            "name": "page_size",
             "in": "query",
-            "required": true
+            "name": "page_size",
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
-                    "required": [
-                      "id",
-                      "creator_id",
-                      "creator_name",
-                      "creator_avatar",
-                      "title",
-                      "location",
-                      "start_time",
-                      "end_time",
-                      "max_people",
-                      "current_people",
-                      "status",
-                      "audit_status",
-                      "is_enrolled"
-                    ],
                     "properties": {
                       "audit_status": {
                         "type": "integer"
@@ -583,8 +536,25 @@
                       "title": {
                         "type": "string"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "id",
+                      "creator_id",
+                      "creator_name",
+                      "creator_avatar",
+                      "title",
+                      "location",
+                      "start_time",
+                      "end_time",
+                      "max_people",
+                      "current_people",
+                      "status",
+                      "audit_status",
+                      "is_enrolled"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -595,83 +565,63 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetEnrolledActivities",
+        "tags": [
+          "activity"
         ]
       }
     },
     "/activity/list": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetActivityList",
         "operationId": "getActivityList",
         "parameters": [
           {
-            "type": "integer",
             "default": 1,
+            "in": "query",
             "name": "page",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
+            "in": "query",
             "name": "page_size",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
+            "allowEmptyValue": true,
+            "in": "query",
             "name": "status",
-            "in": "query",
-            "allowEmptyValue": true
+            "type": "integer"
           },
           {
-            "type": "string",
-            "name": "keyword",
+            "allowEmptyValue": true,
             "in": "query",
-            "allowEmptyValue": true
+            "name": "keyword",
+            "type": "string"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
-                    "required": [
-                      "id",
-                      "creator_id",
-                      "creator_name",
-                      "creator_avatar",
-                      "title",
-                      "location",
-                      "start_time",
-                      "end_time",
-                      "max_people",
-                      "current_people",
-                      "status",
-                      "audit_status",
-                      "is_enrolled"
-                    ],
                     "properties": {
                       "audit_status": {
                         "type": "integer"
@@ -712,8 +662,25 @@
                       "title": {
                         "type": "string"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "id",
+                      "creator_id",
+                      "creator_name",
+                      "creator_avatar",
+                      "title",
+                      "location",
+                      "start_time",
+                      "end_time",
+                      "max_people",
+                      "current_people",
+                      "status",
+                      "audit_status",
+                      "is_enrolled"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -724,71 +691,51 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetActivityList",
+        "tags": [
+          "activity"
         ]
       }
     },
     "/activity/my": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetMyActivities",
         "operationId": "getMyActivities",
         "parameters": [
           {
-            "type": "integer",
             "default": 1,
-            "name": "page",
             "in": "query",
-            "required": true
+            "name": "page",
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
-            "name": "page_size",
             "in": "query",
-            "required": true
+            "name": "page_size",
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
-                    "required": [
-                      "id",
-                      "creator_id",
-                      "creator_name",
-                      "creator_avatar",
-                      "title",
-                      "location",
-                      "start_time",
-                      "end_time",
-                      "max_people",
-                      "current_people",
-                      "status",
-                      "audit_status",
-                      "is_enrolled"
-                    ],
                     "properties": {
                       "audit_status": {
                         "type": "integer"
@@ -829,8 +776,25 @@
                       "title": {
                         "type": "string"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "id",
+                      "creator_id",
+                      "creator_name",
+                      "creator_avatar",
+                      "title",
+                      "location",
+                      "start_time",
+                      "end_time",
+                      "max_people",
+                      "current_people",
+                      "status",
+                      "audit_status",
+                      "is_enrolled"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -841,70 +805,57 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetMyActivities",
+        "tags": [
+          "activity"
         ]
       }
     },
     "/activity/participants": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetParticipants",
         "operationId": "getParticipants",
         "parameters": [
           {
-            "type": "integer",
+            "in": "query",
             "name": "id",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 1,
-            "name": "page",
             "in": "query",
-            "required": true
+            "name": "page",
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
-            "name": "page_size",
             "in": "query",
-            "required": true
+            "name": "page_size",
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
-                    "required": [
-                      "user_id",
-                      "nickname",
-                      "avatar",
-                      "enroll_time",
-                      "checkin_time",
-                      "status"
-                    ],
                     "properties": {
                       "avatar": {
                         "type": "string"
@@ -924,8 +875,18 @@
                       "user_id": {
                         "type": "integer"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "user_id",
+                      "nickname",
+                      "avatar",
+                      "enroll_time",
+                      "checkin_time",
+                      "status"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -936,79 +897,63 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetParticipants",
+        "tags": [
+          "activity"
         ]
       }
     },
     "/activity/public/comment/list": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetPublicComments",
         "operationId": "getPublicComments",
         "parameters": [
           {
-            "type": "integer",
+            "in": "query",
             "name": "activity_id",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
+            "allowEmptyValue": true,
+            "in": "query",
             "name": "parent_id",
-            "in": "query",
-            "allowEmptyValue": true
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 1,
-            "name": "page",
             "in": "query",
-            "required": true
+            "name": "page",
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
-            "name": "page_size",
             "in": "query",
-            "required": true
+            "name": "page_size",
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
-                    "required": [
-                      "id",
-                      "activity_id",
-                      "user_id",
-                      "parent_id",
-                      "content",
-                      "created_at",
-                      "audit_status",
-                      "nickname",
-                      "avatar"
-                    ],
                     "properties": {
                       "activity_id": {
                         "type": "integer"
@@ -1037,8 +982,21 @@
                       "user_id": {
                         "type": "integer"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "id",
+                      "activity_id",
+                      "user_id",
+                      "parent_id",
+                      "content",
+                      "created_at",
+                      "audit_status",
+                      "nickname",
+                      "avatar"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -1049,10 +1007,12 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
+        "summary": "GetPublicComments",
         "tags": [
           "activity"
         ]
@@ -1060,47 +1020,24 @@
     },
     "/activity/public/detail": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetPublicActivityDetail",
         "operationId": "getPublicActivityDetail",
         "parameters": [
           {
-            "type": "integer",
-            "name": "id",
             "in": "query",
-            "required": true
+            "name": "id",
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "activity": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "creator_id",
-                    "title",
-                    "description",
-                    "location",
-                    "start_time",
-                    "end_time",
-                    "max_people",
-                    "current_people",
-                    "status",
-                    "audit_status",
-                    "created_at",
-                    "is_enrolled",
-                    "creator_name",
-                    "creator_avatar"
-                  ],
                   "properties": {
                     "audit_status": {
                       "type": "integer"
@@ -1147,12 +1084,32 @@
                     "title": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "creator_id",
+                    "title",
+                    "description",
+                    "location",
+                    "start_time",
+                    "end_time",
+                    "max_people",
+                    "current_people",
+                    "status",
+                    "audit_status",
+                    "created_at",
+                    "is_enrolled",
+                    "creator_name",
+                    "creator_avatar"
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
+        "summary": "GetPublicActivityDetail",
         "tags": [
           "activity"
         ]
@@ -1160,67 +1117,45 @@
     },
     "/activity/public/list": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetPublicActivityList",
         "operationId": "getPublicActivityList",
         "parameters": [
           {
-            "type": "integer",
             "default": 1,
+            "in": "query",
             "name": "page",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
+            "in": "query",
             "name": "page_size",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
+            "allowEmptyValue": true,
+            "in": "query",
             "name": "status",
-            "in": "query",
-            "allowEmptyValue": true
+            "type": "integer"
           },
           {
-            "type": "string",
-            "name": "keyword",
+            "allowEmptyValue": true,
             "in": "query",
-            "allowEmptyValue": true
+            "name": "keyword",
+            "type": "string"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
-                    "required": [
-                      "id",
-                      "creator_id",
-                      "creator_name",
-                      "creator_avatar",
-                      "title",
-                      "location",
-                      "start_time",
-                      "end_time",
-                      "max_people",
-                      "current_people",
-                      "status",
-                      "audit_status",
-                      "is_enrolled"
-                    ],
                     "properties": {
                       "audit_status": {
                         "type": "integer"
@@ -1261,8 +1196,25 @@
                       "title": {
                         "type": "string"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "id",
+                      "creator_id",
+                      "creator_name",
+                      "creator_avatar",
+                      "title",
+                      "location",
+                      "start_time",
+                      "end_time",
+                      "max_people",
+                      "current_people",
+                      "status",
+                      "audit_status",
+                      "is_enrolled"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -1273,10 +1225,12 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
+        "summary": "GetPublicActivityList",
         "tags": [
           "activity"
         ]
@@ -1287,24 +1241,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "UpdateActivity",
         "operationId": "updateActivity",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
               "properties": {
                 "description": {
                   "type": "string"
@@ -1330,35 +1273,23 @@
                 "title": {
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "id"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "activity": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "creator_id",
-                    "title",
-                    "description",
-                    "location",
-                    "start_time",
-                    "end_time",
-                    "max_people",
-                    "current_people",
-                    "status",
-                    "audit_status",
-                    "created_at",
-                    "is_enrolled",
-                    "creator_name",
-                    "creator_avatar"
-                  ],
                   "properties": {
                     "audit_status": {
                       "type": "integer"
@@ -1405,76 +1336,505 @@
                     "title": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "creator_id",
+                    "title",
+                    "description",
+                    "location",
+                    "start_time",
+                    "end_time",
+                    "max_people",
+                    "current_people",
+                    "status",
+                    "audit_status",
+                    "created_at",
+                    "is_enrolled",
+                    "creator_name",
+                    "creator_avatar"
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "activity"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "UpdateActivity",
+        "tags": [
+          "activity"
         ]
       }
     },
-    "/notification/list": {
+    "/im/conversation/list": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetNotifications",
-        "operationId": "getNotifications",
+        "operationId": "getConversationList",
         "parameters": [
           {
-            "type": "integer",
             "default": 1,
+            "in": "query",
             "name": "page",
-            "in": "query",
-            "required": true
+            "required": true,
+            "type": "integer"
           },
           {
-            "type": "integer",
             "default": 20,
+            "in": "query",
             "name": "page_size",
-            "in": "query",
-            "required": true
-          },
-          {
-            "type": "boolean",
-            "name": "unread_only",
-            "in": "query",
-            "allowEmptyValue": true
+            "required": true,
+            "type": "integer"
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "list": {
-                  "type": "array",
                   "items": {
-                    "type": "object",
+                    "properties": {
+                      "created_at": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "last_message": {
+                        "type": "string"
+                      },
+                      "last_message_at": {
+                        "type": "integer"
+                      },
+                      "last_message_id": {
+                        "type": "integer"
+                      },
+                      "last_sender_id": {
+                        "type": "integer"
+                      },
+                      "peer_avatar": {
+                        "type": "string"
+                      },
+                      "peer_nickname": {
+                        "type": "string"
+                      },
+                      "peer_user_id": {
+                        "type": "integer"
+                      },
+                      "unread_count": {
+                        "type": "integer"
+                      }
+                    },
                     "required": [
                       "id",
-                      "user_id",
-                      "actor_id",
-                      "type",
-                      "activity_id",
-                      "comment_id",
-                      "parent_id",
-                      "content",
-                      "created_at",
-                      "read_at"
+                      "peer_user_id",
+                      "peer_nickname",
+                      "peer_avatar",
+                      "last_message_id",
+                      "last_sender_id",
+                      "last_message",
+                      "last_message_at",
+                      "unread_count",
+                      "created_at"
                     ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "page_size": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "GetConversationList",
+        "tags": [
+          "im"
+        ]
+      }
+    },
+    "/im/conversation/open": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "openConversation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "peer_user_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "peer_user_id"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "conversation": {
+                  "properties": {
+                    "created_at": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "last_message": {
+                      "type": "string"
+                    },
+                    "last_message_at": {
+                      "type": "integer"
+                    },
+                    "last_message_id": {
+                      "type": "integer"
+                    },
+                    "last_sender_id": {
+                      "type": "integer"
+                    },
+                    "peer_avatar": {
+                      "type": "string"
+                    },
+                    "peer_nickname": {
+                      "type": "string"
+                    },
+                    "peer_user_id": {
+                      "type": "integer"
+                    },
+                    "unread_count": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "peer_user_id",
+                    "peer_nickname",
+                    "peer_avatar",
+                    "last_message_id",
+                    "last_sender_id",
+                    "last_message",
+                    "last_message_at",
+                    "unread_count",
+                    "created_at"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "OpenConversation",
+        "tags": [
+          "im"
+        ]
+      }
+    },
+    "/im/conversation/read": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "markConversationRead",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversation_id": {
+                  "type": "integer"
+                },
+                "last_read_msg_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "conversation_id"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "last_read_msg_id": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "MarkConversationRead",
+        "tags": [
+          "im"
+        ]
+      }
+    },
+    "/im/message/list": {
+      "get": {
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "conversation_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "allowEmptyValue": true,
+            "in": "query",
+            "name": "before_message_id",
+            "type": "integer"
+          },
+          {
+            "default": 20,
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "has_more": {
+                  "type": "boolean"
+                },
+                "list": {
+                  "items": {
+                    "properties": {
+                      "audit_status": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "conversation_id": {
+                        "type": "integer"
+                      },
+                      "created_at": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "sender_id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "conversation_id",
+                      "sender_id",
+                      "content",
+                      "audit_status",
+                      "created_at"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "page_size": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "GetMessages",
+        "tags": [
+          "im"
+        ]
+      }
+    },
+    "/im/message/send": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "sendMessage",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "peer_user_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "peer_user_id",
+                "content"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "message": {
+                  "properties": {
+                    "audit_status": {
+                      "type": "integer"
+                    },
+                    "content": {
+                      "type": "string"
+                    },
+                    "conversation_id": {
+                      "type": "integer"
+                    },
+                    "created_at": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "sender_id": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "conversation_id",
+                    "sender_id",
+                    "content",
+                    "audit_status",
+                    "created_at"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "SendMessage",
+        "tags": [
+          "im"
+        ]
+      }
+    },
+    "/notification/list": {
+      "get": {
+        "operationId": "getNotifications",
+        "parameters": [
+          {
+            "default": 1,
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "default": 20,
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "allowEmptyValue": true,
+            "in": "query",
+            "name": "unread_only",
+            "type": "boolean"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "list": {
+                  "items": {
                     "properties": {
                       "activity_id": {
                         "type": "integer"
@@ -1506,8 +1866,22 @@
                       "user_id": {
                         "type": "integer"
                       }
-                    }
-                  }
+                    },
+                    "required": [
+                      "id",
+                      "user_id",
+                      "actor_id",
+                      "type",
+                      "activity_id",
+                      "comment_id",
+                      "parent_id",
+                      "content",
+                      "created_at",
+                      "read_at"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "page": {
                   "type": "integer"
@@ -1518,17 +1892,19 @@
                 "total": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "notification"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetNotifications",
+        "tags": [
+          "notification"
         ]
       }
     },
@@ -1537,34 +1913,29 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "MarkRead",
         "operationId": "markRead",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
               "properties": {
                 "notification_id": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "message": {
                   "type": "string"
@@ -1572,17 +1943,19 @@
                 "success": {
                   "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "notification"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "MarkRead",
+        "tags": [
+          "notification"
         ]
       }
     },
@@ -1591,25 +1964,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "Login",
         "operationId": "login",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "mobile",
-                "password"
-              ],
               "properties": {
                 "mobile": {
                   "type": "string"
@@ -1617,15 +1978,22 @@
                 "password": {
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "mobile",
+                "password"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "token": {
                   "type": "string"
@@ -1634,13 +2002,6 @@
                   "type": "integer"
                 },
                 "user_info": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "mobile",
-                    "nickname",
-                    "avatar"
-                  ],
                   "properties": {
                     "avatar": {
                       "type": "string"
@@ -1654,12 +2015,21 @@
                     "nickname": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "mobile",
+                    "nickname",
+                    "avatar"
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
+        "summary": "Login",
         "tags": [
           "user"
         ]
@@ -1667,19 +2037,14 @@
     },
     "/user/me": {
       "get": {
+        "operationId": "getUserInfo",
         "produces": [
           "application/json"
         ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "GetUserInfo",
-        "operationId": "getUserInfo",
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "avatar": {
                   "type": "string"
@@ -1693,17 +2058,19 @@
                 "nickname": {
                   "type": "string"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "user"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "GetUserInfo",
+        "tags": [
+          "user"
         ]
       }
     },
@@ -1712,27 +2079,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "Register",
         "operationId": "register",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "required": [
-                "mobile",
-                "password",
-                "nickname",
-                "verify_code"
-              ],
               "properties": {
                 "mobile": {
                   "type": "string"
@@ -1746,15 +2099,24 @@
                 "verify_code": {
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "mobile",
+                "password",
+                "nickname",
+                "verify_code"
+              ],
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "token": {
                   "type": "string"
@@ -1762,10 +2124,12 @@
                 "user_id": {
                   "type": "integer"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
+        "summary": "Register",
         "tags": [
           "user"
         ]
@@ -1776,21 +2140,13 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "http"
-        ],
-        "summary": "UpdateUserInfo",
         "operationId": "updateUserInfo",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
+            "name": "body",
             "required": true,
             "schema": {
-              "type": "object",
               "properties": {
                 "avatar": {
                   "type": "string"
@@ -1798,24 +2154,20 @@
                 "nickname": {
                   "type": "string"
                 }
-              }
+              },
+              "type": "object"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "",
             "schema": {
-              "type": "object",
               "properties": {
                 "user_info": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "mobile",
-                    "nickname",
-                    "avatar"
-                  ],
                   "properties": {
                     "avatar": {
                       "type": "string"
@@ -1829,49 +2181,65 @@
                     "nickname": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "mobile",
+                    "nickname",
+                    "avatar"
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         },
-        "tags": [
-          "user"
-        ],
         "security": [
           {
             "BearerAuth": []
           }
+        ],
+        "summary": "UpdateUserInfo",
+        "tags": [
+          "user"
         ]
       }
     }
   },
-  "x-date": "2026-03-13 21:48:33",
-  "x-description": "This is a goctl generated swagger file.",
-  "x-github": "https://github.com/zeromicro/go-zero",
-  "x-go-zero-doc": "https://go-zero.dev/",
-  "x-goctl-version": "1.9.2",
-  "host": "localhost:8080",
-  "tags": [
-    {
-      "name": "user",
-      "description": "User APIs"
-    },
-    {
-      "name": "activity",
-      "description": "Activity APIs"
-    },
-    {
-      "name": "notification",
-      "description": "Notification APIs"
-    }
+  "produces": [
+    "application/json"
   ],
   "securityDefinitions": {
     "BearerAuth": {
-      "type": "apiKey",
-      "name": "Authorization",
+      "description": "JWT Bearer token. Example: Authorization: Bearer \u003ctoken\u003e",
       "in": "header",
-      "description": "JWT Bearer token. Example: Authorization: Bearer <token>"
+      "name": "Authorization",
+      "type": "apiKey"
     }
-  }
+  },
+  "swagger": "2.0",
+  "tags": [
+    {
+      "description": "用户",
+      "name": "user"
+    },
+    {
+      "description": "活动",
+      "name": "activity"
+    },
+    {
+      "description": "通知",
+      "name": "notification"
+    },
+    {
+      "description": "私聊",
+      "name": "im"
+    }
+  ],
+  "x-date": "2026-03-14 22:04:28",
+  "x-description": "This is a goctl generated swagger file.",
+  "x-github": "https://github.com/zeromicro/go-zero",
+  "x-go-zero-doc": "https://go-zero.dev/",
+  "x-goctl-version": "1.9.2"
 }

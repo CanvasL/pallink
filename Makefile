@@ -4,7 +4,7 @@ SQLC ?= $(HOME)/.go/bin/sqlc
 GOCTL ?= $(HOME)/.go/bin/goctl
 COMPOSE ?= docker compose
 
-.PHONY: help up up-build down build logs sqlc goctl goctl-api goctl-rpc
+.PHONY: help up up-build down build logs sqlc swagger goctl goctl-api goctl-rpc
 
 help:
 	@echo "Targets:"
@@ -14,6 +14,7 @@ help:
 	@echo "  make build      Build all docker images"
 	@echo "  make logs       Tail docker compose logs"
 	@echo "  make sqlc       Generate DAO code with sqlc"
+	@echo "  make swagger    Regenerate gateway swagger json"
 	@echo "  make goctl-api  Regenerate gateway API scaffolding"
 	@echo "  make goctl-rpc  Regenerate rpc/proto scaffolding"
 	@echo "  make goctl      Run goctl-api and goctl-rpc"
@@ -39,8 +40,14 @@ logs:
 sqlc:
 	$(SQLC) generate
 
+swagger:
+	cd gateway && $(GOCTL) api swagger -api gateway.api -dir . --filename swagger
+	go run ./deploy/tools/swaggerpatch -file ./gateway/swagger.json
+
 goctl-api:
 	cd gateway && $(GOCTL) api go -api gateway.api -dir .
+	cd gateway && $(GOCTL) api swagger -api gateway.api -dir . --filename swagger
+	go run ./deploy/tools/swaggerpatch -file ./gateway/swagger.json
 
 goctl-rpc:
 	cd user && $(GOCTL) rpc protoc user.proto --go_out=. --go-grpc_out=. --zrpc_out=.
