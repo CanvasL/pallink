@@ -166,6 +166,7 @@ services:
     environment:
       API_HOST: ${API_HOST:-localhost}
       SWAGGER_HOST: ${SWAGGER_HOST:-localhost}
+      GRAFANA_HOST: ${GRAFANA_HOST:-localhost}
     depends_on:
       gateway-api:
         condition: service_started
@@ -186,11 +187,19 @@ services:
 
   swagger-ui:
     image: ${ALIYUN_REGISTRY:-crpi-z5hjgwtu11b6bsmt.cn-hangzhou.personal.cr.aliyuncs.com}/${ALIYUN_MIRROR_NAMESPACE:-pallink-mirror}/swagger-ui:v5.32.0
+    entrypoint:
+      - /bin/sh
+      - -lc
+      - /usr/local/bin/render-swagger /swagger-source/swagger.json "$$SWAGGER_JSON" && exec /docker-entrypoint.sh nginx -g 'daemon off;'
     environment:
       BASE_URL: ${SWAGGER_UI_BASE_URL:-/docs}
       SWAGGER_JSON: ${SWAGGER_UI_JSON:-/swagger/swagger.json}
+      SWAGGER_API_HOST: ${SWAGGER_API_HOST:-}
+      SWAGGER_API_BASE_PATH: ${SWAGGER_API_BASE_PATH:-/}
+      SWAGGER_API_SCHEMES: ${SWAGGER_API_SCHEMES:-}
     volumes:
-      - ./gateway/swagger.json:${SWAGGER_UI_JSON_MOUNT_PATH:-/swagger/swagger.json}:ro
+      - ./gateway/swagger.json:/swagger-source/swagger.json:ro
+      - ./deploy/swagger/render.sh:/usr/local/bin/render-swagger:ro
     expose:
       - "8080"
 

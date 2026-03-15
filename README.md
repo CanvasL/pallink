@@ -238,6 +238,8 @@ make aliyun-up
 - 使用 [`deploy/aliyun/compose.env`](./deploy/aliyun/compose.env) 里的 `API_HOST`、`SWAGGER_HOST`、`CADDYFILE_PATH`、`CADDY_HTTP_PORT`、`CADDY_HTTPS_PORT` 配置
 - Swagger UI 会挂在 `https://swagger.pallink.us.ci/`
 - 业务 API 会挂在 `https://api.pallink.us.ci/`
+- Grafana 会挂在 `https://grafana.pallink.us.ci/`
+- `swagger-ui` 容器会根据 `SWAGGER_API_HOST`、`SWAGGER_API_BASE_PATH`、`SWAGGER_API_SCHEMES` 在启动时渲染最终的 `swagger.json`，不需要把 API 域名硬编码进仓库里的 Swagger 文件
 
 ## 启动后访问地址
 

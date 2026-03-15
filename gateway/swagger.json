@@ -2212,29 +2212,29 @@
   ],
   "securityDefinitions": {
     "BearerAuth": {
-      "description": "JWT Bearer token. Example: Authorization: Bearer \u003ctoken\u003e",
-      "in": "header",
+      "type": "apiKey",
       "name": "Authorization",
-      "type": "apiKey"
+      "in": "header",
+      "description": "JWT Bearer token. Example: Authorization: Bearer <token>"
     }
   },
   "swagger": "2.0",
   "tags": [
     {
-      "description": "用户",
-      "name": "user"
+      "name": "user",
+      "description": "用户"
     },
     {
-      "description": "活动",
-      "name": "activity"
+      "name": "activity",
+      "description": "活动"
     },
     {
-      "description": "通知",
-      "name": "notification"
+      "name": "notification",
+      "description": "通知"
     },
     {
-      "description": "私聊",
-      "name": "im"
+      "name": "im",
+      "description": "私聊"
     }
   ],
   "x-date": "2026-03-14 22:04:28",
