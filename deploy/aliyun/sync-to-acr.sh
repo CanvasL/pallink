@@ -7,6 +7,8 @@ OUTPUT_FILE="docker-compose.aliyun.yml"
 ENV_FILE="deploy/aliyun/compose.env.example"
 DO_GENERATE=1
 DO_SYNC=1
+APP_PLATFORMS="${APP_PLATFORMS:-linux/amd64}"
+MIRROR_PLATFORMS="${MIRROR_PLATFORMS:-linux/amd64}"
 
 log() {
   printf '[sync-to-acr] %s\n' "$*"
@@ -122,6 +124,7 @@ mirror_target_resolved() {
 ensure_commands() {
   command -v docker >/dev/null 2>&1 || die "docker is required"
   command -v jq >/dev/null 2>&1 || die "jq is required"
+  docker buildx version >/dev/null 2>&1 || die "docker buildx is required"
 }
 
 classify_registry() {
@@ -188,6 +191,12 @@ print_preflight() {
 
   log "required namespaces: ${ALIYUN_APP_NAMESPACE}, ${ALIYUN_MIRROR_NAMESPACE}"
   log "if ACR automatic repository creation is disabled, create all target repositories first"
+  log "app image platforms: ${APP_PLATFORMS}"
+  if [[ -n "$MIRROR_PLATFORMS" ]]; then
+    log "third-party mirror platforms: ${MIRROR_PLATFORMS}"
+  else
+    log "third-party mirror platforms: all upstream platforms"
+  fi
 }
 
 parse_args() {
@@ -328,54 +337,50 @@ sync_mirror_images() {
   log "syncing third-party images to ${ALIYUN_REGISTRY}/${ALIYUN_MIRROR_NAMESPACE}"
   while IFS=$'\t' read -r source_image target_image; do
     [[ -n "$source_image" ]] || continue
-    log "pull ${source_image}"
-    docker pull "$source_image"
-    log "tag ${source_image} -> ${target_image}"
-    docker tag "$source_image" "$target_image"
-    log "push ${target_image}"
-    docker push "$target_image"
+    log "copy ${source_image} -> ${target_image}"
+    if [[ -n "$MIRROR_PLATFORMS" ]]; then
+      docker buildx imagetools create --platform "$MIRROR_PLATFORMS" --tag "$target_image" "$source_image"
+    else
+      docker buildx imagetools create --tag "$target_image" "$source_image"
+    fi
   done <"$mirror_pairs"
 }
 
-sync_app_images() {
-  local project_name="$1"
-  local service_targets="$2"
-  local build_services_file="$3"
-  local build_services=()
-  local service=""
-  local template=""
-  local target_image=""
-  local kind=""
-  local source_image=""
-  local local_image=""
+resolve_dockerfile_path() {
+  local context="$1"
+  local dockerfile="$2"
 
-  while IFS= read -r service; do
-    [[ -n "$service" ]] || continue
-    build_services[${#build_services[@]}]="$service"
-  done <"$build_services_file"
-
-  if ((${#build_services[@]} == 0)); then
-    log "no app images to build"
+  if [[ "$dockerfile" == /* ]]; then
+    printf '%s' "$dockerfile"
     return 0
   fi
 
-  log "building app images with docker compose"
-  docker compose -f "$COMPOSE_FILE" build "${build_services[@]}"
+  dockerfile="${dockerfile#./}"
+  printf '%s/%s' "$context" "$dockerfile"
+}
 
-  log "pushing app images to ${ALIYUN_REGISTRY}/${ALIYUN_APP_NAMESPACE}"
-  while IFS=$'\t' read -r service template target_image kind source_image; do
+sync_app_images() {
+  local service_targets="$1"
+  local service=""
+  local target_image=""
+  local kind=""
+  local build_context=""
+  local build_dockerfile=""
+  local resolved_dockerfile=""
+
+  log "building and pushing app images to ${ALIYUN_REGISTRY}/${ALIYUN_APP_NAMESPACE}"
+  while IFS=$'\t' read -r service _ target_image kind _ build_context build_dockerfile; do
     [[ "$kind" == "build" ]] || continue
+    resolved_dockerfile="$(resolve_dockerfile_path "$build_context" "$build_dockerfile")"
 
-    local_image="$source_image"
-    if [[ -z "$local_image" ]]; then
-      local_image="${project_name}-${service}"
-    fi
-
-    docker image inspect "$local_image" >/dev/null 2>&1 || die "local build image not found: ${local_image}"
-    log "tag ${local_image} -> ${target_image}"
-    docker tag "$local_image" "$target_image"
-    log "push ${target_image}"
-    docker push "$target_image"
+    log "buildx ${service} -> ${target_image}"
+    docker buildx build \
+      --platform "$APP_PLATFORMS" \
+      --pull \
+      --push \
+      --tag "$target_image" \
+      --file "$resolved_dockerfile" \
+      "$build_context"
   done <"$service_targets"
 }
 
@@ -384,9 +389,7 @@ main() {
   local compose_json=""
   local service_targets=""
   local mirror_pairs=""
-  local build_services_file=""
   local output_tmp=""
-  local project_name=""
   local build_services_count=""
   local third_party_count=""
 
@@ -399,6 +402,8 @@ main() {
   ALIYUN_APP_NAMESPACE="$(value_or_default ALIYUN_APP_NAMESPACE "pallink")"
   ALIYUN_MIRROR_NAMESPACE="$(value_or_default ALIYUN_MIRROR_NAMESPACE "pallink-mirror")"
   APP_TAG="$(value_or_default APP_TAG "latest")"
+  APP_PLATFORMS="$(value_or_default APP_PLATFORMS "$APP_PLATFORMS")"
+  MIRROR_PLATFORMS="$(value_or_default MIRROR_PLATFORMS "$MIRROR_PLATFORMS")"
 
   tmp_dir="$(mktemp -d)"
   trap "rm -rf \"$tmp_dir\"" EXIT
@@ -406,18 +411,15 @@ main() {
   compose_json="${tmp_dir}/compose.json"
   service_targets="${tmp_dir}/service-targets.tsv"
   mirror_pairs="${tmp_dir}/mirror-pairs.tsv"
-  build_services_file="${tmp_dir}/build-services.txt"
   output_tmp="${tmp_dir}/aliyun-compose.yml"
 
   docker compose -f "$COMPOSE_FILE" config --format json >"$compose_json"
-  project_name="$(jq -r '.name' "$compose_json")"
 
   : >"$service_targets"
   : >"$mirror_pairs"
-  : >"$build_services_file"
 
-  jq -r '.services | to_entries[] | [.key, (.value.build != null), (.value.image // "")] | @tsv' "$compose_json" |
-    while IFS=$'\t' read -r service has_build source_image; do
+  jq -r '.services | to_entries[] | [.key, (.value.build != null), (.value.image // "-"), (.value.build.context // "-"), (.value.build.dockerfile // "-")] | @tsv' "$compose_json" |
+    while IFS=$'\t' read -r service has_build source_image build_context build_dockerfile; do
       local repo=""
       local tag=""
       local target_template=""
@@ -426,13 +428,12 @@ main() {
       if [[ "$has_build" == "true" ]]; then
         target_template="$(build_target_template "$service")"
         target_resolved="$(build_target_resolved "$service")"
-        printf '%s\t%s\t%s\tbuild\t%s\n' \
-          "$service" "$target_template" "$target_resolved" "$source_image" >>"$service_targets"
-        printf '%s\n' "$service" >>"$build_services_file"
+        printf '%s\t%s\t%s\tbuild\t%s\t%s\t%s\n' \
+          "$service" "$target_template" "$target_resolved" "-" "$build_context" "$build_dockerfile" >>"$service_targets"
         continue
       fi
 
-      [[ -n "$source_image" ]] || continue
+      [[ -n "$source_image" && "$source_image" != "-" ]] || continue
 
       IFS=$'\t' read -r repo tag <<EOF
 $(image_repo_and_tag "$source_image")
@@ -441,8 +442,8 @@ EOF
       target_template="$(mirror_target_template "$repo" "$tag")"
       target_resolved="$(mirror_target_resolved "$repo" "$tag")"
 
-      printf '%s\t%s\t%s\tmirror\t%s\n' \
-        "$service" "$target_template" "$target_resolved" "$source_image" >>"$service_targets"
+      printf '%s\t%s\t%s\tmirror\t%s\t%s\t%s\n' \
+        "$service" "$target_template" "$target_resolved" "$source_image" "-" "-" >>"$service_targets"
       printf '%s\t%s\n' "$source_image" "$target_resolved" >>"$mirror_pairs"
     done
 
@@ -457,7 +458,7 @@ EOF
     }
   ' "$mirror_pairs"
 
-  build_services_count="$(wc -l <"$build_services_file" | tr -d ' ')"
+  build_services_count="$(awk -F '\t' '$4 == "build" { count++ } END { print count + 0 }' "$service_targets")"
   third_party_count="$(wc -l <"$mirror_pairs" | tr -d ' ')"
   log "resolved ${build_services_count} app services and ${third_party_count} third-party images"
   print_preflight
@@ -468,7 +469,7 @@ EOF
 
   if [[ "$DO_SYNC" -eq 1 ]]; then
     sync_mirror_images "$mirror_pairs"
-    sync_app_images "$project_name" "$service_targets" "$build_services_file"
+    sync_app_images "$service_targets"
   fi
 
   log "done"

@@ -6,6 +6,7 @@ COMPOSE ?= docker compose
 ALIYUN_SYNC ?= ./deploy/aliyun/sync-to-acr.sh
 ALIYUN_ENV_FILE ?= ./deploy/aliyun/compose.env
 ALIYUN_COMPOSE ?= ./docker-compose.aliyun.yml
+SWAGGER_PATCH ?= ./deploy/swagger/patch.sh
 
 .PHONY: help up up-build down down-v build logs sqlc swagger goctl goctl-api goctl-rpc aliyun-compose aliyun-sync aliyun-up aliyun-down
 
@@ -49,12 +50,12 @@ sqlc:
 
 swagger:
 	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./gateway --filename swagger
-	go run ./deploy/tools/swaggerpatch -file ./gateway/swagger.json
+	$(SWAGGER_PATCH) ./gateway/swagger.json
 
 goctl-api:
 	$(GOCTL) api go -api ./gateway/gateway.api -dir ./gateway
 	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./gateway --filename swagger
-	go run ./deploy/tools/swaggerpatch -file ./gateway/swagger.json
+	$(SWAGGER_PATCH) ./gateway/swagger.json
 
 goctl-rpc:
 	$(GOCTL) rpc protoc ./user/user.proto --go_out=./user --go-grpc_out=./user --zrpc_out=./user

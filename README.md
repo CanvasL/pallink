@@ -183,8 +183,8 @@ make aliyun-sync
 这条命令会完成三件事：
 
 - 基于 [`docker-compose.yml`](./docker-compose.yml) 生成阿里云版 [`docker-compose.aliyun.yml`](./docker-compose.aliyun.yml)
-- `pull -> tag -> push` 同步第三方镜像到 `ALIYUN_MIRROR_NAMESPACE`
-- `docker compose build` 后把自研服务推送到 `ALIYUN_APP_NAMESPACE`
+- 复制第三方镜像的 manifest list 到 `ALIYUN_MIRROR_NAMESPACE`
+- 使用 `docker buildx build --platform linux/amd64 --push` 把自研服务推送到 `ALIYUN_APP_NAMESPACE`
 
 执行前请先确认两点：
 
@@ -197,6 +197,27 @@ make aliyun-sync
 - `docker login` 登录的域名和实际 `push` 的域名不一致
 - 目标命名空间不存在，或者当前账号没有该命名空间/仓库的推送权限
 - 自动建仓已关闭，但目标仓库还没创建
+
+`make aliyun-sync` 默认只同步 `linux/amd64`，因为它的目标就是给云服务器部署，不额外照顾本地 Apple Silicon。
+
+如果部署时报 `no matching manifest for linux/amd64`，通常不是仓库权限问题，而是镜像平台不对：
+
+- 你在 Apple Silicon 上执行了普通的 `docker pull` 或 `docker compose build`
+- 然后把本地 `arm64` 单架构镜像直接推到了 ACR
+- 最后在 `amd64` ECS 上拉取同一个 tag，就会报这个错
+
+仓库里的同步脚本现在会：
+
+- 第三方镜像通过 `docker buildx imagetools create --platform linux/amd64` 只同步云服务器需要的平台
+- 自研服务默认只构建 `linux/amd64`
+
+如果你以后真想发多架构，再临时覆盖即可：
+
+```bash
+APP_PLATFORMS=linux/amd64,linux/arm64 \
+MIRROR_PLATFORMS=linux/amd64,linux/arm64 \
+make aliyun-sync
+```
 
 如果你只想重写阿里云版 compose，不想推镜像：
 
