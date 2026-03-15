@@ -233,10 +233,11 @@ make aliyun-up
 
 如果你要用子域名和 HTTPS 部署：
 
-- 把 `api.pallink.us.ci`、`grafana.pallink.us.ci`、`pghero.pallink.us.ci` 的 DNS A 记录指到你的服务器公网 IP
+- 把 `api.pallink.us.ci`、`prometheus.pallink.us.ci`、`grafana.pallink.us.ci`、`pghero.pallink.us.ci` 的 DNS A 记录指到你的服务器公网 IP
 - 在服务器安全组和本机防火墙放通 `80/tcp` 和 `443/tcp`
-- 使用 [`deploy/aliyun/compose.env`](./deploy/aliyun/compose.env) 里的 `API_HOST`、`GRAFANA_HOST`、`PGHERO_HOST`、`CADDYFILE_PATH`、`CADDY_HTTP_PORT`、`CADDY_HTTPS_PORT` 配置
+- 使用 [`deploy/aliyun/compose.env`](./deploy/aliyun/compose.env) 里的 `API_HOST`、`PROMETHEUS_HOST`、`GRAFANA_HOST`、`PGHERO_HOST`、`CADDYFILE_PATH`、`CADDY_HTTP_PORT`、`CADDY_HTTPS_PORT` 配置
 - Swagger UI 会挂在 `https://api.pallink.us.ci/docs/`
+- Prometheus 会挂在 `https://prometheus.pallink.us.ci/`
 - 业务 API 会挂在 `https://api.pallink.us.ci/`
 - Grafana 会挂在 `https://grafana.pallink.us.ci/`
 - PgHero 会挂在 `https://pghero.pallink.us.ci/`

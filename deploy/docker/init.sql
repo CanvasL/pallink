@@ -92,7 +92,6 @@ CREATE TABLE IF NOT EXISTS im_message (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_user_mobile ON "user" (mobile);
 CREATE INDEX IF NOT EXISTS idx_user_audit_status ON "user" (audit_status);
 CREATE INDEX IF NOT EXISTS idx_activity_creator ON activity (creator_id);
 CREATE INDEX IF NOT EXISTS idx_activity_status ON activity (status);
@@ -101,9 +100,7 @@ CREATE INDEX IF NOT EXISTS idx_enrollment_user ON enrollment (user_id);
 CREATE INDEX IF NOT EXISTS idx_comment_activity ON activity_comment (activity_id);
 CREATE INDEX IF NOT EXISTS idx_comment_parent ON activity_comment (parent_id);
 CREATE INDEX IF NOT EXISTS idx_comment_audit_status ON activity_comment (audit_status);
-CREATE INDEX IF NOT EXISTS idx_notification_user ON notification (user_id);
 CREATE INDEX IF NOT EXISTS idx_notification_user_read ON notification (user_id, read_at);
-CREATE INDEX IF NOT EXISTS idx_im_conversation_user1 ON im_conversation (user1_id);
 CREATE INDEX IF NOT EXISTS idx_im_conversation_user2 ON im_conversation (user2_id);
 CREATE INDEX IF NOT EXISTS idx_im_member_user ON im_conversation_member (user_id);
 CREATE INDEX IF NOT EXISTS idx_im_message_conversation ON im_message (conversation_id, id DESC);

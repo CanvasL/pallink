@@ -173,6 +173,7 @@ services:
     image: caddy:2-alpine
     environment:
       API_HOST: ${API_HOST:-localhost}
+      PROMETHEUS_HOST: ${PROMETHEUS_HOST:-localhost}
       GRAFANA_HOST: ${GRAFANA_HOST:-localhost}
       PGHERO_HOST: ${PGHERO_HOST:-localhost}
     depends_on:
@@ -196,8 +197,8 @@ services:
   swagger-ui:
     image: swaggerapi/swagger-ui:v5.32.0
     environment:
-      BASE_URL: ${SWAGGER_UI_BASE_URL:-/docs}
-      SWAGGER_JSON: ${SWAGGER_UI_JSON:-/swagger/swagger.json}
+      BASE_URL: /docs
+      SWAGGER_JSON: /swagger/swagger.json
       PERSIST_AUTHORIZATION: ${SWAGGER_UI_PERSIST_AUTHORIZATION:-true}
     volumes:
       - ./deploy/swagger:/swagger:ro
@@ -223,6 +224,7 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --web.enable-lifecycle
+      - --web.external-url=${PROMETHEUS_EXTERNAL_URL:-http://prometheus.localhost:8080/}
     restart: unless-stopped
     expose:
       - "9090"
