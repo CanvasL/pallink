@@ -188,7 +188,7 @@ services:
   swagger-ui:
     image: ${ALIYUN_REGISTRY:-registry.cn-hangzhou.aliyuncs.com}/${ALIYUN_MIRROR_NAMESPACE:-pallink-mirror}/swagger-ui:v5.32.0
     environment:
-      BASE_URL: ${SWAGGER_UI_BASE_URL:-/swagger}
+      BASE_URL: ${SWAGGER_UI_BASE_URL:-/docs}
       SWAGGER_JSON: ${SWAGGER_UI_JSON:-/swagger/swagger.json}
       PERSIST_AUTHORIZATION: ${SWAGGER_UI_PERSIST_AUTHORIZATION:-true}
     volumes:

@@ -11,15 +11,10 @@
 {$API_HOST} {
 	import common
 
-	redir /docs /swagger/
+	@docs_root path /docs
+	redir @docs_root /docs/ 308
 
 	handle /docs/* {
-		redir /swagger/ 308
-	}
-
-	redir /swagger /swagger/
-
-	handle /swagger/* {
 		reverse_proxy swagger-ui:8080
 	}
 
