@@ -2,10 +2,7 @@
 
 set -euo pipefail
 
-FILE="gateway/swagger.json"
-SWAGGER_API_HOST="${SWAGGER_API_HOST:-}"
-SWAGGER_API_BASE_PATH="${SWAGGER_API_BASE_PATH:-/}"
-SWAGGER_API_SCHEMES="${SWAGGER_API_SCHEMES:-}"
+FILE="deploy/swagger/swagger.json"
 
 usage() {
   cat <<'EOF'
@@ -46,9 +43,7 @@ TMP_FILE="$(mktemp)"
 trap 'rm -f "$TMP_FILE"' EXIT
 
 jq --indent 2 \
-  --arg swagger_api_host "$SWAGGER_API_HOST" \
-  --arg swagger_api_base_path "$SWAGGER_API_BASE_PATH" \
-  --arg swagger_api_schemes "$SWAGGER_API_SCHEMES" '
+  '
   def route_tag($route):
     if ($route | startswith("/user/")) then "user"
     elif ($route | startswith("/activity/")) then "activity"
@@ -73,17 +68,8 @@ jq --indent 2 \
     {"name": "notification", "description": "通知"},
     {"name": "im", "description": "私聊"}
   ]
-  | if $swagger_api_host != "" then
-      .host = $swagger_api_host
-    else
-      del(.host)
-    end
-  | .basePath = $swagger_api_base_path
-  | if $swagger_api_schemes != "" then
-      .schemes = ($swagger_api_schemes | split(",") | map(gsub("^ +| +$"; "")) | map(select(. != "")))
-    else
-      del(.schemes)
-    end
+  | del(.host, .schemes)
+  | .basePath = "/"
   | .securityDefinitions = {
       "BearerAuth": {
         "type": "apiKey",

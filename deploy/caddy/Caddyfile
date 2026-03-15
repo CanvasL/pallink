@@ -11,11 +11,13 @@
 localhost, 127.0.0.1 {
 	import common
 
-	redir /docs /docs/
+	redir /docs /swagger/
 
 	handle /docs/* {
-		reverse_proxy swagger-ui:8080
+		redir /swagger/ 308
 	}
+
+	redir /swagger /swagger/
 
 	handle /swagger/* {
 		reverse_proxy swagger-ui:8080

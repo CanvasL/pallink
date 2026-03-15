@@ -18,7 +18,7 @@ help:
 	@echo "  make build      Build all docker images"
 	@echo "  make logs       Tail docker compose logs"
 	@echo "  make sqlc       Generate DAO code with sqlc"
-	@echo "  make swagger    Regenerate gateway swagger json"
+	@echo "  make swagger    Regenerate deploy swagger json"
 	@echo "  make goctl-api  Regenerate gateway API scaffolding"
 	@echo "  make goctl-rpc  Regenerate rpc/proto scaffolding"
 	@echo "  make goctl      Run goctl-api and goctl-rpc"
@@ -49,13 +49,13 @@ sqlc:
 	$(SQLC) generate
 
 swagger:
-	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./gateway --filename swagger
-	$(SWAGGER_PATCH) ./gateway/swagger.json
+	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./deploy/swagger --filename swagger
+	$(SWAGGER_PATCH) ./deploy/swagger/swagger.json
 
 goctl-api:
 	$(GOCTL) api go -api ./gateway/gateway.api -dir ./gateway
-	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./gateway --filename swagger
-	$(SWAGGER_PATCH) ./gateway/swagger.json
+	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./deploy/swagger --filename swagger
+	$(SWAGGER_PATCH) ./deploy/swagger/swagger.json
 
 goctl-rpc:
 	$(GOCTL) rpc protoc ./user/user.proto --go_out=./user --go-grpc_out=./user --zrpc_out=./user

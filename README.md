@@ -233,13 +233,14 @@ make aliyun-up
 
 如果你要用子域名和 HTTPS 部署：
 
-- 把 `api.pallink.us.ci` 和 `swagger.pallink.us.ci` 的 DNS A 记录指到你的服务器公网 IP
+- 把 `api.pallink.us.ci`、`grafana.pallink.us.ci`、`pghero.pallink.us.ci` 的 DNS A 记录指到你的服务器公网 IP
 - 在服务器安全组和本机防火墙放通 `80/tcp` 和 `443/tcp`
-- 使用 [`deploy/aliyun/compose.env`](./deploy/aliyun/compose.env) 里的 `API_HOST`、`SWAGGER_HOST`、`CADDYFILE_PATH`、`CADDY_HTTP_PORT`、`CADDY_HTTPS_PORT` 配置
-- Swagger UI 会挂在 `https://swagger.pallink.us.ci/`
+- 使用 [`deploy/aliyun/compose.env`](./deploy/aliyun/compose.env) 里的 `API_HOST`、`GRAFANA_HOST`、`PGHERO_HOST`、`CADDYFILE_PATH`、`CADDY_HTTP_PORT`、`CADDY_HTTPS_PORT` 配置
+- Swagger UI 会挂在 `https://api.pallink.us.ci/swagger/`
 - 业务 API 会挂在 `https://api.pallink.us.ci/`
 - Grafana 会挂在 `https://grafana.pallink.us.ci/`
-- `swagger-ui` 容器会根据 `SWAGGER_API_HOST`、`SWAGGER_API_BASE_PATH`、`SWAGGER_API_SCHEMES` 在启动时渲染最终的 `swagger.json`，不需要把 API 域名硬编码进仓库里的 Swagger 文件
+- PgHero 会挂在 `https://pghero.pallink.us.ci/`
+- Swagger UI 和 API 现在同源，仓库里的 [`deploy/swagger/swagger.json`](./deploy/swagger/swagger.json) 不写 `host`/`schemes`，直接走相对地址模式
 
 ## 启动后访问地址
 
@@ -248,7 +249,7 @@ make aliyun-up
 | 名称 | 地址 | 说明 |
 | --- | --- | --- |
 | 网关基址 | `http://localhost:8080` | 业务接口统一入口 |
-| Swagger UI | `http://localhost:8080/docs/` | 在线接口文档 |
+| Swagger UI | `http://localhost:8080/swagger/` | 在线接口文档 |
 | Swagger JSON | `http://localhost:8080/swagger/swagger.json` | 原始 OpenAPI 文档 |
 | 公共活动列表示例 | `http://localhost:8080/activity/public/list` | 无需登录即可访问 |
 | IM WebSocket | `ws://localhost:8080/im/ws?token=<JWT>` | 实时消息入口 |
@@ -323,5 +324,5 @@ make aliyun-up
 
 更完整的接口字段说明，请直接查看 Swagger：
 
-- [`gateway/swagger.json`](./gateway/swagger.json)
-- `http://localhost:8080/docs/`
+- [`deploy/swagger/swagger.json`](./deploy/swagger/swagger.json)
+- `http://localhost:8080/swagger/`
