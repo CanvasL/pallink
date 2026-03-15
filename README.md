@@ -168,6 +168,48 @@ make down
 docker compose exec postgres psql -U pallink -d pallink -c 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements;'
 ```
 
+## 阿里云 ACR 部署
+
+如果你要把自研服务镜像和第三方基础镜像都同步到阿里云 ACR，可以直接使用仓库内置脚本：
+
+```bash
+# 先登录 ACR
+docker login --username=<your-aliyun-account> registry.cn-hangzhou.aliyuncs.com
+
+# 按 deploy/aliyun/compose.env.example 配置命名空间和标签
+make aliyun-sync
+```
+
+这条命令会完成三件事：
+
+- 基于 [`docker-compose.yml`](./docker-compose.yml) 生成阿里云版 [`docker-compose.aliyun.yml`](./docker-compose.aliyun.yml)
+- `pull -> tag -> push` 同步第三方镜像到 `ALIYUN_MIRROR_NAMESPACE`
+- `docker compose build` 后把自研服务推送到 `ALIYUN_APP_NAMESPACE`
+
+执行前请先确认两点：
+
+- [`deploy/aliyun/compose.env.example`](./deploy/aliyun/compose.env.example) 里的 `ALIYUN_REGISTRY` 必须改成你在 ACR 控制台看到的精确登录域名。新个人版、旧个人版、企业版域名格式不同，`docker login` 和 `docker push` 必须使用同一个域名。
+- `ALIYUN_APP_NAMESPACE` 和 `ALIYUN_MIRROR_NAMESPACE` 这两个命名空间必须已经在 ACR 中创建好。如果你关闭了 ACR 的自动创建仓库能力，还需要预先创建对应仓库。
+
+如果推送时报 `insufficient_scope: authorization failed`，通常就是以下几类问题：
+
+- `ALIYUN_REGISTRY` 填错了，尤其是把新个人版或企业版实例误写成了 `registry.cn-hangzhou.aliyuncs.com`
+- `docker login` 登录的域名和实际 `push` 的域名不一致
+- 目标命名空间不存在，或者当前账号没有该命名空间/仓库的推送权限
+- 自动建仓已关闭，但目标仓库还没创建
+
+如果你只想重写阿里云版 compose，不想推镜像：
+
+```bash
+make aliyun-compose
+```
+
+同步完成后可以直接启动：
+
+```bash
+make aliyun-up
+```
+
 ## 启动后访问地址
 
 ### 业务与文档入口

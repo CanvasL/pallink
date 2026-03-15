@@ -3,8 +3,11 @@ SHELL := /bin/bash
 SQLC ?= $(HOME)/.go/bin/sqlc
 GOCTL ?= $(HOME)/.go/bin/goctl
 COMPOSE ?= docker compose
+ALIYUN_SYNC ?= ./deploy/aliyun/sync-to-acr.sh
+ALIYUN_ENV_FILE ?= ./deploy/aliyun/compose.env
+ALIYUN_COMPOSE ?= ./docker-compose.aliyun.yml
 
-.PHONY: help up up-build down build logs sqlc swagger goctl goctl-api goctl-rpc
+.PHONY: help up up-build down down-v build logs sqlc swagger goctl goctl-api goctl-rpc aliyun-compose aliyun-sync aliyun-up aliyun-down
 
 help:
 	@echo "Targets:"
@@ -18,6 +21,10 @@ help:
 	@echo "  make goctl-api  Regenerate gateway API scaffolding"
 	@echo "  make goctl-rpc  Regenerate rpc/proto scaffolding"
 	@echo "  make goctl      Run goctl-api and goctl-rpc"
+	@echo "  make aliyun-compose  Regenerate the aliyun compose file"
+	@echo "  make aliyun-sync     Build/push app images and mirror third-party images to ACR"
+	@echo "  make aliyun-up       Start services with docker-compose.aliyun.yml"
+	@echo "  make aliyun-down     Stop services with docker-compose.aliyun.yml"
 
 up:
 	$(COMPOSE) up -d
@@ -56,3 +63,15 @@ goctl-rpc:
 	$(GOCTL) rpc protoc ./im/im.proto --go_out=./im --go-grpc_out=./im --zrpc_out=./im
 
 goctl: goctl-api goctl-rpc
+
+aliyun-compose:
+	$(ALIYUN_SYNC) --generate-only --compose-file ./docker-compose.yml --output-file $(ALIYUN_COMPOSE) --env-file $(ALIYUN_ENV_FILE)
+
+aliyun-sync:
+	$(ALIYUN_SYNC) --compose-file ./docker-compose.yml --output-file $(ALIYUN_COMPOSE) --env-file $(ALIYUN_ENV_FILE)
+
+aliyun-up:
+	$(COMPOSE) --env-file $(ALIYUN_ENV_FILE) -f $(ALIYUN_COMPOSE) up -d
+
+aliyun-down:
+	$(COMPOSE) --env-file $(ALIYUN_ENV_FILE) -f $(ALIYUN_COMPOSE) down
