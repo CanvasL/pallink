@@ -190,6 +190,7 @@ services:
     environment:
       BASE_URL: ${SWAGGER_UI_BASE_URL:-/swagger}
       SWAGGER_JSON: ${SWAGGER_UI_JSON:-/swagger/swagger.json}
+      PERSIST_AUTHORIZATION: ${SWAGGER_UI_PERSIST_AUTHORIZATION:-true}
     volumes:
       - ./deploy/swagger:/swagger:ro
     expose:

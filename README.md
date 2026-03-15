@@ -241,6 +241,7 @@ make aliyun-up
 - Grafana 会挂在 `https://grafana.pallink.us.ci/`
 - PgHero 会挂在 `https://pghero.pallink.us.ci/`
 - Swagger UI 和 API 现在同源，仓库里的 [`deploy/swagger/swagger.json`](./deploy/swagger/swagger.json) 不写 `host`/`schemes`，直接走相对地址模式
+- Swagger UI 默认开启 `persistAuthorization`，刷新页面后会保留浏览器里的授权信息
 
 ## 启动后访问地址
 
