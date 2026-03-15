@@ -41,18 +41,18 @@ sqlc:
 	$(SQLC) generate
 
 swagger:
-	cd gateway && $(GOCTL) api swagger -api gateway.api -dir . --filename swagger
+	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./gateway --filename swagger
 	go run ./deploy/tools/swaggerpatch -file ./gateway/swagger.json
 
 goctl-api:
-	cd gateway && $(GOCTL) api go -api gateway.api -dir .
-	cd gateway && $(GOCTL) api swagger -api gateway.api -dir . --filename swagger
+	$(GOCTL) api go -api ./gateway/gateway.api -dir ./gateway
+	$(GOCTL) api swagger -api ./gateway/gateway.api -dir ./gateway --filename swagger
 	go run ./deploy/tools/swaggerpatch -file ./gateway/swagger.json
 
 goctl-rpc:
-	cd user && $(GOCTL) rpc protoc user.proto --go_out=. --go-grpc_out=. --zrpc_out=.
-	cd activity && $(GOCTL) rpc protoc activity.proto --go_out=. --go-grpc_out=. --zrpc_out=.
-	cd notification && $(GOCTL) rpc protoc notification.proto --go_out=. --go-grpc_out=. --zrpc_out=.
-	cd im && $(GOCTL) rpc protoc im.proto --go_out=. --go-grpc_out=. --zrpc_out=.
+	$(GOCTL) rpc protoc ./user/user.proto --go_out=./user --go-grpc_out=./user --zrpc_out=./user
+	$(GOCTL) rpc protoc ./activity/activity.proto --go_out=./activity --go-grpc_out=./activity --zrpc_out=./activity
+	$(GOCTL) rpc protoc ./notification/notification.proto --go_out=./notification --go-grpc_out=./notification --zrpc_out=./notification
+	$(GOCTL) rpc protoc ./im/im.proto --go_out=./im --go-grpc_out=./im --zrpc_out=./im
 
 goctl: goctl-api goctl-rpc

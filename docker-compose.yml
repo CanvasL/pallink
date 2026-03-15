@@ -4,12 +4,18 @@ services:
       context: .
       dockerfile: ./deploy/docker/gateway-api.Dockerfile
     depends_on:
-      - user-rpc
-      - activity-rpc
-      - notification-rpc
-      - im-rpc
-      - etcd
-      - redis
+      user-rpc:
+        condition: service_started
+      activity-rpc:
+        condition: service_started
+      notification-rpc:
+        condition: service_started
+      im-rpc:
+        condition: service_started
+      etcd:
+        condition: service_started
+      redis:
+        condition: service_healthy
     expose:
       - "8080"
       - "9101"
@@ -19,8 +25,10 @@ services:
       context: .
       dockerfile: ./deploy/docker/user-rpc.Dockerfile
     depends_on:
-      - postgres
-      - etcd
+      postgres:
+        condition: service_healthy
+      etcd:
+        condition: service_started
     ports:
       - "8002:8002"
     expose:
@@ -31,9 +39,12 @@ services:
       context: .
       dockerfile: ./deploy/docker/activity-rpc.Dockerfile
     depends_on:
-      - postgres
-      - etcd
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      etcd:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     restart: unless-stopped
     ports:
       - "8004:8004"
@@ -45,9 +56,12 @@ services:
       context: .
       dockerfile: ./deploy/docker/notification-rpc.Dockerfile
     depends_on:
-      - postgres
-      - rabbitmq
-      - etcd
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      etcd:
+        condition: service_started
     restart: unless-stopped
     ports:
       - "8006:8006"
@@ -59,10 +73,14 @@ services:
       context: .
       dockerfile: ./deploy/docker/im-rpc.Dockerfile
     depends_on:
-      - postgres
-      - rabbitmq
-      - etcd
-      - user-rpc
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      etcd:
+        condition: service_started
+      user-rpc:
+        condition: service_started
     restart: unless-stopped
     ports:
       - "8005:8005"
@@ -74,9 +92,12 @@ services:
       context: .
       dockerfile: ./deploy/docker/audit-worker.Dockerfile
     depends_on:
-      - rabbitmq
-      - etcd
-      - activity-rpc
+      rabbitmq:
+        condition: service_healthy
+      etcd:
+        condition: service_started
+      activity-rpc:
+        condition: service_started
     restart: unless-stopped
 
   postgres:
@@ -96,6 +117,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./deploy/docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
 
   etcd:
     image: registry.k8s.io/etcd:v3.5.21
@@ -145,11 +172,16 @@ services:
   caddy:
     image: caddy:2-alpine
     depends_on:
-      - gateway-api
-      - swagger-ui
-      - pghero
-      - prometheus
-      - grafana
+      gateway-api:
+        condition: service_started
+      swagger-ui:
+        condition: service_started
+      pghero:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      grafana:
+        condition: service_started
     restart: unless-stopped
     ports:
       - "8080:80"
@@ -169,7 +201,8 @@ services:
   pghero:
     image: ankane/pghero:v3.7.0
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgres://pallink:pallink@postgres:5432/pallink
       PGHERO_USERNAME: admin
@@ -201,7 +234,8 @@ services:
     expose:
       - "3000"
     depends_on:
-      - prometheus
+      prometheus:
+        condition: service_started
     volumes:
       - ./deploy/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./deploy/monitoring/grafana/dashboards:/etc/grafana/dashboards:ro
