@@ -22,7 +22,7 @@ help:
 	@echo "  make goctl-api  Regenerate gateway API scaffolding"
 	@echo "  make goctl-rpc  Regenerate rpc/proto scaffolding"
 	@echo "  make goctl      Run goctl-api and goctl-rpc"
-	@echo "  make aliyun-compose  Regenerate the aliyun compose file"
+	@echo "  make aliyun-compose  Regenerate the generated aliyun compose file"
 	@echo "  make aliyun-sync     Build/push app images and mirror third-party images to ACR"
 	@echo "  make aliyun-up       Start services with docker-compose.aliyun.yml"
 	@echo "  make aliyun-down     Stop services with docker-compose.aliyun.yml"
@@ -71,8 +71,8 @@ aliyun-compose:
 aliyun-sync:
 	$(ALIYUN_SYNC) --compose-file ./docker-compose.yml --output-file $(ALIYUN_COMPOSE) --env-file $(ALIYUN_ENV_FILE)
 
-aliyun-up:
+aliyun-up: aliyun-compose
 	$(COMPOSE) --env-file $(ALIYUN_ENV_FILE) -f $(ALIYUN_COMPOSE) up -d
 
-aliyun-down:
+aliyun-down: aliyun-compose
 	$(COMPOSE) --env-file $(ALIYUN_ENV_FILE) -f $(ALIYUN_COMPOSE) down
