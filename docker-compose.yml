@@ -171,6 +171,9 @@ services:
 
   caddy:
     image: caddy:2-alpine
+    environment:
+      API_HOST: ${API_HOST:-localhost}
+      SWAGGER_HOST: ${SWAGGER_HOST:-localhost}
     depends_on:
       gateway-api:
         condition: service_started
@@ -184,17 +187,18 @@ services:
         condition: service_started
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "${CADDY_HTTP_PORT:-8080}:80"
+      - "${CADDY_HTTPS_PORT:-8443}:443"
     volumes:
-      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${CADDYFILE_PATH:-./deploy/caddy/Caddyfile}:/etc/caddy/Caddyfile:ro
 
   swagger-ui:
     image: swaggerapi/swagger-ui:v5.32.0
     environment:
-      BASE_URL: /docs
-      SWAGGER_JSON: /swagger/swagger.json
+      BASE_URL: ${SWAGGER_UI_BASE_URL:-/docs}
+      SWAGGER_JSON: ${SWAGGER_UI_JSON:-/swagger/swagger.json}
     volumes:
-      - ./gateway/swagger.json:/swagger/swagger.json:ro
+      - ./gateway/swagger.json:${SWAGGER_UI_JSON_MOUNT_PATH:-/swagger/swagger.json}:ro
     expose:
       - "8080"
 

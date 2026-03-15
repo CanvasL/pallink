@@ -1,0 +1,21 @@
+(common) {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy no-referrer-when-downgrade
+	}
+}
+
+{$API_HOST} {
+	import common
+
+	reverse_proxy gateway-api:8080
+}
+
+{$SWAGGER_HOST} {
+	import common
+
+	reverse_proxy swagger-ui:8080
+}
