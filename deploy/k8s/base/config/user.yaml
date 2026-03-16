@@ -1,0 +1,19 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8002
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9102
+  Path: /metrics
+Postgres:
+  DSN: postgres://pallink:pallink@postgres:5432/pallink?sslmode=disable
+  MaxConns: 10
+  MinConns: 2
+  MaxConnLifetimeSeconds: 1800
+  MaxConnIdleSeconds: 300
+  HealthCheckPeriodSeconds: 60
+Jwt:
+  AccessSecret: "pallink-mvp-secret"
+  AccessExpire: 86400
+AuditMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Queue: "audit_events"

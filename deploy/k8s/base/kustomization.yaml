@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pallink
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: pallink-runtime-config
+    files:
+      - config/gatewayapi.yaml
+      - config/user.yaml
+      - config/activity.yaml
+      - config/notification.yaml
+      - config/im.yaml
+      - config/audit.yaml
+
+resources:
+  - namespace.yaml
+  - secret.yaml
+  - infra.yaml
+  - apps.yaml
+  - ops.yaml

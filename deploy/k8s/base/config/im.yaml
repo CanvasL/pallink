@@ -1,0 +1,22 @@
+Name: im.rpc
+ListenOn: 0.0.0.0:8005
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9104
+  Path: /metrics
+Postgres:
+  DSN: postgres://pallink:pallink@postgres:5432/pallink?sslmode=disable
+  MaxConns: 10
+  MinConns: 2
+  MaxConnLifetimeSeconds: 1800
+  MaxConnIdleSeconds: 300
+  HealthCheckPeriodSeconds: 60
+UserRpc:
+  Endpoints:
+    - user-rpc:8002
+NotificationMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Queue: "notification_events"
+RealtimeMQ:
+  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Exchange: "im_realtime_events"

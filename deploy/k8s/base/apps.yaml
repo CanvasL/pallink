@@ -1,0 +1,401 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-rpc
+spec:
+  selector:
+    app: user-rpc
+  ports:
+    - name: rpc
+      port: 8002
+      targetPort: 8002
+    - name: metrics
+      port: 9102
+      targetPort: 9102
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-rpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-rpc
+  template:
+    metadata:
+      labels:
+        app: user-rpc
+    spec:
+      volumes:
+        - name: app-config
+          configMap:
+            name: pallink-runtime-config
+      initContainers:
+        - name: wait-for-deps
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for target in postgres:5432 rabbitmq:5672; do
+                host="${target%:*}"
+                port="${target#*:}"
+                until nc -z "${host}" "${port}"; do
+                  echo "waiting for ${target}"
+                  sleep 2
+                done
+              done
+      containers:
+        - name: user-rpc
+          image: pallink/user-rpc:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: rpc
+              containerPort: 8002
+            - name: metrics
+              containerPort: 9102
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/etc/user.yaml
+              subPath: user.yaml
+          readinessProbe:
+            tcpSocket:
+              port: 8002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8002
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: activity-rpc
+spec:
+  selector:
+    app: activity-rpc
+  ports:
+    - name: rpc
+      port: 8004
+      targetPort: 8004
+    - name: metrics
+      port: 9103
+      targetPort: 9103
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activity-rpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activity-rpc
+  template:
+    metadata:
+      labels:
+        app: activity-rpc
+    spec:
+      volumes:
+        - name: app-config
+          configMap:
+            name: pallink-runtime-config
+      initContainers:
+        - name: wait-for-deps
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for target in postgres:5432 rabbitmq:5672 user-rpc:8002; do
+                host="${target%:*}"
+                port="${target#*:}"
+                until nc -z "${host}" "${port}"; do
+                  echo "waiting for ${target}"
+                  sleep 2
+                done
+              done
+      containers:
+        - name: activity-rpc
+          image: pallink/activity-rpc:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: rpc
+              containerPort: 8004
+            - name: metrics
+              containerPort: 9103
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/etc/activity.yaml
+              subPath: activity.yaml
+          readinessProbe:
+            tcpSocket:
+              port: 8004
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8004
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-rpc
+spec:
+  selector:
+    app: notification-rpc
+  ports:
+    - name: rpc
+      port: 8006
+      targetPort: 8006
+    - name: metrics
+      port: 9105
+      targetPort: 9105
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-rpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-rpc
+  template:
+    metadata:
+      labels:
+        app: notification-rpc
+    spec:
+      volumes:
+        - name: app-config
+          configMap:
+            name: pallink-runtime-config
+      initContainers:
+        - name: wait-for-deps
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for target in postgres:5432 rabbitmq:5672; do
+                host="${target%:*}"
+                port="${target#*:}"
+                until nc -z "${host}" "${port}"; do
+                  echo "waiting for ${target}"
+                  sleep 2
+                done
+              done
+      containers:
+        - name: notification-rpc
+          image: pallink/notification-rpc:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: rpc
+              containerPort: 8006
+            - name: metrics
+              containerPort: 9105
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/etc/notification.yaml
+              subPath: notification.yaml
+          readinessProbe:
+            tcpSocket:
+              port: 8006
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8006
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: im-rpc
+spec:
+  selector:
+    app: im-rpc
+  ports:
+    - name: rpc
+      port: 8005
+      targetPort: 8005
+    - name: metrics
+      port: 9104
+      targetPort: 9104
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: im-rpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: im-rpc
+  template:
+    metadata:
+      labels:
+        app: im-rpc
+    spec:
+      volumes:
+        - name: app-config
+          configMap:
+            name: pallink-runtime-config
+      initContainers:
+        - name: wait-for-deps
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for target in postgres:5432 rabbitmq:5672 user-rpc:8002; do
+                host="${target%:*}"
+                port="${target#*:}"
+                until nc -z "${host}" "${port}"; do
+                  echo "waiting for ${target}"
+                  sleep 2
+                done
+              done
+      containers:
+        - name: im-rpc
+          image: pallink/im-rpc:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: rpc
+              containerPort: 8005
+            - name: metrics
+              containerPort: 9104
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/etc/im.yaml
+              subPath: im.yaml
+          readinessProbe:
+            tcpSocket:
+              port: 8005
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8005
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-worker
+  template:
+    metadata:
+      labels:
+        app: audit-worker
+    spec:
+      volumes:
+        - name: app-config
+          configMap:
+            name: pallink-runtime-config
+      initContainers:
+        - name: wait-for-deps
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for target in rabbitmq:5672 activity-rpc:8004 user-rpc:8002; do
+                host="${target%:*}"
+                port="${target#*:}"
+                until nc -z "${host}" "${port}"; do
+                  echo "waiting for ${target}"
+                  sleep 2
+                done
+              done
+      containers:
+        - name: audit-worker
+          image: pallink/audit-worker:dev
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/etc/audit.yaml
+              subPath: audit.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-api
+spec:
+  selector:
+    app: gateway-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: metrics
+      port: 9101
+      targetPort: 9101
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-api
+  template:
+    metadata:
+      labels:
+        app: gateway-api
+    spec:
+      volumes:
+        - name: app-config
+          configMap:
+            name: pallink-runtime-config
+      initContainers:
+        - name: wait-for-deps
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for target in user-rpc:8002 activity-rpc:8004 notification-rpc:8006 im-rpc:8005 redis:6379 rabbitmq:5672; do
+                host="${target%:*}"
+                port="${target#*:}"
+                until nc -z "${host}" "${port}"; do
+                  echo "waiting for ${target}"
+                  sleep 2
+                done
+              done
+      containers:
+        - name: gateway-api
+          image: pallink/gateway-api:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: metrics
+              containerPort: 9101
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/etc/gatewayapi.yaml
+              subPath: gatewayapi.yaml
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10

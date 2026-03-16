@@ -196,7 +196,58 @@ docker compose --env-file ./deploy/docker/compose.env up -d
 - Swagger UI 和 API 同源，仓库里的 [`deploy/swagger/swagger.json`](./deploy/swagger/swagger.json) 不写 `host`/`schemes`，直接走相对地址模式。
 - Swagger UI 默认开启 `persistAuthorization`，刷新页面后会保留浏览器里的授权信息。
 
-## 启动后访问地址
+## Kubernetes 本地测试
+
+如果你想在本地先跑一套 K8s 环境，仓库里已经补了 `kind + kustomize` 方案：
+
+前置要求：
+
+- 已安装 `docker`
+- 已安装 `kubectl`
+- 已安装 `kind`
+
+一条命令拉起：
+
+```bash
+make k8s-kind-up
+```
+
+这条命令会自动：
+
+- 创建或复用本地 `kind` 集群 `pallink-local`
+- 安装本地 `ingress-nginx` controller
+- 构建本地业务镜像和 K8s 专用运维镜像
+- 把镜像 load 进集群
+- 应用 [`deploy/k8s/overlays/local`](./deploy/k8s/overlays/local) 这套清单
+
+本地 Ingress 入口：
+
+- API: `http://api.localhost:8080/`
+- Swagger UI: `http://api.localhost:8080/docs/`
+- PgHero: `http://pghero.localhost:8080/`
+- Prometheus: `http://prometheus.localhost:8080/`
+- Grafana: `http://grafana.localhost:8080/`
+
+本地直连端口：
+
+- PostgreSQL: `localhost:5432`
+- Redis: `localhost:6379`
+- RabbitMQ: `localhost:5672`
+- RabbitMQ 管理台: `http://localhost:15672/`
+
+说明：
+
+- K8s 清单放在 [`deploy/k8s`](./deploy/k8s)。
+- 本地 K8s 方案不再依赖 `caddy` 和 `etcd`。
+- RPC 服务发现改成了 K8s Service 直连。
+- 对外入口由 [`deploy/k8s/overlays/local/ingress.yaml`](./deploy/k8s/overlays/local/ingress.yaml) 定义，默认走 `api.localhost`、`grafana.localhost`、`prometheus.localhost`、`pghero.localhost`。
+- `kind` 里通过 `ingress-nginx` 接收 `8080 -> 80` 和 `8443 -> 443` 的宿主机映射。
+- PostgreSQL、Redis、RabbitMQ 仍然通过 `NodePort + kind extraPortMappings` 暴露给宿主机，配置在 [`deploy/k8s/overlays/local/nodeports/postgres.yaml`](./deploy/k8s/overlays/local/nodeports/postgres.yaml)、[`deploy/k8s/overlays/local/nodeports/redis.yaml`](./deploy/k8s/overlays/local/nodeports/redis.yaml)、[`deploy/k8s/overlays/local/nodeports/rabbitmq.yaml`](./deploy/k8s/overlays/local/nodeports/rabbitmq.yaml) 和 [`deploy/k8s/overlays/local/kind-config.yaml`](./deploy/k8s/overlays/local/kind-config.yaml)。
+- 如果你的系统不能自动解析 `*.localhost` 子域名，就把这些域名加到 `/etc/hosts` 指向 `127.0.0.1`。
+- 如果你只想把清单打到当前 kube context，而不是走 kind 工作流，可以直接执行 `make k8s-apply`。这种模式下你需要自己准备镜像可拉取地址，并确保集群里已经有 Ingress controller。
+- 销毁本地集群执行 `make k8s-kind-down`。
+
+## Docker Compose 启动后访问地址
 
 ### 业务与文档入口
 

@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pallink
+
+resources:
+  - ../../base
+  - ingress.yaml
+
+patches:
+  - path: nodeports/postgres.yaml
+  - path: nodeports/redis.yaml
+  - path: nodeports/rabbitmq.yaml
