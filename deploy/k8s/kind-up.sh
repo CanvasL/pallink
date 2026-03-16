@@ -243,16 +243,15 @@ kubectl --context "${KUBE_CONTEXT}" -n "${NAMESPACE}" get pods,svc,ingress
 cat <<EOF
 
 local ingress entrypoints:
-  api:        http://api.localhost:8080/
-  swagger:    http://api.localhost:8080/docs/
-  pghero:     http://pghero.localhost:8080/
-  prometheus: http://prometheus.localhost:8080/
-  grafana:    http://grafana.localhost:8080/
-  rabbitmq:   http://rabbitmq.localhost:8080/
+  api:        http://localhost:8080/
+  swagger:    http://localhost:8080/docs/
 
 direct infra ports:
   postgres: localhost:5432
   redis:    localhost:6379
   rabbitmq: localhost:5672
   rabbitmq ui: http://localhost:15672/
+  pghero:   http://localhost:8081/
+  prometheus: http://localhost:9090/
+  grafana:  http://localhost:3000/
 EOF

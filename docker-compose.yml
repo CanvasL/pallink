@@ -144,7 +144,7 @@ services:
   rabbitmq:
     image: rabbitmq:3.13-management
     environment:
-      RABBITMQ_DEFAULT_USER: pallink
+      RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: pallink
     ports:
       - "5672:5672"
@@ -218,8 +218,8 @@ services:
       PGHERO_USERNAME: admin
       PGHERO_PASSWORD: pallink
     restart: unless-stopped
-    expose:
-      - "8080"
+    ports:
+      - "8081:8080"
 
   prometheus:
     image: prom/prometheus
@@ -227,10 +227,9 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --web.enable-lifecycle
-      - --web.external-url=${PROMETHEUS_EXTERNAL_URL:-http://prometheus.localhost:8080/}
     restart: unless-stopped
-    expose:
-      - "9090"
+    ports:
+      - "9090:9090"
     volumes:
       - ./deploy/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -242,8 +241,8 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: pallink
       GF_USERS_ALLOW_SIGN_UP: "false"
     restart: unless-stopped
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     depends_on:
       prometheus:
         condition: service_started

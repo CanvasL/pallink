@@ -1,6 +1,6 @@
 Name: audit.worker
 AuditMQ:
-  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Url: "amqp://admin:pallink@rabbitmq:5672/"
   Queue: "audit_events"
 ActivityRpc:
   Endpoints:

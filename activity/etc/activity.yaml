@@ -21,8 +21,8 @@ UserRpc:
     - etcd:2379
     Key: user.rpc
 AuditMQ:
-  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Url: "amqp://admin:pallink@rabbitmq:5672/"
   Queue: "audit_events"
 NotificationMQ:
-  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Url: "amqp://admin:pallink@rabbitmq:5672/"
   Queue: "notification_events"

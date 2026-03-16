@@ -11,3 +11,6 @@ patches:
   - path: nodeports/postgres.yaml
   - path: nodeports/redis.yaml
   - path: nodeports/rabbitmq.yaml
+  - path: nodeports/pghero.yaml
+  - path: nodeports/prometheus.yaml
+  - path: nodeports/grafana.yaml

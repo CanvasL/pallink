@@ -15,8 +15,8 @@ UserRpc:
   Endpoints:
     - user-rpc:8002
 NotificationMQ:
-  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Url: "amqp://admin:pallink@rabbitmq:5672/"
   Queue: "notification_events"
 RealtimeMQ:
-  Url: "amqp://pallink:pallink@rabbitmq:5672/"
+  Url: "amqp://admin:pallink@rabbitmq:5672/"
   Exchange: "im_realtime_events"
