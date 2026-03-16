@@ -176,6 +176,7 @@ services:
       PROMETHEUS_HOST: ${PROMETHEUS_HOST:-localhost}
       GRAFANA_HOST: ${GRAFANA_HOST:-localhost}
       PGHERO_HOST: ${PGHERO_HOST:-localhost}
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-localhost}
     depends_on:
       gateway-api:
         condition: service_started
@@ -186,6 +187,8 @@ services:
       prometheus:
         condition: service_started
       grafana:
+        condition: service_started
+      rabbitmq:
         condition: service_started
     restart: unless-stopped
     ports:

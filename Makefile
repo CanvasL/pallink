@@ -5,12 +5,14 @@ GOCTL ?= $(HOME)/.go/bin/goctl
 COMPOSE ?= docker compose
 SWAGGER_PATCH ?= ./deploy/swagger/patch.sh
 
-.PHONY: help up up-build down down-v build logs sqlc swagger goctl goctl-api goctl-rpc k8s-build-images k8s-apply k8s-delete k8s-status k8s-kind-up k8s-kind-down
+.PHONY: help up up-build down down-v build logs sqlc swagger goctl goctl-api goctl-rpc k8s-build-images k8s-apply k8s-delete k8s-status k8s-kind-up k8s-kind-down k8s-k9s
 
 KUBECTL ?= kubectl
 KIND ?= kind
+K9S ?= k9s
 K8S_NAMESPACE ?= pallink
 KIND_CLUSTER_NAME ?= pallink-local
+KUBE_CONTEXT ?= kind-$(KIND_CLUSTER_NAME)
 K8S_OVERLAY ?= ./deploy/k8s/overlays/local
 
 help:
@@ -28,6 +30,7 @@ help:
 	@echo "  make k8s-status Show Kubernetes pods and services"
 	@echo "  make k8s-kind-up Create/reuse kind cluster, build/load images, apply manifests"
 	@echo "  make k8s-kind-down Delete the local kind cluster"
+	@echo "  make k8s-k9s    Open k9s on the local kind context and namespace"
 	@echo "  make goctl-api  Regenerate gateway API scaffolding"
 	@echo "  make goctl-rpc  Regenerate rpc/proto scaffolding"
 	@echo "  make goctl      Run goctl-api and goctl-rpc"
@@ -87,3 +90,10 @@ k8s-kind-up:
 
 k8s-kind-down:
 	$(KIND) delete cluster --name $(KIND_CLUSTER_NAME)
+
+k8s-k9s:
+	@if ! command -v $(K9S) >/dev/null 2>&1; then \
+		echo "missing required command: $(K9S)"; \
+		exit 1; \
+	fi
+	$(K9S) --context $(KUBE_CONTEXT) --namespace $(K8S_NAMESPACE)

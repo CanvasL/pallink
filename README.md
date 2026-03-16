@@ -181,7 +181,7 @@ docker compose --env-file ./deploy/docker/compose.env up -d
 
 - `CADDYFILE_PATH=./deploy/docker/Caddyfile.prod`
 - `80/tcp` 和 `443/tcp` 已对公网放通
-- `api`、`prometheus`、`grafana`、`pghero` 这些子域名都已经解析到你的服务器公网 IP
+- `api`、`prometheus`、`grafana`、`pghero`、`rabbitmq` 这些子域名都已经解析到你的服务器公网 IP
 
 默认入口：
 
@@ -190,6 +190,7 @@ docker compose --env-file ./deploy/docker/compose.env up -d
 - Prometheus: `https://prometheus.example.com/`
 - Grafana: `https://grafana.example.com/`
 - PgHero: `https://pghero.example.com/`
+- RabbitMQ 管理台: `https://rabbitmq.example.com/`
 
 说明：
 
@@ -205,6 +206,7 @@ docker compose --env-file ./deploy/docker/compose.env up -d
 - 已安装 `docker`
 - 已安装 `kubectl`
 - 已安装 `kind`
+- 可选：已安装 `k9s`
 
 一条命令拉起：
 
@@ -227,6 +229,7 @@ make k8s-kind-up
 - PgHero: `http://pghero.localhost:8080/`
 - Prometheus: `http://prometheus.localhost:8080/`
 - Grafana: `http://grafana.localhost:8080/`
+- RabbitMQ 管理台: `http://rabbitmq.localhost:8080/`
 
 本地直连端口：
 
@@ -235,14 +238,23 @@ make k8s-kind-up
 - RabbitMQ: `localhost:5672`
 - RabbitMQ 管理台: `http://localhost:15672/`
 
+可选调试工具：
+
+```bash
+make k8s-k9s
+```
+
+这会直接打开 `k9s`，默认连接到 `kind-pallink-local` context 和 `pallink` namespace。
+
 说明：
 
 - K8s 清单放在 [`deploy/k8s`](./deploy/k8s)。
 - 本地 K8s 方案不再依赖 `caddy` 和 `etcd`。
 - RPC 服务发现改成了 K8s Service 直连。
-- 对外入口由 [`deploy/k8s/overlays/local/ingress.yaml`](./deploy/k8s/overlays/local/ingress.yaml) 定义，默认走 `api.localhost`、`grafana.localhost`、`prometheus.localhost`、`pghero.localhost`。
+- 对外入口由 [`deploy/k8s/overlays/local/ingress.yaml`](./deploy/k8s/overlays/local/ingress.yaml) 定义，默认走 `api.localhost`、`grafana.localhost`、`prometheus.localhost`、`pghero.localhost`、`rabbitmq.localhost`。
 - `kind` 里通过 `ingress-nginx` 接收 `8080 -> 80` 和 `8443 -> 443` 的宿主机映射。
 - PostgreSQL、Redis、RabbitMQ 仍然通过 `NodePort + kind extraPortMappings` 暴露给宿主机，配置在 [`deploy/k8s/overlays/local/nodeports/postgres.yaml`](./deploy/k8s/overlays/local/nodeports/postgres.yaml)、[`deploy/k8s/overlays/local/nodeports/redis.yaml`](./deploy/k8s/overlays/local/nodeports/redis.yaml)、[`deploy/k8s/overlays/local/nodeports/rabbitmq.yaml`](./deploy/k8s/overlays/local/nodeports/rabbitmq.yaml) 和 [`deploy/k8s/overlays/local/kind-config.yaml`](./deploy/k8s/overlays/local/kind-config.yaml)。
+- RabbitMQ 的 `5672` 是 AMQP TCP 端口，不适合像 Swagger/Grafana 那样走 Ingress 子域名；本地开发保留 `localhost:5672` 更直接。管理台 `15672` 是 HTTP，所以这里额外提供了 `rabbitmq.localhost`。
 - 如果你的系统不能自动解析 `*.localhost` 子域名，就把这些域名加到 `/etc/hosts` 指向 `127.0.0.1`。
 - 如果你只想把清单打到当前 kube context，而不是走 kind 工作流，可以直接执行 `make k8s-apply`。这种模式下你需要自己准备镜像可拉取地址，并确保集群里已经有 Ingress controller。
 - 销毁本地集群执行 `make k8s-kind-down`。
@@ -266,11 +278,12 @@ make k8s-kind-up
 | PgHero | `http://pghero.localhost:8080/` | `admin / pallink` |
 | Prometheus | `http://prometheus.localhost:8080/` | 无 |
 | Grafana | `http://grafana.localhost:8080/` | `admin / pallink` |
-| RabbitMQ 管理台 | `http://localhost:15672/` | `pallink / pallink` |
+| RabbitMQ 管理台 | `http://rabbitmq.localhost:8080/` | `pallink / pallink` |
 
 说明：
 
-- `pghero.localhost`、`prometheus.localhost`、`grafana.localhost` 走的是 `Caddy` 的 Host 路由。
+- `pghero.localhost`、`prometheus.localhost`、`grafana.localhost`、`rabbitmq.localhost` 走的是 `Caddy` 的 Host 路由。
+- RabbitMQ 管理台也可以直连 `http://localhost:15672/`，但 README 默认只保留统一入口地址。
 - 现代系统通常会把 `*.localhost` 自动解析到本机回环地址。
 
 ### 基础设施连接信息

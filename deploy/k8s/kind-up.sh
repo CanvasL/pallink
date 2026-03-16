@@ -248,6 +248,7 @@ local ingress entrypoints:
   pghero:     http://pghero.localhost:8080/
   prometheus: http://prometheus.localhost:8080/
   grafana:    http://grafana.localhost:8080/
+  rabbitmq:   http://rabbitmq.localhost:8080/
 
 direct infra ports:
   postgres: localhost:5432

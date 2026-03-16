@@ -38,3 +38,9 @@
 
 	reverse_proxy pghero:8080
 }
+
+{$RABBITMQ_HOST} {
+	import common
+
+	reverse_proxy rabbitmq:15672
+}

@@ -42,3 +42,9 @@ http://grafana.localhost {
 
 	reverse_proxy grafana:3000
 }
+
+http://rabbitmq.localhost {
+	import common
+
+	reverse_proxy rabbitmq:15672
+}
