@@ -1,4 +1,4 @@
 .DS_Store
 .tmp/
 compose.env
-docker-compose.aliyun.yml
+deploy/docker/compose.env
