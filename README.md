@@ -234,7 +234,7 @@ make k8s-kind-up
 - RabbitMQ: `localhost:5672`
 - RabbitMQ 管理台: `http://localhost:15672/`
 - PgHero: `http://localhost:8081/`
-- Prometheus: `http://localhost:9090/`
+- Prometheus: `http://localhost:19090/`
 - Grafana: `http://localhost:3000/`
 
 可选调试工具：
@@ -274,7 +274,7 @@ make k8s-k9s
 | 名称 | 地址 | 默认账号 |
 | --- | --- | --- |
 | PgHero | `http://localhost:8081/` | `admin / pallink` |
-| Prometheus | `http://localhost:9090/` | 无 |
+| Prometheus | `http://localhost:19090/` | 无 |
 | Grafana | `http://localhost:3000/` | `admin / pallink` |
 | RabbitMQ 管理台 | `http://localhost:15672/` | `admin / pallink` |
 

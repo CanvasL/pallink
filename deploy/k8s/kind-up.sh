@@ -252,6 +252,6 @@ direct infra ports:
   rabbitmq: localhost:5672
   rabbitmq ui: http://localhost:15672/
   pghero:   http://localhost:8081/
-  prometheus: http://localhost:9090/
+  prometheus: http://localhost:19090/
   grafana:  http://localhost:3000/
 EOF

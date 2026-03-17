@@ -229,7 +229,7 @@ services:
       - --web.enable-lifecycle
     restart: unless-stopped
     ports:
-      - "9090:9090"
+      - "19090:9090"
     volumes:
       - ./deploy/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
